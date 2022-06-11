@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.root.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "target": "ES2017",
+    "sourceMap": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./src/__tests__"
+  ]
+}
