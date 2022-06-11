@@ -7,14 +7,14 @@ import buble from '@rollup/plugin-buble';
 const {join} = require('path')
 const cwd = __dirname
 
-export default  {
+export default {
     input: join(cwd, 'src/index.ts'),
     output: {
         file: path.resolve(cwd, 'dist/index.js'),
         format: 'esm',
     },
     plugins: [
-        typescript(),
+        typescript({useTsconfigDeclarationDir: true}),
         resolve(),
         commonjs(),
         buble()

@@ -9,6 +9,6 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "removeComments": false
+        "removeComments": false,
     }
 }
