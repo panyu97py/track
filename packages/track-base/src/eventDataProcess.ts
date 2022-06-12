@@ -14,6 +14,9 @@ import {FilledEventIdSimpleEventData} from "./interface";
 
 export class EventDataProcess implements TrackEventDataProcessInstance {
 
+    /**
+     * 页面曝光事件
+     */
     pageExposureEvent: FilledEventIdSimpleEventData;
 
     /**
