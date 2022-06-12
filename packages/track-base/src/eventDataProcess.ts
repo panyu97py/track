@@ -7,10 +7,9 @@ import type {
     SimpleEventData,
     SubmitTrackDataType,
     TargetTrackConfig,
-    TrackEventDataProcessInstance
+    TrackEventDataProcessInstance,
+    FilledEventIdSimpleEventData
 } from './interface'
-import {FilledEventIdSimpleEventData} from "./interface";
-
 
 export class EventDataProcess implements TrackEventDataProcessInstance {
 

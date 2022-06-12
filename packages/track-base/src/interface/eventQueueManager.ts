@@ -1,17 +1,17 @@
-import type {eventData} from "./eventData";
+import type {EventData} from "./eventData";
 
 export interface TrackEventQueueManagerInterface {
     limitNum: number;
 
-    eventsQueue: eventData[];
+    eventsQueue: EventData[];
 
     submitEventsQueue: () => void;
 
     retrySubmitEventsQueue: () => void;
 
-    submitEvent: (trackData: eventData) => void;
+    submitEvent: (trackData: EventData) => void;
 
-    batchSubmitEvent: (trackDataList: eventData[]) => void;
+    batchSubmitEvent: (trackDataList: EventData[]) => void;
 
-    failCallback: (trackDataList: eventData[]) => void;
+    failCallback: (trackDataList: EventData[]) => void;
 }
