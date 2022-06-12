@@ -9,6 +9,6 @@ export interface SimpleEventData {
     extendData: Record<string, any>;
 }
 
-export type FiledlEventIdSimpleEventData = SimpleEventData & { referrerId: string }
+export type FilledEventIdSimpleEventData = SimpleEventData & { referrerId: string }
 
 export type EventData = Required<SimpleEventData>

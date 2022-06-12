@@ -3,9 +3,9 @@ export type EventType = 'CLICK' | 'EXPOSURE';
 export interface EventConfig {
     eventType: EventType;
     eventName: string;
-    extendsPrimaryKey?: string;
-    originEventName?: string
-    originEventType?: string
+    originEventType?: EventType;
+    originEventName?: string;
+    relevanceKey?: 'string';
 }
 
 export interface TargetTrackConfig {

@@ -1,6 +1,5 @@
 import type {EventType} from '../interface'
 
-export const EVENT_TYPE: Record<string, EventType> = {
-    CLICK: 'CLICK',
-    EXPOSURE: 'EXPOSURE'
-}
+export const CLICK: EventType = 'CLICK'
+
+export const EXPOSURE: EventType = 'EXPOSURE'
