@@ -1,18 +1,18 @@
-export type listenerType = (...args: any[]) => void
+export type Listener = (...args: any[]) => void
 
-export interface IEventNode {
+export interface EventNode {
     listener: Function;
     context?: any;
 }
 
-export interface eventCenter {
-    eventMap: Record<string, IEventNode[]>;
+export interface EventCenterInterface {
+    eventMap: Record<string, EventNode[]>;
 
-    on: (eventName: string, listener?: listenerType, context?: any) => void;
+    on: (eventName: string, listener?: Listener, context?: any) => void;
 
-    once: (eventName: string, listener?: listenerType, context?: any) => void;
+    once: (eventName: string, listener?: Listener, context?: any) => void;
 
-    off: (eventName?: string, listener?: listenerType, context?: any) => void;
+    off: (eventName?: string, listener?: Listener, context?: any) => void;
 
     trigger: (eventName: string, ...args: any[]) => void;
 }

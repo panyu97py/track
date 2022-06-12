@@ -1,25 +1,29 @@
-import type {simpleEventData, eventData} from './eventData'
-import type {eventConfig, eventType, targetTrackConfig} from "./eventConfig";
+import type {SimpleEventData, EventData} from './eventData'
+import type {EventConfig, EventType, TargetTrackConfig} from "./eventConfig";
 
-export type submitTrackDataType = (trackData: eventData) => void;
+export type SubmitTrackDataType = (trackData: EventData) => void;
 
 export interface TrackEventDataProcessInstance {
 
-    exposureEventDataList: Map<string, simpleEventData>;
+    exposureEventDataMap: Map<string, SimpleEventData>;
 
-    clickEventDataList: Map<string, simpleEventData>;
+    clickEventDataMap: Map<string, SimpleEventData>;
 
-    generateEventData: (trackConfig: targetTrackConfig, type: eventType) => simpleEventData;
+    getEventConfig: (trackConfig: TargetTrackConfig, type: EventType) => EventConfig
 
-    fillReferrerId: (trackData: simpleEventData, config: eventConfig) => simpleEventData;
+    generateEventKey: (trackData: SimpleEventData, config: EventConfig) => string;
 
-    targetExposureCount: (trackConfigList: targetTrackConfig[]) => void;
+    generateEventData: (trackConfig: TargetTrackConfig, config: EventConfig) => SimpleEventData;
 
-    targetBeginExposure: (trackConfig: targetTrackConfig) => void;
+    fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => SimpleEventData;
 
-    targetEndExposure: (trackConfig: targetTrackConfig) => void;
+    targetExposureCount: (trackConfigList: TargetTrackConfig[]) => void;
 
-    targetClick: (trackConfig: targetTrackConfig) => void;
+    targetBeginExposure: (trackConfig: TargetTrackConfig) => void;
 
-    submitTrackData: submitTrackDataType;
+    targetEndExposure: (trackConfig: TargetTrackConfig) => void;
+
+    targetClick: (trackConfig: TargetTrackConfig) => void;
+
+    submitTrackData: SubmitTrackDataType;
 }

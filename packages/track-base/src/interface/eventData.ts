@@ -1,4 +1,4 @@
-export interface simpleEventData {
+export interface SimpleEventData {
     eventId: string;
     referrerId?: string;
     eventType: string;
@@ -9,7 +9,7 @@ export interface simpleEventData {
     extends?: Record<string, any>;
 }
 
-export interface eventData {
+export interface EventData {
     eventId: string;
     referrerId: string;
     eventType: string;

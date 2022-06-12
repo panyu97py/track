@@ -1,21 +1,21 @@
-import type {TrackEventQueueManagerInterface, eventData} from "./interface";
+import type {TrackEventQueueManagerInterface, EventData} from "./interface";
 
 export class EventQueueManager implements TrackEventQueueManagerInterface {
 
     limitNum: number;
 
-    eventsQueue: eventData[];
+    eventsQueue: EventData[];
 
-    submitEvent(trackData: eventData): void {
+    submitEvent(trackData: EventData): void {
         console.log({trackData})
     }
 
-    batchSubmitEvent(trackDataList: eventData[]): void {
+    batchSubmitEvent(trackDataList: EventData[]): void {
         console.log({trackDataList})
     }
 
 
-    failCallback(trackDataList: eventData[]): void {
+    failCallback(trackDataList: EventData[]): void {
         console.log({trackDataList})
     }
 

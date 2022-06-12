@@ -1,17 +1,17 @@
-import type {eventCenter as IEventCenter, IEventNode, listenerType} from './interface'
+import type {EventCenterInterface, EventNode, Listener} from './interface'
 
-class EventCenter implements IEventCenter {
-    eventMap: Record<string, IEventNode[]>;
+class EventCenter implements EventCenterInterface {
+    eventMap: Record<string, EventNode[]>;
 
-    off(eventName?: string, listener?: listenerType, context?: any): void {
+    off(eventName?: string, listener?: Listener, context?: any): void {
         console.log(eventName, listener, context)
     }
 
-    on(eventName: string, listener?: listenerType, context?: any): void {
+    on(eventName: string, listener?: Listener, context?: any): void {
         console.log(eventName, listener, context)
     }
 
-    once(eventName: string, listener?: listenerType, context?: any): void {
+    once(eventName: string, listener?: Listener, context?: any): void {
         console.log(eventName, listener, context)
     }
 
