@@ -9,6 +9,7 @@ import type {
     TargetTrackConfig,
     TrackEventDataProcessInstance
 } from './interface'
+import {FiledlEventIdSimpleEventData} from "./interface";
 
 
 export class EventDataProcess implements TrackEventDataProcessInstance {
@@ -17,13 +18,13 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * 点击事件数据列表
      * @desc 保存当前页面所有点击事件
      */
-    clickEventDataMap: Map<string, SimpleEventData>;
+    clickEventDataMap: Map<string, FiledlEventIdSimpleEventData>;
 
     /**
      * 曝光事件数据列表
      * @desc 仅保存当前页面可视元素
      */
-    exposureEventDataMap: Map<string, SimpleEventData>;
+    exposureEventDataMap: Map<string, FiledlEventIdSimpleEventData>;
 
 
     /**
@@ -45,13 +46,32 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * @param trackData
      * @param config
      */
-    fillReferrerId(trackData: SimpleEventData, config: EventConfig): SimpleEventData {
+    fillReferrerId(trackData: SimpleEventData, config: EventConfig): FiledlEventIdSimpleEventData {
         console.log({trackData, config})
         return {
             eventId: '',
+            referrerId: '',
             eventType: 'string',
             eventName: 'string',
+            startTime: 0,
+            extendData: {}
         };
+    }
+
+    /**
+     * 填充事件结束时间
+     * @param trackData
+     * @param type
+     */
+    fillEndTime(trackData: FiledlEventIdSimpleEventData, type: EventType): EventData {
+
+        if (type === EVENT_TYPE.CLICK) {
+            return {...trackData, endTime: trackData.startTime, duration: 0}
+        }
+
+        const endTime = new Date().getTime()
+
+        return {...trackData, endTime, duration: endTime - trackData.startTime}
     }
 
     /**
@@ -79,14 +99,14 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 生成事件唯一标识
-     * @param trackData
+     * @param trackConfig
      * @param config
      */
-    generateEventKey(trackData: SimpleEventData, config: EventConfig): string {
+    generateEventKey(trackConfig: TargetTrackConfig, config: EventConfig): string {
 
         const {eventType, eventName, extendsPrimaryKey} = config
 
-        const {extends: trackExtends} = trackData
+        const {extendData: trackExtends} = trackConfig
 
         const baseEventKey = `${eventType}-${eventName}`
 
@@ -101,26 +121,17 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      * @param config
      */
-    generateEventData(trackConfig: TargetTrackConfig, config: EventConfig): SimpleEventData {
+    generateEventData(trackConfig: TargetTrackConfig, config: EventConfig): FiledlEventIdSimpleEventData {
 
         const {eventType, eventName} = config
 
-        const {extendData} = trackConfig
+        const {extendData = {}} = trackConfig
 
         const eventId = generateUUID()
 
         const startTime = new Date().getTime()
 
-        const simpleEvent = (() => {
-            switch (eventType) {
-                case EVENT_TYPE.CLICK:
-                    return {eventId, eventType, eventName, extendData, startTime, endTime: startTime, duration: 0}
-                case EVENT_TYPE.EXPOSURE:
-                    return {eventId, eventType, eventName, extendData, startTime}
-                default:
-                    throw ERROR_MSG.UNKNOWN_EVENT_TYPE
-            }
-        })()
+        const simpleEvent = {eventId, eventType, eventName, extendData, startTime}
 
         return this.fillReferrerId(simpleEvent, config);
     }
@@ -130,11 +141,18 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      */
     targetClick(trackConfig: TargetTrackConfig): void {
+
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.CLICK)
-        const eventData = this.generateEventData(trackConfig, eventConfig)
-        const eventKey = this.generateEventKey(eventData, eventConfig)
+
+        const simpleEventData = this.generateEventData(trackConfig, eventConfig)
+
+        const eventData = this.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
+
+        const eventKey = this.generateEventKey(trackConfig, eventConfig)
+
         this.clickEventDataMap.set(eventKey, eventData)
-        this.submitTrackData(eventData as EventData)
+
+        this.submitTrackData(eventData)
     }
 
     /**
@@ -142,7 +160,14 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      */
     targetBeginExposure(trackConfig: TargetTrackConfig): void {
-        console.log({trackConfig})
+
+        const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.EXPOSURE)
+
+        const eventData = this.generateEventData(trackConfig, eventConfig)
+
+        const eventKey = this.generateEventKey(trackConfig, eventConfig)
+
+        this.exposureEventDataMap.set(eventKey, eventData)
     }
 
     /**
@@ -150,19 +175,18 @@ export class EventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      */
     targetEndExposure(trackConfig: TargetTrackConfig): void {
-        console.log({trackConfig})
-    }
 
-    /**
-     * 目标元素曝光计算
-     * @param trackConfigList
-     */
-    targetExposureCount(trackConfigList: TargetTrackConfig[]): void {
-        trackConfigList.forEach(trackConfig => {
-            this.targetEndExposure(trackConfig)
-            this.targetBeginExposure(trackConfig)
-        })
-        console.log({trackConfigList})
+        const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.EXPOSURE)
+
+        const eventKey = this.generateEventKey(trackConfig, eventConfig)
+
+        const simpleEvent = this.exposureEventDataMap.get(eventKey)
+
+        if (!simpleEvent) return
+
+        const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
+
+        this.submitTrackData(eventData as EventData)
     }
 
 }

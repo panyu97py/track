@@ -1,23 +1,24 @@
 import type {SimpleEventData, EventData} from './eventData'
 import type {EventConfig, EventType, TargetTrackConfig} from "./eventConfig";
+import {FiledlEventIdSimpleEventData} from "./eventData";
 
 export type SubmitTrackDataType = (trackData: EventData) => void;
 
 export interface TrackEventDataProcessInstance {
 
-    exposureEventDataMap: Map<string, SimpleEventData>;
+    exposureEventDataMap: Map<string, FiledlEventIdSimpleEventData>;
 
-    clickEventDataMap: Map<string, SimpleEventData>;
+    clickEventDataMap: Map<string, FiledlEventIdSimpleEventData>;
 
     getEventConfig: (trackConfig: TargetTrackConfig, type: EventType) => EventConfig
 
-    generateEventKey: (trackData: SimpleEventData, config: EventConfig) => string;
+    generateEventKey: (trackConfig: TargetTrackConfig, config: EventConfig) => string;
 
-    generateEventData: (trackConfig: TargetTrackConfig, config: EventConfig) => SimpleEventData;
+    generateEventData: (trackConfig: TargetTrackConfig, config: EventConfig) => FiledlEventIdSimpleEventData;
 
-    fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => SimpleEventData;
+    fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => FiledlEventIdSimpleEventData;
 
-    targetExposureCount: (trackConfigList: TargetTrackConfig[]) => void;
+    fillEndTime: (trackData: FiledlEventIdSimpleEventData, type: EventType) => EventData;
 
     targetBeginExposure: (trackConfig: TargetTrackConfig) => void;
 
