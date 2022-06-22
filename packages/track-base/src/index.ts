@@ -1,16 +1,15 @@
 import {noop} from './utils'
-import EventCenter, {eventCenter} from './eventCenter'
-import {EventDataProcess} from './eventDataProcess'
-import {EventQueueManager} from './eventQueueManager'
-import {PageLifecycleTrack} from './PageLifecycleTrack'
+import {EventCenter} from './impl/EventCenter'
+import {TrackEventDataProcess} from './impl/TrackEventDataProcess'
+import {TrackEventQueueManager} from './impl/TrackEventQueueManager'
+import {PageLifecycleTrack} from './impl/PageLifecycleTrack'
 import {initBaseTrack} from './initBaseTrack'
 
 export {
     noop,
     initBaseTrack,
-    eventCenter,
     EventCenter,
-    EventDataProcess,
-    EventQueueManager,
+    TrackEventDataProcess,
+    TrackEventQueueManager,
     PageLifecycleTrack
 }

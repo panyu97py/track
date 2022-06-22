@@ -1,4 +1,4 @@
-import type {PageLifecycleTrackInstance} from "./interface/pageLifecycleTrack";
+import type {PageLifecycleTrackInstance} from "../interface/pageLifecycleTrack";
 
 export class PageLifecycleTrack implements PageLifecycleTrackInstance {
     pageOnHide(): void {

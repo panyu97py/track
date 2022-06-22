@@ -1,5 +1,6 @@
 import {v4 as generateUUID} from 'uuid'
-import {EVENT_TYPE, EVENT_NAME, ERROR_MSG} from "./constants";
+import {injectable} from 'inversify'
+import {EVENT_TYPE, EVENT_NAME, ERROR_MSG} from "../constants";
 import type {
     EventConfig,
     EventData,
@@ -9,9 +10,10 @@ import type {
     TargetTrackConfig,
     TrackEventDataProcessInstance,
     FilledEventIdSimpleEventData
-} from './interface'
+} from '../interface'
 
-export class EventDataProcess implements TrackEventDataProcessInstance {
+@injectable()
+export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 页面曝光事件

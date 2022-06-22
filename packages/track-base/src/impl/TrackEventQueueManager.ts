@@ -1,7 +1,9 @@
-import {noop} from "./utils";
-import type {TrackEventQueueManagerInterface, EventData} from "./interface";
+import {injectable} from "inversify";
+import {noop} from "../utils";
+import type {TrackEventQueueManagerInterface, EventData} from "../interface";
 
-export class EventQueueManager implements TrackEventQueueManagerInterface {
+@injectable()
+export class TrackEventQueueManager implements TrackEventQueueManagerInterface {
 
     limitNum: number;
 
