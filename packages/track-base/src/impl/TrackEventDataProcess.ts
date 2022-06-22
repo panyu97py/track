@@ -1,19 +1,26 @@
 import {v4 as generateUUID} from 'uuid'
-import {injectable} from 'inversify'
-import {EVENT_TYPE, EVENT_NAME, ERROR_MSG} from "../constants";
+import {inject, injectable} from 'inversify'
+import {EVENT_TYPE, EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
 import type {
     EventConfig,
     EventData,
     EventType,
     SimpleEventData,
-    SubmitTrackDataType,
     TargetTrackConfig,
     TrackEventDataProcessInstance,
     FilledEventIdSimpleEventData
 } from '../interface'
+import {TrackEventQueueManager} from "./TrackEventQueueManager";
 
 @injectable()
 export class TrackEventDataProcess implements TrackEventDataProcessInstance {
+
+    /**
+     * 事件队列
+     * @param trackData
+     */
+    @inject(SERVICE_IDENTIFIER.TRACK_EVENT_QUEUE_MANAGER)
+    private _trackEventQueueManager: TrackEventQueueManager;
 
     /**
      * 页面曝光事件
@@ -32,20 +39,11 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      */
     exposureEventDataMap: Map<string, FilledEventIdSimpleEventData>;
 
-
-    /**
-     * 提交事件数据
-     * @param trackData
-     */
-    submitTrackData: SubmitTrackDataType;
-
     /**
      * 构造函数
-     * @param submitTrackData
      * @param pageExposureEvent
      */
-    constructor(submitTrackData: SubmitTrackDataType, pageExposureEvent: FilledEventIdSimpleEventData) {
-        this.submitTrackData = submitTrackData
+    constructor(pageExposureEvent: FilledEventIdSimpleEventData) {
         this.pageExposureEvent = pageExposureEvent
     }
 
@@ -172,11 +170,12 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         this.clickEventDataMap.set(eventKey, eventData)
 
-        this.submitTrackData(eventData)
+        this._trackEventQueueManager.submitEvent(eventData)
     }
 
     /**
      * 目标元素开始曝光
+     * @todo 页面曝光事件的处理逻辑
      * @param trackConfig
      */
     targetBeginExposure(trackConfig: TargetTrackConfig): void {
@@ -192,6 +191,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 目标元素停止曝光
+     * @todo 页面曝光事件的处理逻辑
      * @param trackConfig
      */
     targetEndExposure(trackConfig: TargetTrackConfig): void {
@@ -204,7 +204,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
 
-        this.submitTrackData(eventData as EventData)
+        this._trackEventQueueManager.submitEvent(eventData as EventData)
     }
 
 }

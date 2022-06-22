@@ -2,8 +2,6 @@ import type {SimpleEventData, EventData} from './eventData'
 import type {EventConfig, EventType, TargetTrackConfig} from "./eventConfig";
 import {FilledEventIdSimpleEventData} from "./eventData";
 
-export type SubmitTrackDataType = (trackData: EventData) => void;
-
 export interface TrackEventDataProcessInstance {
 
     exposureEventDataMap: Map<string, FilledEventIdSimpleEventData>;
@@ -25,6 +23,4 @@ export interface TrackEventDataProcessInstance {
     targetEndExposure: (trackConfig: TargetTrackConfig) => void;
 
     targetClick: (trackConfig: TargetTrackConfig) => void;
-
-    submitTrackData: SubmitTrackDataType;
 }
