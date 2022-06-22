@@ -1,6 +1,6 @@
 import {v4 as generateUUID} from 'uuid'
 import {inject, injectable} from 'inversify'
-import {EVENT_TYPE, EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
+import {EVENT_TYPE, DEFAULT_EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
 import type {
     EventConfig,
     EventData,
@@ -55,7 +55,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
     fillReferrerId(trackData: SimpleEventData, config: EventConfig): FilledEventIdSimpleEventData {
         const {
             originEventType: eventType = EVENT_TYPE.EXPOSURE,
-            originEventName: eventName = EVENT_NAME.PAGE_EXPOSURE,
+            originEventName: eventName = DEFAULT_EVENT_NAME.PAGE_EXPOSURE,
             relevanceKey
         } = config
 
@@ -64,7 +64,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
         const originEvent = (() => {
             switch (originEventKey) {
                 case EVENT_TYPE.EXPOSURE:
-                    if (eventName === EVENT_NAME.PAGE_EXPOSURE) return this.pageExposureEvent
+                    if (eventName === DEFAULT_EVENT_NAME.PAGE_EXPOSURE) return this.pageExposureEvent
                     return this.exposureEventDataMap.get(originEventKey)
                 case EVENT_TYPE.CLICK:
                     return this.clickEventDataMap.get(originEventKey)

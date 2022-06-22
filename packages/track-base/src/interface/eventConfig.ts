@@ -1,4 +1,4 @@
-export type EventType = 'CLICK' | 'EXPOSURE';
+export type EventType = 'CLICK' | 'EXPOSURE' | 'ERROR';
 
 export interface EventConfig {
     eventType: EventType;
