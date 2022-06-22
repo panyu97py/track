@@ -3,6 +3,8 @@ import type {EventData} from "./eventData";
 export interface TrackEventQueueManagerInterface {
     limitNum: number;
 
+    maxRetryTimes: number;
+
     eventsQueue: EventData[];
 
     submitEventsQueue: () => void;
