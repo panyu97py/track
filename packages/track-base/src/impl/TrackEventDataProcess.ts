@@ -31,21 +31,13 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      * 点击事件数据列表
      * @desc 保存当前页面所有点击事件
      */
-    clickEventDataMap: Map<string, FilledEventIdSimpleEventData>;
+    clickEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
 
     /**
      * 曝光事件数据列表
      * @desc 仅保存当前页面可视元素
      */
-    exposureEventDataMap: Map<string, FilledEventIdSimpleEventData>;
-
-    /**
-     * 构造函数
-     * @param pageExposureEvent
-     */
-    constructor(pageExposureEvent: FilledEventIdSimpleEventData) {
-        this.pageExposureEvent = pageExposureEvent
-    }
+    exposureEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
 
     /**
      * 填充事件来源 id

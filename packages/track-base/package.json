@@ -18,7 +18,8 @@
     "registry": "https://registry.yarnpkg.com/"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test": "jest",
+    "test:dev": "jest --watch",
     "build": "rollup -c",
     "prepublish": "npm run build"
   },
