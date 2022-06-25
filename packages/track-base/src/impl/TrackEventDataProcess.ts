@@ -23,11 +23,6 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
     private _trackEventQueueManager: TrackEventQueueManager;
 
     /**
-     * 页面曝光事件
-     */
-    pageExposureEvent: FilledEventIdSimpleEventData;
-
-    /**
      * 点击事件数据列表
      * @desc 保存当前页面所有点击事件
      */
@@ -56,7 +51,6 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
         const originEvent = (() => {
             switch (originEventKey) {
                 case EVENT_TYPE.EXPOSURE:
-                    if (eventName === DEFAULT_EVENT_NAME.PAGE_EXPOSURE) return this.pageExposureEvent
                     return this.exposureEventDataMap.get(originEventKey)
                 case EVENT_TYPE.CLICK:
                     return this.clickEventDataMap.get(originEventKey)
@@ -65,7 +59,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
             }
         })()
 
-        const {eventId: referrerId} = originEvent || this.pageExposureEvent
+        const {eventId: referrerId = ''} = originEvent || {}
 
         return {referrerId, ...trackData};
     }
