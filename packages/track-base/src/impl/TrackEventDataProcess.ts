@@ -42,15 +42,19 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      */
     fillReferrerId(trackData: SimpleEventData, config: EventConfig): FilledEventIdSimpleEventData {
         const {
-            originEventType: eventType = EVENT_TYPE.EXPOSURE,
-            originEventName: eventName = DEFAULT_EVENT_NAME.PAGE_EXPOSURE,
+            originEventType = EVENT_TYPE.EXPOSURE,
+            originEventName = DEFAULT_EVENT_NAME.PAGE_EXPOSURE,
             relevanceKey
         } = config
 
-        const originEventKey = this.generateEventKey({eventType, eventName, relevanceKey}, trackData.extendData)
+        const originEventKey = this.generateEventKey({
+            eventType: originEventType,
+            eventName: originEventName,
+            relevanceKey
+        }, trackData.extendData)
 
         const originEvent = (() => {
-            switch (originEventKey) {
+            switch (originEventType) {
                 case EVENT_TYPE.EXPOSURE:
                     return this.exposureEventDataMap.get(originEventKey)
                 case EVENT_TYPE.CLICK:

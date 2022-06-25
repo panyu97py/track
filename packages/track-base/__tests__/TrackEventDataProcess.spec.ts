@@ -62,8 +62,59 @@ describe('trackEventDataProcess', () => {
 
     })
 
-    describe('targetBeginExposure',()=>{
+    describe('generateEventData', () => {
 
+    })
+
+    describe('fillReferrerId', () => {
+
+    })
+
+    describe('fillEndTime', () => {
+
+        it('fill click event end time', () => {
+
+            const simpleEventData = trackEventDataProcess.generateEventData(exampleEventConfig.eventClickConfig!)
+
+            const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
+
+            expect(eventData.duration).toBe(0)
+
+            expect(eventData.startTime).toBe(eventData.endTime)
+
+        })
+
+        it('fill exposure event end time', () => {
+
+            const simpleEventData = trackEventDataProcess.generateEventData(exampleEventConfig.eventExposureConfig!)
+
+            const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.EXPOSURE)
+
+            expect(eventData.duration).toBe(eventData.endTime - eventData.startTime)
+
+        })
+
+    })
+
+    describe('targetBeginExposure', () => {
+
+    })
+
+    describe('targetEndExposure', () => {
+
+    })
+
+    describe('targetClick', () => {
+
+        it('', () => {
+
+            // const eventKey = trackEventDataProcess.generateEventKey(exampleEventConfig.eventExposureConfig!)
+            //
+            // trackEventDataProcess.targetClick(exampleEventConfig)
+            //
+            // const eventData = trackEventDataProcess.clickEventDataMap.get(eventKey)
+
+        })
 
     })
 
