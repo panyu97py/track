@@ -2,8 +2,9 @@ import {injectable, inject} from 'inversify'
 import {EventCenter} from "./EventCenter";
 import {TrackEventDataProcess} from "./TrackEventDataProcess";
 import {TrackEventQueueManager} from './TrackEventQueueManager';
-import {SERVICE_IDENTIFIER, DEFAULT_EVENT_CONFIG} from "../constants";
+import {SERVICE_IDENTIFIER, DEFAULT_EVENT_CONFIG, EVENT_DATA_PROCESS_TYPE} from "../constants";
 import type {PageLifecycleTrackInstance, TargetTrackConfig} from "../interface";
+import {EventDataProcessType} from "../interface";
 
 @injectable()
 export class PageLifecycleTrack implements PageLifecycleTrackInstance {
@@ -17,30 +18,35 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
     @inject(SERVICE_IDENTIFIER.EVENT_CENTER)
     private _eventCenter: EventCenter
 
-    pageOnShow(): void {
+    private _pageKey: string
+
+    pageOnShow(pageKey: string): void {
+
+        this._pageKey = pageKey
 
         this._trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
 
-        // todo 注册事件名需要唯一标识
+        this._eventCenter.on(this._pageKey, (trackConfig: TargetTrackConfig, type: EventDataProcessType) => {
 
-        this._eventCenter.on('click', (trackConfig: TargetTrackConfig) => this._trackEventDataProcess.targetClick(trackConfig))
+            switch (type) {
 
-        this._eventCenter.on('beginExposure', (trackConfig: TargetTrackConfig) => this._trackEventDataProcess.targetBeginExposure(trackConfig))
+                case EVENT_DATA_PROCESS_TYPE.CLICK:
+                    return this._trackEventDataProcess.targetClick(trackConfig)
 
-        this._eventCenter.on('endExposure', (trackConfig: TargetTrackConfig) => this._trackEventDataProcess.targetEndExposure(trackConfig))
+                case EVENT_DATA_PROCESS_TYPE.BEGIN_EXPOSURE:
+                    return this._trackEventDataProcess.targetBeginExposure(trackConfig)
 
+                case EVENT_DATA_PROCESS_TYPE.END_EXPOSURE:
+                    return this._trackEventDataProcess.targetEndExposure(trackConfig)
+            }
+
+        })
     }
 
     pageOnHide(): void {
+        this._eventCenter.off(this._pageKey)
+
         this._trackEventDataProcess.targetEndExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
-
-        // todo 注册事件名需要唯一标识
-
-        this._eventCenter.off('click')
-
-        this._eventCenter.off('beginExposure')
-
-        this._eventCenter.off('endExposure')
 
         this._trackEventQueueManager.submitEventsQueue()
     }

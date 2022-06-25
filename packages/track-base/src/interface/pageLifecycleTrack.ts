@@ -1,4 +1,6 @@
 export interface PageLifecycleTrackInstance {
-    pageOnShow: () => void;
+
+    pageOnShow: (pageKey:string) => void;
+
     pageOnHide: () => void;
 }

@@ -6,11 +6,11 @@ export interface EventNode {
 }
 
 export interface EventCenterInterface {
-    eventMap: Record<string, EventNode[]>;
+    _eventMap: Map<string, EventNode[]>;
 
-    on: (eventName: string, listener?: Listener, context?: any) => void;
+    on: (eventName: string, listener: Listener, context?: any) => void;
 
-    once: (eventName: string, listener?: Listener, context?: any) => void;
+    once: (eventName: string, listener: Listener, context?: any) => void;
 
     off: (eventName?: string, listener?: Listener, context?: any) => void;
 

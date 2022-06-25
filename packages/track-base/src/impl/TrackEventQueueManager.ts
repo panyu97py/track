@@ -9,7 +9,7 @@ export class TrackEventQueueManager implements TrackEventQueueManagerInterface {
 
     maxRetryTimes: number;
 
-    eventsQueue: EventData[];
+    eventsQueue: EventData[] = [];
 
     failCallback: (trackDataList: EventData[]) => void
 
