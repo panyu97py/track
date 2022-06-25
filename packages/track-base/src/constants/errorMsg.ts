@@ -1,2 +1,3 @@
-export const EVENT_CONFIG_IS_NULL = ''
+export const EVENT_CONFIG_IS_NULL = 'EVENT_CONFIG_IS_NULL'
+
 export const UNKNOWN_EVENT_TYPE = 'UNKNOWN_EVENT_TYPE'

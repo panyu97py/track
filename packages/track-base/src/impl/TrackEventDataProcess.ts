@@ -36,6 +36,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 填充事件来源 id
+     * @todo 页面曝光事件的处理逻辑
      * @param trackData
      * @param config
      */
@@ -161,7 +162,6 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 目标元素开始曝光
-     * @todo 页面曝光事件的处理逻辑
      * @param trackConfig
      */
     targetBeginExposure(trackConfig: TargetTrackConfig): void {
@@ -177,7 +177,6 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 目标元素停止曝光
-     * @todo 页面曝光事件的处理逻辑
      * @param trackConfig
      */
     targetEndExposure(trackConfig: TargetTrackConfig): void {

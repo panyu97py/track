@@ -5,7 +5,7 @@ export interface EventConfig {
     eventName: string;
     originEventType?: EventType;
     originEventName?: string;
-    relevanceKey?: 'string';
+    relevanceKey?: string;
 }
 
 export interface TargetTrackConfig {
