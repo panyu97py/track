@@ -1,5 +1,5 @@
 'use strict';
-import {container, SERVICE_IDENTIFIER, TrackEventDataProcess} from '../src'
+import {container, SERVICE_IDENTIFIER, TrackEventDataProcess, TrackEventQueueManager} from '../src'
 import {EVENT_TYPE} from "../src/constants";
 import {TargetTrackConfig} from "../src/interface";
 
@@ -20,7 +20,12 @@ const exampleEventConfig: TargetTrackConfig = {
 }
 
 describe('trackEventDataProcess', () => {
-    const trackEventDataProcess: TrackEventDataProcess = container.get(SERVICE_IDENTIFIER.TRACK_EVENT_DATA_PROCESS)
+
+    const trackEventDataProcess = container.get<TrackEventDataProcess>(SERVICE_IDENTIFIER.TRACK_EVENT_DATA_PROCESS)
+
+    const trackEventQueueManager: TrackEventQueueManager = (trackEventDataProcess as any)._trackEventQueueManager
+
+    const spySubmitEventsQueue = jest.spyOn(trackEventQueueManager, 'submitEvent')
 
     describe('generateEventKey', () => {
 
@@ -106,13 +111,17 @@ describe('trackEventDataProcess', () => {
 
     describe('targetClick', () => {
 
-        it('', () => {
+        it('target click track test', () => {
 
-            // const eventKey = trackEventDataProcess.generateEventKey(exampleEventConfig.eventExposureConfig!)
-            //
-            // trackEventDataProcess.targetClick(exampleEventConfig)
-            //
-            // const eventData = trackEventDataProcess.clickEventDataMap.get(eventKey)
+            trackEventDataProcess.targetClick(exampleEventConfig)
+
+            const {eventClickConfig} = exampleEventConfig
+
+            const eventKey = trackEventDataProcess.generateEventKey(eventClickConfig!, exampleEventConfig.extendData)
+
+            expect(spySubmitEventsQueue).toHaveBeenCalled()
+
+            expect(trackEventDataProcess.clickEventDataMap.get(eventKey)).toBeTruthy()
 
         })
 
