@@ -62,4 +62,9 @@ describe('trackEventDataProcess', () => {
 
     })
 
+    describe('targetBeginExposure',()=>{
+
+
+    })
+
 });

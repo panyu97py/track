@@ -123,20 +123,18 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 生成事件数据
-     * @param trackConfig
      * @param config
+     * @param extendData
      */
-    generateEventData(trackConfig: TargetTrackConfig, config: EventConfig): FilledEventIdSimpleEventData {
+    generateEventData(config: EventConfig, extendData?: Record<string, any>): FilledEventIdSimpleEventData {
 
         const {eventType, eventName} = config
-
-        const {extendData = {}} = trackConfig
 
         const eventId = generateUUID()
 
         const startTime = new Date().getTime()
 
-        const simpleEvent = {eventId, eventType, eventName, extendData, startTime}
+        const simpleEvent = {eventId, eventType, eventName, extendData: extendData || {}, startTime}
 
         return this.fillReferrerId(simpleEvent, config);
     }
@@ -149,7 +147,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.CLICK)
 
-        const simpleEventData = this.generateEventData(trackConfig, eventConfig)
+        const simpleEventData = this.generateEventData(eventConfig, trackConfig.extendData)
 
         const eventData = this.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
 
@@ -168,7 +166,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.EXPOSURE)
 
-        const eventData = this.generateEventData(trackConfig, eventConfig)
+        const eventData = this.generateEventData(eventConfig, trackConfig.extendData)
 
         const eventKey = this.generateEventKey(eventConfig, trackConfig.extendData)
 
@@ -185,7 +183,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventKey = this.generateEventKey(eventConfig, trackConfig.extendData)
 
-        const simpleEvent = this.exposureEventDataMap.get(eventKey) || this.generateEventData(trackConfig, eventConfig)
+        const simpleEvent = this.exposureEventDataMap.get(eventKey) || this.generateEventData(eventConfig, trackConfig.extendData)
 
         const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
 

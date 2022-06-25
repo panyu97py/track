@@ -12,7 +12,7 @@ export interface TrackEventDataProcessInstance {
 
     generateEventKey: (config: EventConfig, extendData?: Record<string,any>) => string;
 
-    generateEventData: (trackConfig: TargetTrackConfig, config: EventConfig) => FilledEventIdSimpleEventData;
+    generateEventData: (config: EventConfig, extendData?: Record<string,any>) => FilledEventIdSimpleEventData;
 
     fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => FilledEventIdSimpleEventData;
 
