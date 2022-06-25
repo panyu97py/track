@@ -103,15 +103,41 @@ describe('trackEventDataProcess', () => {
 
     describe('targetBeginExposure', () => {
 
+        trackEventDataProcess.targetBeginExposure(exampleEventConfig)
+
+        const {eventExposureConfig} = exampleEventConfig
+
+        const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, exampleEventConfig.extendData)
+
+        expect(trackEventDataProcess.exposureEventDataMap.get(eventKey)).toBeTruthy()
+
     })
 
     describe('targetEndExposure', () => {
+
+        it('',async ()=>{
+
+            trackEventDataProcess.targetBeginExposure(exampleEventConfig)
+
+            await new Promise<void>(resolve => setTimeout(() => {
+                trackEventDataProcess.targetEndExposure(exampleEventConfig)
+                resolve()
+            }, 500))
+
+            const {eventExposureConfig} = exampleEventConfig
+
+            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, exampleEventConfig.extendData)
+
+            expect(spySubmitEventsQueue).toHaveBeenCalled()
+
+            expect(trackEventDataProcess.exposureEventDataMap.get(eventKey)).toBeUndefined()
+        })
 
     })
 
     describe('targetClick', () => {
 
-        it('target click track test', () => {
+        it('target click track', () => {
 
             trackEventDataProcess.targetClick(exampleEventConfig)
 

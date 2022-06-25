@@ -192,6 +192,8 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
         const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
 
         this._trackEventQueueManager.submitEvent(eventData as EventData)
+
+        this.exposureEventDataMap.delete(eventKey)
     }
 
 }
