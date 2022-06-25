@@ -19,4 +19,5 @@ export default {
         commonjs(),
         buble()
     ],
+    external: ['uuid', 'inversify', 'reflect-metadata'],
 }
