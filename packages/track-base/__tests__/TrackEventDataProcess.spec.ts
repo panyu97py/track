@@ -1,5 +1,4 @@
 'use strict';
-import "reflect-metadata"
 import {container, SERVICE_IDENTIFIER, TrackEventDataProcess} from '../src'
 import {DEFAULT_EVENT_CONFIG} from "../src/constants";
 

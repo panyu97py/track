@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import {noop} from './utils'
 import container from './container'
 import {SERVICE_IDENTIFIER} from './constants'
