@@ -27,6 +27,8 @@ describe('trackEventDataProcess', () => {
 
     const spySubmitEventsQueue = jest.spyOn(trackEventQueueManager, 'submitEvent')
 
+    const {eventExposureConfig, eventClickConfig, extendData} = exampleEventConfig
+
     describe('generateEventKey', () => {
 
         it('no extendData', () => {
@@ -69,6 +71,19 @@ describe('trackEventDataProcess', () => {
 
     describe('generateEventData', () => {
 
+        const eventData = trackEventDataProcess.generateEventData(eventExposureConfig!, extendData)
+
+        expect(eventData.eventId).toBeTruthy()
+
+        expect(eventData.eventType).toBe(eventExposureConfig?.eventType)
+
+        expect(eventData.eventName).toBe(eventExposureConfig?.eventName)
+
+        expect(eventData.startTime).toBeTruthy()
+
+        expect(eventData.extendData).toBeTruthy()
+
+
     })
 
     describe('fillReferrerId', () => {
@@ -79,7 +94,7 @@ describe('trackEventDataProcess', () => {
 
         it('fill click event end time', () => {
 
-            const simpleEventData = trackEventDataProcess.generateEventData(exampleEventConfig.eventClickConfig!)
+            const simpleEventData = trackEventDataProcess.generateEventData(eventClickConfig!)
 
             const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
 
@@ -91,7 +106,7 @@ describe('trackEventDataProcess', () => {
 
         it('fill exposure event end time', () => {
 
-            const simpleEventData = trackEventDataProcess.generateEventData(exampleEventConfig.eventExposureConfig!)
+            const simpleEventData = trackEventDataProcess.generateEventData(eventExposureConfig!)
 
             const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.EXPOSURE)
 
@@ -105,9 +120,7 @@ describe('trackEventDataProcess', () => {
 
         trackEventDataProcess.targetBeginExposure(exampleEventConfig)
 
-        const {eventExposureConfig} = exampleEventConfig
-
-        const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, exampleEventConfig.extendData)
+        const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
 
         expect(trackEventDataProcess.exposureEventDataMap.get(eventKey)).toBeTruthy()
 
@@ -115,7 +128,7 @@ describe('trackEventDataProcess', () => {
 
     describe('targetEndExposure', () => {
 
-        it('',async ()=>{
+        it('', async () => {
 
             trackEventDataProcess.targetBeginExposure(exampleEventConfig)
 
@@ -124,9 +137,7 @@ describe('trackEventDataProcess', () => {
                 resolve()
             }, 500))
 
-            const {eventExposureConfig} = exampleEventConfig
-
-            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, exampleEventConfig.extendData)
+            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
 
             expect(spySubmitEventsQueue).toHaveBeenCalled()
 
@@ -141,9 +152,7 @@ describe('trackEventDataProcess', () => {
 
             trackEventDataProcess.targetClick(exampleEventConfig)
 
-            const {eventClickConfig} = exampleEventConfig
-
-            const eventKey = trackEventDataProcess.generateEventKey(eventClickConfig!, exampleEventConfig.extendData)
+            const eventKey = trackEventDataProcess.generateEventKey(eventClickConfig!, extendData)
 
             expect(spySubmitEventsQueue).toHaveBeenCalled()
 
