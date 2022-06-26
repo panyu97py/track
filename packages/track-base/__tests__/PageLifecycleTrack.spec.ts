@@ -9,6 +9,7 @@ import {
 } from '../src'
 import {TargetTrackConfig} from "../src/interface";
 import {EVENT_TYPE, EVENT_DATA_PROCESS_TYPE} from "../src/constants";
+import {ConfigStore} from "../src/store";
 
 const defaultExampleEventConfig: TargetTrackConfig = {
     eventExposureConfig: {
@@ -33,6 +34,10 @@ describe('PageLifecycleTrack', () => {
     const pageLifecycleTrack = container.get<PageLifecycleTrack>(SERVICE_IDENTIFIER.PAGE_LIFECYCLE_TRACK)
 
     const eventCenter = container.get<EventCenter>(SERVICE_IDENTIFIER.EVENT_CENTER)
+
+    const configStore = container.get<ConfigStore>(SERVICE_IDENTIFIER.CONFIG_STORE)
+
+    configStore.enableLog = true
 
     const trackEventQueueManager: TrackEventQueueManager = (pageLifecycleTrack as any)._trackEventQueueManager
 
