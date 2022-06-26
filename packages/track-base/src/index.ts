@@ -1,7 +1,7 @@
 import "reflect-metadata"
-import {noop} from './utils'
 import {container} from './container'
-import {SERVICE_IDENTIFIER, EVENT_TYPE, DEFAULT_EVENT_CONFIG, DEFAULT_EVENT_NAME} from './constants'
+import {noop, submitTrack, submitEventData} from './utils'
+import {SERVICE_IDENTIFIER, EVENT_TYPE, DEFAULT_EVENT_CONFIG, DEFAULT_TRACK_EVENT_NAME} from './constants'
 import {EventCenter, TrackEventDataProcess, TrackEventQueueManager, PageLifecycleTrack} from './impl'
 import {initBaseTrack} from './initBaseTrack'
 
@@ -15,7 +15,9 @@ export type {
 
 export {
     noop,
+    submitTrack,
     initBaseTrack,
+    submitEventData,
     EventCenter,
     TrackEventDataProcess,
     TrackEventQueueManager,
@@ -24,5 +26,5 @@ export {
     SERVICE_IDENTIFIER,
     EVENT_TYPE,
     DEFAULT_EVENT_CONFIG,
-    DEFAULT_EVENT_NAME
+    DEFAULT_TRACK_EVENT_NAME
 }

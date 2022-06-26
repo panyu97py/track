@@ -22,7 +22,7 @@ export interface TrackEventDataProcessInstance {
 
     targetBeginExposure: (trackConfig: TargetTrackConfig) => void;
 
-    targetEndExposure: (trackConfig: TargetTrackConfig) => void;
+    targetEndExposure: (trackConfig: TargetTrackConfig, isImport?:boolean) => void;
 
-    targetClick: (trackConfig: TargetTrackConfig) => void;
+    targetClick: (trackConfig: TargetTrackConfig, isImport?:boolean) => void;
 }

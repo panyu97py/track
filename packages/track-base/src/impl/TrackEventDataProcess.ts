@@ -1,7 +1,7 @@
 import {v4 as generateUUID} from 'uuid'
 import {inject, injectable} from 'inversify'
 import {TrackEventQueueManager} from "./TrackEventQueueManager";
-import {EVENT_TYPE, DEFAULT_EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
+import {EVENT_TYPE, DEFAULT_TRACK_EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
 import type {
     EventConfig,
     EventData,
@@ -43,7 +43,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
     fillReferrerId(trackData: SimpleEventData, config: EventConfig): FilledEventIdSimpleEventData {
         const {
             originEventType = EVENT_TYPE.EXPOSURE,
-            originEventName = DEFAULT_EVENT_NAME.PAGE_EXPOSURE,
+            originEventName = DEFAULT_TRACK_EVENT_NAME.PAGE_EXPOSURE,
             relevanceKey
         } = config
 
@@ -146,8 +146,9 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
     /**
      * 目标元素点击
      * @param trackConfig
+     * @param isImport
      */
-    targetClick(trackConfig: TargetTrackConfig): void {
+    targetClick(trackConfig: TargetTrackConfig, isImport?:boolean): void {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.CLICK)
 
@@ -159,7 +160,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         this.clickEventDataMap.set(eventKey, eventData)
 
-        this._trackEventQueueManager.submitEvent(eventData)
+        this._trackEventQueueManager.submitEvent(eventData,isImport)
     }
 
     /**
@@ -180,8 +181,9 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
     /**
      * 目标元素停止曝光
      * @param trackConfig
+     * @param isImport
      */
-    targetEndExposure(trackConfig: TargetTrackConfig): void {
+    targetEndExposure(trackConfig: TargetTrackConfig, isImport?:boolean): void {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.EXPOSURE)
 
@@ -191,7 +193,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
 
-        this._trackEventQueueManager.submitEvent(eventData as EventData)
+        this._trackEventQueueManager.submitEvent(eventData, isImport)
 
         this.exposureEventDataMap.delete(eventKey)
     }

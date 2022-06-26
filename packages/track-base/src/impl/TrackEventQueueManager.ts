@@ -22,23 +22,25 @@ export class TrackEventQueueManager implements TrackEventQueueManagerInterface {
     /**
      * 提交事件
      * @param trackData
+     * @param isImport
      */
-    submitEvent(trackData: EventData): void {
+    submitEvent(trackData: EventData, isImport?: boolean): void {
 
         this._eventsQueue.push(trackData)
 
-        if (this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
+        if (isImport || this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
     }
 
     /**
      * 批量提交事件
      * @param trackDataList
+     * @param isImport
      */
-    batchSubmitEvent(trackDataList: EventData[]): void {
+    batchSubmitEvent(trackDataList: EventData[], isImport?: boolean): void {
 
         this._eventsQueue.push(...trackDataList)
 
-        if (this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
+        if (isImport || this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
     }
 
     /**

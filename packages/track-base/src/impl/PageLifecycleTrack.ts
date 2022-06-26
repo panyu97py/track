@@ -36,18 +36,18 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
 
         this._trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
 
-        this._eventCenter.on(this._pageKey, (trackConfig: TargetTrackConfig, type: EventDataProcessType) => {
+        this._eventCenter.on(this._pageKey, (trackConfig: TargetTrackConfig, type: EventDataProcessType, isImport?: boolean) => {
 
             switch (type) {
-
-                case EVENT_DATA_PROCESS_TYPE.CLICK:
-                    return this._trackEventDataProcess.targetClick(trackConfig)
 
                 case EVENT_DATA_PROCESS_TYPE.BEGIN_EXPOSURE:
                     return this._trackEventDataProcess.targetBeginExposure(trackConfig)
 
                 case EVENT_DATA_PROCESS_TYPE.END_EXPOSURE:
-                    return this._trackEventDataProcess.targetEndExposure(trackConfig)
+                    return this._trackEventDataProcess.targetEndExposure(trackConfig, isImport)
+
+                case EVENT_DATA_PROCESS_TYPE.CLICK:
+                    return this._trackEventDataProcess.targetClick(trackConfig, isImport)
             }
 
         })
