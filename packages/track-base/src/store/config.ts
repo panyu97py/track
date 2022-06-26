@@ -1,5 +1,4 @@
 import {injectable} from "inversify";
-import {noop} from "../utils";
 import type {ConfigStoreInterface, EventDataRequest} from "../interface";
 
 @injectable()
@@ -23,7 +22,7 @@ export class ConfigStore implements ConfigStoreInterface {
     }
 
     get request(): EventDataRequest {
-        return this._request || noop
+        return this._request
     }
 
     get baseInfo(): Record<string, any> {

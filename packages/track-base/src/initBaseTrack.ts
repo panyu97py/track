@@ -1,20 +1,22 @@
 import {container} from './container'
 import {ConfigStore} from './store';
-import type {InitBaseTrackOption} from "./interface/initBaseTrack";
 import {SERVICE_IDENTIFIER} from "./constants";
-import {initGlobalEventQueueManager} from "./utils";
+import {initGlobalEventQueueManager, noop} from "./utils";
+import type {InitBaseTrackOption} from "./interface/initBaseTrack";
 
 export const initBaseTrack = (option: InitBaseTrackOption) => {
 
+    const {enableLog = true, request = noop, baseInfo = {}, commonInfo = {}} = option
+
     const configStore = container.get<ConfigStore>(SERVICE_IDENTIFIER.CONFIG_STORE)
 
-    configStore.setEnableLog(option.enableLog)
+    configStore.setEnableLog(enableLog)
 
-    configStore.setRequest(option.request)
+    configStore.setRequest(request)
 
-    configStore.setBaseInfo(option.baseInfo)
+    configStore.setBaseInfo(baseInfo)
 
-    configStore.setCommonInfo(option.commonInfo)
+    configStore.setCommonInfo(commonInfo)
 
     initGlobalEventQueueManager()
 }
