@@ -5,6 +5,7 @@ import {TrackEventQueueManager} from './TrackEventQueueManager';
 import {SERVICE_IDENTIFIER, DEFAULT_EVENT_CONFIG, EVENT_DATA_PROCESS_TYPE} from "../constants";
 import type {PageLifecycleTrackInstance, TargetTrackConfig} from "../interface";
 import {EventDataProcessType} from "../interface";
+import {ConfigStore} from "../store";
 
 @injectable()
 export class PageLifecycleTrack implements PageLifecycleTrackInstance {
@@ -18,9 +19,14 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
     @inject(SERVICE_IDENTIFIER.EVENT_CENTER)
     private _eventCenter: EventCenter
 
+    @inject(SERVICE_IDENTIFIER.CONFIG_STORE)
+    private _config: ConfigStore;
+
     private _pageKey: string
 
     pageOnShow(pageKey: string): void {
+
+        if (!this._config.enableLog) return
 
         this._pageKey = pageKey
 
@@ -44,6 +50,8 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
     }
 
     pageOnHide(): void {
+        if (!this._config.enableLog) return
+
         this._eventCenter.off(this._pageKey)
 
         this._trackEventDataProcess.targetEndExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
