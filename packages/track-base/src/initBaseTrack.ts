@@ -9,6 +9,8 @@ export const initBaseTrack = (option: InitBaseTrackOption) => {
 
     configStore.enableLog = option.enableLog
 
+    configStore.request = option.request
+
     configStore.baseInfo = option.baseInfo
 
     configStore.commonInfo = option.commonInfo

@@ -1,3 +1,5 @@
+import {EventDataRequest} from "./store";
+
 export interface InitBaseTrackOption {
 
     enableLog: boolean | (() => boolean);
@@ -6,6 +8,10 @@ export interface InitBaseTrackOption {
 
     baseInfo: Record<string, any> | (() => Record<string, any>);
 
-    request: () => void
+    request: EventDataRequest;
+
+    eventQueueLimitNum: number;
+
+    eventQueueMaxRetryTimes: number;
 
 }

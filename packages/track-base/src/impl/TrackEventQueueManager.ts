@@ -1,44 +1,59 @@
-import {injectable} from "inversify";
-import {noop} from "../utils";
+import {inject, injectable} from "inversify";
+import {ConfigStore} from "../store";
 import type {TrackEventQueueManagerInterface, EventData} from "../interface";
+import {SERVICE_IDENTIFIER} from "../constants";
 
 @injectable()
 export class TrackEventQueueManager implements TrackEventQueueManagerInterface {
 
-    limitNum: number;
+    /**
+     * 配置
+     * @private
+     */
+    @inject(SERVICE_IDENTIFIER.CONFIG_STORE)
+    private _config: ConfigStore;
 
-    maxRetryTimes: number;
+    /**
+     * 事件队列
+     * @private
+     */
+    private _eventsQueue: EventData[] = [];
 
-    eventsQueue: EventData[] = [];
-
-    failCallback: (trackDataList: EventData[]) => void
-
-    constructor(limitNum = 10, maxRetryTimes = 3, failCallback = noop) {
-        this.limitNum = limitNum
-        this.maxRetryTimes = maxRetryTimes
-        this.failCallback = failCallback
-    }
-
+    /**
+     * 提交事件
+     * @param trackData
+     */
     submitEvent(trackData: EventData): void {
-        console.log({trackData})
+
+        this._eventsQueue.push(trackData)
+
+        if (this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
     }
 
+    /**
+     * 批量提交事件
+     * @param trackDataList
+     */
     batchSubmitEvent(trackDataList: EventData[]): void {
-        console.log({trackDataList})
+
+        this._eventsQueue.push(...trackDataList)
+
+        if (this._eventsQueue.length >= this._config.eventQueueLimitNum) this.submitEventsQueue();
     }
 
-    retrySubmitEventsQueue(): void {
-    }
-
-
+    /**
+     * 提交事件队列
+     */
     submitEventsQueue(): void {
-        const len = this.eventsQueue.length;
+        const len = this._eventsQueue.length;
 
         if (!len) return;
 
-        const events = this.eventsQueue.splice(0, len);
+        const events = this._eventsQueue.splice(0, len);
 
-        console.log(events)
+        const {baseInfo, commonInfo} = this._config
+
+        this._config.request({events, baseInfo, commonInfo})
     }
 
 }
