@@ -2,6 +2,7 @@ export interface SimpleEventData {
     eventId: string;
     eventType: string;
     eventName: string;
+    pageKey:string;
     startTime: number;
     referrerId?: string;
     endTime?: number;

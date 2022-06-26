@@ -10,11 +10,11 @@ export interface CommonStoreInterface {
 
     setCurrentPageKey(currentPageKey: string): void;
 
-    setReferrerEventData(referrerEventData: EventData): void;
+    setCurrentPageReferrerEventData(currentPageReferrerEventData: EventData): void;
 
     get currentPageKey(): string;
 
-    get referrerEventData(): EventData;
+    get currentPageReferrerEventData(): EventData;
 }
 
 export interface ConfigStoreInterface {

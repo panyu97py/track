@@ -11,6 +11,7 @@ import type {
     TrackEventDataProcessInstance,
     FilledEventIdSimpleEventData
 } from '../interface'
+import {CommonStore} from "../store";
 
 @injectable()
 export class TrackEventDataProcess implements TrackEventDataProcessInstance {
@@ -21,6 +22,13 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      */
     @inject(SERVICE_IDENTIFIER.TRACK_EVENT_QUEUE_MANAGER)
     private _trackEventQueueManager: TrackEventQueueManager;
+
+    /**
+     * 公共 store
+     * @private
+     */
+    @inject(SERVICE_IDENTIFIER.COMMON_STORE)
+    private _commonStore: CommonStore;
 
     /**
      * 点击事件数据列表
@@ -36,7 +44,6 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
     /**
      * 填充事件来源 id
-     * @todo 页面曝光事件的处理逻辑
      * @param trackData
      * @param config
      */
@@ -54,6 +61,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
         }, trackData.extendData)
 
         const originEvent = (() => {
+            if (trackData.eventName === DEFAULT_TRACK_EVENT_NAME.PAGE_EXPOSURE) return this._commonStore.currentPageReferrerEventData
             switch (originEventType) {
                 case EVENT_TYPE.EXPOSURE:
                     return this.exposureEventDataMap.get(originEventKey)
@@ -138,7 +146,9 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const startTime = new Date().getTime()
 
-        const simpleEvent = {eventId, eventType, eventName, extendData: extendData || {}, startTime}
+        const pageKey = this._commonStore.currentPageKey
+
+        const simpleEvent = {eventId, eventType, eventName, pageKey, extendData: extendData || {}, startTime}
 
         return this.fillReferrerId(simpleEvent, config);
     }
@@ -148,7 +158,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      * @param isImport
      */
-    targetClick(trackConfig: TargetTrackConfig, isImport?:boolean): void {
+    targetClick(trackConfig: TargetTrackConfig, isImport?: boolean): void {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.CLICK)
 
@@ -160,7 +170,9 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         this.clickEventDataMap.set(eventKey, eventData)
 
-        this._trackEventQueueManager.submitEvent(eventData,isImport)
+        this._trackEventQueueManager.submitEvent(eventData, isImport)
+
+        if (eventConfig.canBePageReferrerEvent) this._commonStore.setCurrentPageReferrerEventData(eventData)
     }
 
     /**
@@ -183,7 +195,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      * @param trackConfig
      * @param isImport
      */
-    targetEndExposure(trackConfig: TargetTrackConfig, isImport?:boolean): void {
+    targetEndExposure(trackConfig: TargetTrackConfig, isImport?: boolean): void {
 
         const eventConfig = this.getEventConfig(trackConfig, EVENT_TYPE.EXPOSURE)
 
@@ -196,6 +208,8 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
         this._trackEventQueueManager.submitEvent(eventData, isImport)
 
         this.exposureEventDataMap.delete(eventKey)
+
+        if (eventConfig.canBePageReferrerEvent) this._commonStore.setCurrentPageReferrerEventData(eventData)
     }
 
 }

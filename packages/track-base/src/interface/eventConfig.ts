@@ -6,6 +6,7 @@ export interface EventConfig {
     originEventType?: EventType;
     originEventName?: string;
     relevanceKey?: string;
+    canBePageReferrerEvent?: boolean
 }
 
 export interface TargetTrackConfig {
