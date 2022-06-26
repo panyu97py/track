@@ -1,6 +1,6 @@
 import {injectable, inject} from 'inversify'
 import {EventCenter} from "./EventCenter";
-import {ConfigStore, EventStore} from "../store";
+import {ConfigStore, CommonStore} from "../store";
 import {TrackEventDataProcess} from "./TrackEventDataProcess";
 import {TrackEventQueueManager} from './TrackEventQueueManager';
 import {SERVICE_IDENTIFIER, DEFAULT_EVENT_CONFIG, EVENT_DATA_PROCESS_TYPE} from "../constants";
@@ -21,8 +21,8 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
     @inject(SERVICE_IDENTIFIER.CONFIG_STORE)
     private _config: ConfigStore;
 
-    @inject(SERVICE_IDENTIFIER.EVENT_STORE)
-    private _eventStore: EventStore;
+    @inject(SERVICE_IDENTIFIER.COMMON_STORE)
+    private _commonStore: CommonStore;
 
     private _pageKey: string
 
@@ -30,7 +30,7 @@ export class PageLifecycleTrack implements PageLifecycleTrackInstance {
 
         if (!this._config.enableLog) return
 
-        this._eventStore.setCurrentPageKey(pageKey)
+        this._commonStore.setCurrentPageKey(pageKey)
 
         this._pageKey = pageKey
 

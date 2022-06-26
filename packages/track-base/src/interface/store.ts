@@ -6,7 +6,7 @@ export interface requestParams {
 
 export type EventDataRequest = (params: requestParams) => void;
 
-export interface EventStoreInterface {
+export interface CommonStoreInterface {
 
     setCurrentPageKey(currentPageKey: string): void;
 

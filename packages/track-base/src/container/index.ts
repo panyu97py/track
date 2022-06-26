@@ -1,6 +1,6 @@
 import {Container} from 'inversify'
 import {SERVICE_IDENTIFIER} from '../constants'
-import {ConfigStore,EventStore} from "../store";
+import {CommonStore, ConfigStore} from "../store";
 import {EventCenter, TrackEventDataProcess, TrackEventQueueManager, PageLifecycleTrack} from '../impl'
 import type {
     TrackEventDataProcessInstance,
@@ -8,12 +8,12 @@ import type {
     EventCenterInterface,
     PageLifecycleTrackInstance,
     ConfigStoreInterface,
-    EventStoreInterface
+    CommonStoreInterface
 } from '../interface'
 
 const container = new Container()
 
-container.bind<EventStoreInterface>(SERVICE_IDENTIFIER.EVENT_STORE).to(EventStore).inSingletonScope()
+container.bind<CommonStoreInterface>(SERVICE_IDENTIFIER.COMMON_STORE).to(CommonStore).inSingletonScope()
 
 container.bind<ConfigStoreInterface>(SERVICE_IDENTIFIER.CONFIG_STORE).to(ConfigStore).inSingletonScope()
 

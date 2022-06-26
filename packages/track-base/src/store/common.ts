@@ -1,8 +1,8 @@
 import {injectable} from "inversify";
-import type {EventData, EventStoreInterface} from "../interface";
+import type {EventData, CommonStoreInterface} from "../interface";
 
 @injectable()
-export class EventStore implements EventStoreInterface {
+export class CommonStore implements CommonStoreInterface {
 
     private _currentPageKey: string;
 
