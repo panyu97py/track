@@ -17,30 +17,6 @@ export class ConfigStore implements ConfigStoreInterface {
 
     private _request: EventDataRequest;
 
-    set enableLog(enableLog: boolean | (() => boolean)) {
-        this._enableLog = enableLog
-    }
-
-    set request(request: EventDataRequest) {
-        this._request = request
-    }
-
-    set baseInfo(baseInfo: Record<string, any> | (() => Record<string, any>)) {
-        this._baseInfo = baseInfo
-    }
-
-    set commonInfo(commonInfo: Record<string, any> | (() => Record<string, any>)) {
-        this._commonInfo = commonInfo
-    }
-
-    set eventQueueLimitNum(eventQueueLimitNum: number) {
-        this._eventQueueLimitNum = eventQueueLimitNum
-    }
-
-    set eventQueueMaxRetryTimes(eventQueueMaxRetryTimes: number) {
-        this._eventQueueMaxRetryTimes = eventQueueMaxRetryTimes
-    }
-
     get enableLog(): boolean {
         if (typeof this._enableLog === 'function') return this._enableLog()
         return this._enableLog
@@ -66,6 +42,30 @@ export class ConfigStore implements ConfigStoreInterface {
 
     get eventQueueMaxRetryTimes(): number {
         return this._eventQueueMaxRetryTimes
+    }
+
+    setEnableLog(enableLog: boolean | (() => boolean)) {
+        this._enableLog = enableLog
+    }
+
+    setRequest(request: EventDataRequest) {
+        this._request = request
+    }
+
+    setBaseInfo(baseInfo: Record<string, any> | (() => Record<string, any>)) {
+        this._baseInfo = baseInfo
+    }
+
+    setCommonInfo(commonInfo: Record<string, any> | (() => Record<string, any>)) {
+        this._commonInfo = commonInfo
+    }
+
+    setEventQueueLimitNum(eventQueueLimitNum: number) {
+        this._eventQueueLimitNum = eventQueueLimitNum
+    }
+
+    setEventQueueMaxRetryTimes(eventQueueMaxRetryTimes: number) {
+        this._eventQueueMaxRetryTimes = eventQueueMaxRetryTimes
     }
 
 }

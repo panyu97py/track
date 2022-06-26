@@ -7,11 +7,11 @@ export const initBaseTrack = (option: InitBaseTrackOption) => {
 
     const configStore = container.get<ConfigStore>(SERVICE_IDENTIFIER.CONFIG_STORE)
 
-    configStore.enableLog = option.enableLog
+    configStore.setEnableLog(option.enableLog)
 
-    configStore.request = option.request
+    configStore.setRequest(option.request)
 
-    configStore.baseInfo = option.baseInfo
+    configStore.setBaseInfo(option.baseInfo)
 
-    configStore.commonInfo = option.commonInfo
+    configStore.setCommonInfo(option.commonInfo)
 }

@@ -37,7 +37,7 @@ describe('PageLifecycleTrack', () => {
 
     const configStore = container.get<ConfigStore>(SERVICE_IDENTIFIER.CONFIG_STORE)
 
-    configStore.enableLog = true
+    configStore.setEnableLog(true)
 
     const trackEventQueueManager: TrackEventQueueManager = (pageLifecycleTrack as any)._trackEventQueueManager
 

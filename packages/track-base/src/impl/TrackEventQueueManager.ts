@@ -1,7 +1,7 @@
 import {inject, injectable} from "inversify";
 import {ConfigStore} from "../store";
-import type {TrackEventQueueManagerInterface, EventData} from "../interface";
 import {SERVICE_IDENTIFIER} from "../constants";
+import type {TrackEventQueueManagerInterface, EventData} from "../interface";
 
 @injectable()
 export class TrackEventQueueManager implements TrackEventQueueManagerInterface {

@@ -7,3 +7,5 @@ export const EVENT_CENTER = 'EVENT_CENTER'
 export const PAGE_LIFECYCLE_TRACK = 'PAGE_LIFECYCLE_TRACK'
 
 export const CONFIG_STORE = 'CONFIG_STORE'
+
+export const EVENT_STORE = 'EVENT_STORE'

@@ -1,5 +1,6 @@
 import {v4 as generateUUID} from 'uuid'
 import {inject, injectable} from 'inversify'
+import {TrackEventQueueManager} from "./TrackEventQueueManager";
 import {EVENT_TYPE, DEFAULT_EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
 import type {
     EventConfig,
@@ -10,7 +11,6 @@ import type {
     TrackEventDataProcessInstance,
     FilledEventIdSimpleEventData
 } from '../interface'
-import {TrackEventQueueManager} from "./TrackEventQueueManager";
 
 @injectable()
 export class TrackEventDataProcess implements TrackEventDataProcessInstance {

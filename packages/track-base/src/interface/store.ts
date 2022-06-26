@@ -1,22 +1,35 @@
+import {EventData} from "./eventData";
+
 export interface requestParams {
 
 }
 
 export type EventDataRequest = (params: requestParams) => void;
 
+export interface EventStoreInterface {
+
+    setCurrentPageKey(currentPageKey: string): void;
+
+    setReferrerEventData(referrerEventData: EventData): void;
+
+    get currentPageKey(): string;
+
+    get referrerEventData(): EventData;
+}
+
 export interface ConfigStoreInterface {
 
-    set enableLog(enable: boolean | (() => boolean));
+    setEnableLog(enable: boolean | (() => boolean));
 
-    set request(request: EventDataRequest)
+    setRequest(request: EventDataRequest)
 
-    set baseInfo(baseInfo: Record<string, any> | (() => Record<string, any>));
+    setBaseInfo(baseInfo: Record<string, any> | (() => Record<string, any>));
 
-    set commonInfo(commonInfo: Record<string, any> | (() => Record<string, any>));
+    setCommonInfo(commonInfo: Record<string, any> | (() => Record<string, any>));
 
-    set eventQueueLimitNum(eventQueueLimitNum: number);
+    setEventQueueLimitNum(eventQueueLimitNum: number);
 
-    set eventQueueMaxRetryTimes(eventQueueMaxRetryTimes:number);
+    setEventQueueMaxRetryTimes(eventQueueMaxRetryTimes: number);
 
     get enableLog(): boolean;
 
@@ -28,6 +41,6 @@ export interface ConfigStoreInterface {
 
     get eventQueueLimitNum(): number;
 
-    get eventQueueMaxRetryTimes():number;
+    get eventQueueMaxRetryTimes(): number;
 
 }
