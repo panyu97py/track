@@ -6,10 +6,6 @@ export type EventDataProcessType = 'CLICK' | 'BEGIN_EXPOSURE' | 'END_EXPOSURE';
 
 export interface TrackEventDataProcessInstance {
 
-    exposureEventDataMap: Map<string, FilledEventIdSimpleEventData>;
-
-    clickEventDataMap: Map<string, FilledEventIdSimpleEventData>;
-
     getEventConfig: (trackConfig: TargetTrackConfig, type: EventType) => EventConfig
 
     generateEventKey: (config: EventConfig, extendData?: Record<string, any>) => string;

@@ -1,7 +1,7 @@
 'use strict';
 import {container, SERVICE_IDENTIFIER, TrackEventDataProcess, TrackEventQueueManager} from '../src'
 import {EVENT_TYPE, DEFAULT_EVENT_CONFIG} from "../src/constants";
-import {TargetTrackConfig} from "../src/interface";
+import {TargetTrackConfig} from "../src";
 
 const defaultExampleEventConfig: TargetTrackConfig = {
     eventExposureConfig: {
@@ -95,7 +95,7 @@ describe('trackEventDataProcess', () => {
 
             const exampleEventData = trackEventDataProcess.generateEventData(eventExposureConfig!)
 
-            const pageEventData = trackEventDataProcess.exposureEventDataMap.get(pageEventKey)
+            const pageEventData = (trackEventDataProcess as any)._exposureEventDataMap.get(pageEventKey)
 
             expect(exampleEventData.referrerId).toBeTruthy()
 
@@ -110,7 +110,7 @@ describe('trackEventDataProcess', () => {
 
             const targetExposureKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
 
-            const targetExposureData = trackEventDataProcess.exposureEventDataMap.get(targetExposureKey)
+            const targetExposureData = (trackEventDataProcess as any)._exposureEventDataMap.get(targetExposureKey)
 
             const exampleEventData = trackEventDataProcess.generateEventData(eventClickConfig!, extendData)
 
@@ -136,7 +136,7 @@ describe('trackEventDataProcess', () => {
 
             const targetClickKey = trackEventDataProcess.generateEventKey(eventClickConfig!, extendData)
 
-            const targetClickData = trackEventDataProcess.clickEventDataMap.get(targetClickKey)
+            const targetClickData = (trackEventDataProcess as any)._clickEventDataMap.get(targetClickKey)
 
             const testEventData = trackEventDataProcess.generateEventData(testEventConfig.eventExposureConfig!, testEventConfig.extendData)
 
@@ -179,7 +179,7 @@ describe('trackEventDataProcess', () => {
 
         const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
 
-        expect(trackEventDataProcess.exposureEventDataMap.get(eventKey)).toBeTruthy()
+        expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeTruthy()
 
     })
 
@@ -198,7 +198,7 @@ describe('trackEventDataProcess', () => {
 
             expect(spySubmitEventsQueue).toHaveBeenCalled()
 
-            expect(trackEventDataProcess.exposureEventDataMap.get(eventKey)).toBeUndefined()
+            expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeUndefined()
         })
 
     })
@@ -213,7 +213,7 @@ describe('trackEventDataProcess', () => {
 
             expect(spySubmitEventsQueue).toHaveBeenCalled()
 
-            expect(trackEventDataProcess.clickEventDataMap.get(eventKey)).toBeTruthy()
+            expect((trackEventDataProcess as any)._clickEventDataMap.get(eventKey)).toBeTruthy()
 
         })
 

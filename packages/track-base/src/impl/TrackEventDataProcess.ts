@@ -34,13 +34,13 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
      * 点击事件数据列表
      * @desc 保存当前页面所有点击事件
      */
-    clickEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
+    private _clickEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
 
     /**
      * 曝光事件数据列表
      * @desc 仅保存当前页面可视元素
      */
-    exposureEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
+    private _exposureEventDataMap: Map<string, FilledEventIdSimpleEventData> = new Map();
 
     /**
      * 填充事件来源 id
@@ -64,9 +64,9 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
             if (trackData.eventName === DEFAULT_TRACK_EVENT_NAME.PAGE_EXPOSURE) return this._commonStore.currentPageReferrerEventData
             switch (originEventType) {
                 case EVENT_TYPE.EXPOSURE:
-                    return this.exposureEventDataMap.get(originEventKey)
+                    return this._exposureEventDataMap.get(originEventKey)
                 case EVENT_TYPE.CLICK:
-                    return this.clickEventDataMap.get(originEventKey)
+                    return this._clickEventDataMap.get(originEventKey)
                 default:
                     throw ERROR_MSG.UNKNOWN_EVENT_TYPE
             }
@@ -168,7 +168,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventKey = this.generateEventKey(eventConfig, trackConfig.extendData)
 
-        this.clickEventDataMap.set(eventKey, eventData)
+        this._clickEventDataMap.set(eventKey, eventData)
 
         this._trackEventQueueManager.submitEvent(eventData, isImport)
 
@@ -187,7 +187,7 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventKey = this.generateEventKey(eventConfig, trackConfig.extendData)
 
-        this.exposureEventDataMap.set(eventKey, eventData)
+        this._exposureEventDataMap.set(eventKey, eventData)
     }
 
     /**
@@ -201,13 +201,13 @@ export class TrackEventDataProcess implements TrackEventDataProcessInstance {
 
         const eventKey = this.generateEventKey(eventConfig, trackConfig.extendData)
 
-        const simpleEvent = this.exposureEventDataMap.get(eventKey) || this.generateEventData(eventConfig, trackConfig.extendData)
+        const simpleEvent = this._exposureEventDataMap.get(eventKey) || this.generateEventData(eventConfig, trackConfig.extendData)
 
         const eventData = this.fillEndTime(simpleEvent, EVENT_TYPE.EXPOSURE)
 
         this._trackEventQueueManager.submitEvent(eventData, isImport)
 
-        this.exposureEventDataMap.delete(eventKey)
+        this._exposureEventDataMap.delete(eventKey)
 
         if (eventConfig.canBePageReferrerEvent) this._commonStore.setCurrentPageReferrerEventData(eventData)
     }

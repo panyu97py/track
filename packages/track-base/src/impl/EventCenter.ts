@@ -5,7 +5,7 @@ import type {EventCenterInterface, EventNode, Listener} from '../interface'
 @injectable()
 export class EventCenter implements EventCenterInterface {
 
-    _eventMap: Map<string, EventNode[]> = new Map();
+    private _eventMap: Map<string, EventNode[]> = new Map();
 
     /**
      * 监听事件

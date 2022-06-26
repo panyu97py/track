@@ -7,7 +7,7 @@ import {
     TrackEventDataProcess,
     EventCenter
 } from '../src'
-import {TargetTrackConfig} from "../src/interface";
+import {TargetTrackConfig} from "../src";
 import {EVENT_TYPE, EVENT_DATA_PROCESS_TYPE} from "../src/constants";
 import {ConfigStore} from "../src/store";
 

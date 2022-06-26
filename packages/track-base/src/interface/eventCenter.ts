@@ -6,7 +6,6 @@ export interface EventNode {
 }
 
 export interface EventCenterInterface {
-    _eventMap: Map<string, EventNode[]>;
 
     on: (eventName: string, listener: Listener, context?: any) => void;
 

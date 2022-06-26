@@ -21,10 +21,6 @@ describe('EventCenter', () => {
 
         eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
 
-        expect(eventCenter._eventMap.get(EXAMPLE_EVENT_NAME)).toContainEqual({listener: firstFn, context: undefined})
-
-        expect(eventCenter._eventMap.get(EXAMPLE_EVENT_NAME)).toContainEqual({listener: secondFn, context: undefined})
-
         expect(firstFn).toHaveBeenCalledWith(params)
 
         expect(secondFn).toHaveBeenCalledWith(params)
