@@ -1,7 +1,9 @@
 import {EventData} from "./eventData";
 
 export interface requestParams {
-
+    baseInfo: Record<string, any>,
+    commonInfo: Record<string, any>,
+    events: EventData[]
 }
 
 export type EventDataRequest = (params: requestParams) => void;
