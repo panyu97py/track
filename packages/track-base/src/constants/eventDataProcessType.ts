@@ -1,4 +1,4 @@
-import {EventDataProcessType} from "../interface";
+import type {EventDataProcessType} from "../interface";
 
 export const CLICK: EventDataProcessType = 'CLICK'
 
