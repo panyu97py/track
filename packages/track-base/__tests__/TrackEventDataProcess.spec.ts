@@ -1,222 +1,187 @@
-'use strict';
-import {container, SERVICE_IDENTIFIER, TrackEventDataProcess, TrackEventQueueManager} from '../src'
-import {EVENT_TYPE, DEFAULT_EVENT_CONFIG} from "../src/constants";
-import {TargetTrackConfig} from "../src";
+'use strict'
+import { container, SERVICE_IDENTIFIER, TrackEventDataProcess, TrackEventQueueManager, TargetTrackConfig } from '../src'
+import { EVENT_TYPE, DEFAULT_EVENT_CONFIG } from '../src/constants'
 
-const defaultExampleEventConfig: TargetTrackConfig = {
-    eventExposureConfig: {
-        eventType: EVENT_TYPE.EXPOSURE,
-        eventName: 'DEFAULT_EXAMPLE_EXPOSURE',
-        relevanceKey: 'exampleId'
-    },
-    eventClickConfig: {
-        eventType: EVENT_TYPE.CLICK,
-        eventName: 'DEFAULT_EXAMPLE_CLICK',
-        relevanceKey: 'exampleId',
-        originEventType: EVENT_TYPE.EXPOSURE,
-        originEventName: 'DEFAULT_EXAMPLE_EXPOSURE'
-    },
-    extendData: {
-        exampleId: 'exampleId'
-    }
+const defaultExampleEventConfig: Required<TargetTrackConfig> = {
+  eventExposureConfig: {
+    eventType: EVENT_TYPE.EXPOSURE,
+    eventName: 'DEFAULT_EXAMPLE_EXPOSURE',
+    relevanceKey: 'exampleId'
+  },
+  eventClickConfig: {
+    eventType: EVENT_TYPE.CLICK,
+    eventName: 'DEFAULT_EXAMPLE_CLICK',
+    relevanceKey: 'exampleId',
+    originEventType: EVENT_TYPE.EXPOSURE,
+    originEventName: 'DEFAULT_EXAMPLE_EXPOSURE'
+  },
+  extendData: {
+    exampleId: 'exampleId'
+  }
 }
 
 describe('trackEventDataProcess', () => {
+  const trackEventDataProcess = container.get<TrackEventDataProcess>(SERVICE_IDENTIFIER.TRACK_EVENT_DATA_PROCESS)
 
-    const trackEventDataProcess = container.get<TrackEventDataProcess>(SERVICE_IDENTIFIER.TRACK_EVENT_DATA_PROCESS)
+  const trackEventQueueManager: TrackEventQueueManager = (trackEventDataProcess as any)._trackEventQueueManager
 
-    const trackEventQueueManager: TrackEventQueueManager = (trackEventDataProcess as any)._trackEventQueueManager
+  const spySubmitEventsQueue = jest.spyOn(trackEventQueueManager, 'submitEvent')
 
-    const spySubmitEventsQueue = jest.spyOn(trackEventQueueManager, 'submitEvent')
+  const { eventExposureConfig, eventClickConfig, extendData } = defaultExampleEventConfig
 
-    const {eventExposureConfig, eventClickConfig, extendData} = defaultExampleEventConfig
+  describe('generateEventKey', () => {
+    it('no extendData', () => {
+      const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig)
 
-    describe('generateEventKey', () => {
-
-        it('no extendData', () => {
-
-            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!)
-
-            expect(eventKey).toEqual(`${eventExposureConfig?.eventType}-${eventExposureConfig?.eventName}`)
-        });
-
-        it('exit extendData', () => {
-
-            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData!)
-
-            expect(eventKey).toEqual(`${eventExposureConfig?.eventType}-${eventExposureConfig?.eventName}-${extendData?.exampleId}`)
-        })
-
+      expect(eventKey).toEqual(`${eventExposureConfig?.eventType}-${eventExposureConfig?.eventName}`)
     })
 
-    describe('getEventConfig', () => {
+    it('exit extendData', () => {
+      const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig, extendData)
 
-        it('exposure event config', () => {
+      expect(eventKey).toEqual(`${eventExposureConfig?.eventType}-${eventExposureConfig?.eventName}-${extendData?.exampleId}`)
+    })
+  })
 
-            const eventConfig = trackEventDataProcess.getEventConfig(defaultExampleEventConfig, EVENT_TYPE.EXPOSURE)
+  describe('getEventConfig', () => {
+    it('exposure event config', () => {
+      const eventConfig = trackEventDataProcess.getEventConfig(defaultExampleEventConfig, EVENT_TYPE.EXPOSURE)
 
-            expect(eventConfig).toEqual(defaultExampleEventConfig.eventExposureConfig)
-        })
-
-        it('click event config', () => {
-
-            const eventConfig = trackEventDataProcess.getEventConfig(defaultExampleEventConfig, EVENT_TYPE.CLICK)
-
-            expect(eventConfig).toEqual(defaultExampleEventConfig.eventClickConfig)
-        })
-
+      expect(eventConfig).toEqual(defaultExampleEventConfig.eventExposureConfig)
     })
 
-    describe('generateEventData', () => {
+    it('click event config', () => {
+      const eventConfig = trackEventDataProcess.getEventConfig(defaultExampleEventConfig, EVENT_TYPE.CLICK)
 
-        const eventData = trackEventDataProcess.generateEventData(eventExposureConfig!, extendData)
+      expect(eventConfig).toEqual(defaultExampleEventConfig.eventClickConfig)
+    })
+  })
 
-        expect(eventData.eventId).toBeTruthy()
+  describe('generateEventData', () => {
+    const eventData = trackEventDataProcess.generateEventData(eventExposureConfig, extendData)
 
-        expect(eventData.eventType).toBe(eventExposureConfig?.eventType)
+    expect(eventData.eventId).toBeTruthy()
 
-        expect(eventData.eventName).toBe(eventExposureConfig?.eventName)
+    expect(eventData.eventType).toBe(eventExposureConfig?.eventType)
 
-        expect(eventData.startTime).toBeTruthy()
+    expect(eventData.eventName).toBe(eventExposureConfig?.eventName)
 
-        expect(eventData.extendData).toBeTruthy()
+    expect(eventData.startTime).toBeTruthy()
 
+    expect(eventData.extendData).toBeTruthy()
+  })
+
+  describe('fillReferrerId', () => {
+    // TODO 页面曝光 referrerId (来自上个页面的事件)
+
+    it('referrer is page exposure', () => {
+      trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
+
+      const pageEventKey = trackEventDataProcess.generateEventKey(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG.eventExposureConfig)
+
+      const exampleEventData = trackEventDataProcess.generateEventData(eventExposureConfig)
+
+      const pageEventData = (trackEventDataProcess as any)._exposureEventDataMap.get(pageEventKey)
+
+      expect(exampleEventData.referrerId).toBeTruthy()
+
+      expect(exampleEventData.referrerId).toBe(pageEventData?.eventId)
     })
 
-    describe('fillReferrerId', () => {
+    it('referrer is target exposure', () => {
+      trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig)
 
-        // TODO 页面曝光 referrerId (来自上个页面的事件)
+      const targetExposureKey = trackEventDataProcess.generateEventKey(eventExposureConfig, extendData)
 
-        it('referrer is page exposure', () => {
+      const targetExposureData = (trackEventDataProcess as any)._exposureEventDataMap.get(targetExposureKey)
 
-            trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
+      const exampleEventData = trackEventDataProcess.generateEventData(eventClickConfig, extendData)
 
-            const pageEventKey = trackEventDataProcess.generateEventKey(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG.eventExposureConfig!)
+      expect(exampleEventData.referrerId).toBeTruthy()
 
-            const exampleEventData = trackEventDataProcess.generateEventData(eventExposureConfig!)
-
-            const pageEventData = (trackEventDataProcess as any)._exposureEventDataMap.get(pageEventKey)
-
-            expect(exampleEventData.referrerId).toBeTruthy()
-
-            expect(exampleEventData.referrerId).toBe(pageEventData?.eventId)
-
-        })
-
-
-        it('referrer is target exposure', () => {
-
-            trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig!)
-
-            const targetExposureKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
-
-            const targetExposureData = (trackEventDataProcess as any)._exposureEventDataMap.get(targetExposureKey)
-
-            const exampleEventData = trackEventDataProcess.generateEventData(eventClickConfig!, extendData)
-
-            expect(exampleEventData.referrerId).toBeTruthy()
-
-            expect(exampleEventData.referrerId).toBe(targetExposureData?.eventId)
-        })
-
-        it('referrer is target click', () => {
-
-            const testEventConfig: TargetTrackConfig = {
-                eventExposureConfig: {
-                    eventType: EVENT_TYPE.EXPOSURE,
-                    eventName: 'TEST_EXPOSURE',
-                    originEventType:EVENT_TYPE.CLICK,
-                    originEventName:defaultExampleEventConfig.eventClickConfig!.eventName!,
-                    relevanceKey: defaultExampleEventConfig.eventClickConfig!.relevanceKey!
-                },
-                extendData: defaultExampleEventConfig.extendData
-            }
-
-            trackEventDataProcess.targetClick(defaultExampleEventConfig)
-
-            const targetClickKey = trackEventDataProcess.generateEventKey(eventClickConfig!, extendData)
-
-            const targetClickData = (trackEventDataProcess as any)._clickEventDataMap.get(targetClickKey)
-
-            const testEventData = trackEventDataProcess.generateEventData(testEventConfig.eventExposureConfig!, testEventConfig.extendData)
-
-            expect(testEventData.referrerId).toBeTruthy()
-
-            expect(testEventData.referrerId).toBe(targetClickData?.eventId)
-        })
-
+      expect(exampleEventData.referrerId).toBe(targetExposureData?.eventId)
     })
 
-    describe('fillEndTime', () => {
+    it('referrer is target click', () => {
+      const testEventConfig: Omit<Required<TargetTrackConfig>, 'eventClickConfig'> = {
+        eventExposureConfig: {
+          eventType: EVENT_TYPE.EXPOSURE,
+          eventName: 'TEST_EXPOSURE',
+          originEventType: EVENT_TYPE.CLICK,
+          originEventName: defaultExampleEventConfig.eventClickConfig.eventName,
+          relevanceKey: defaultExampleEventConfig.eventClickConfig.relevanceKey
+        },
+        extendData: defaultExampleEventConfig.extendData
+      }
 
-        it('fill click event end time', () => {
+      trackEventDataProcess.targetClick(defaultExampleEventConfig)
 
-            const simpleEventData = trackEventDataProcess.generateEventData(eventClickConfig!)
+      const targetClickKey = trackEventDataProcess.generateEventKey(eventClickConfig, extendData)
 
-            const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
+      const targetClickData = (trackEventDataProcess as any)._clickEventDataMap.get(targetClickKey)
 
-            expect(eventData.duration).toBe(0)
+      const testEventData = trackEventDataProcess.generateEventData(testEventConfig.eventExposureConfig, testEventConfig.extendData)
 
-            expect(eventData.startTime).toBe(eventData.endTime)
+      expect(testEventData.referrerId).toBeTruthy()
 
-        })
+      expect(testEventData.referrerId).toBe(targetClickData?.eventId)
+    })
+  })
 
-        it('fill exposure event end time', () => {
+  describe('fillEndTime', () => {
+    it('fill click event end time', () => {
+      const simpleEventData = trackEventDataProcess.generateEventData(eventClickConfig)
 
-            const simpleEventData = trackEventDataProcess.generateEventData(eventExposureConfig!)
+      const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.CLICK)
 
-            const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.EXPOSURE)
+      expect(eventData.duration).toBe(0)
 
-            expect(eventData.duration).toBe(eventData.endTime - eventData.startTime)
-
-        })
-
+      expect(eventData.startTime).toBe(eventData.endTime)
     })
 
-    describe('targetBeginExposure', () => {
+    it('fill exposure event end time', () => {
+      const simpleEventData = trackEventDataProcess.generateEventData(eventExposureConfig)
 
-        trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig)
+      const eventData = trackEventDataProcess.fillEndTime(simpleEventData, EVENT_TYPE.EXPOSURE)
 
-        const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
-
-        expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeTruthy()
-
+      expect(eventData.duration).toBe(eventData.endTime - eventData.startTime)
     })
+  })
 
-    describe('targetEndExposure', () => {
+  describe('targetBeginExposure', () => {
+    trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig)
 
-        it('', async () => {
+    const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig, extendData)
 
-            trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig)
+    expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeTruthy()
+  })
 
-            await new Promise<void>(resolve => setTimeout(() => {
-                trackEventDataProcess.targetEndExposure(defaultExampleEventConfig)
-                resolve()
-            }, 500))
+  describe('targetEndExposure', () => {
+    it('', async () => {
+      trackEventDataProcess.targetBeginExposure(defaultExampleEventConfig)
 
-            const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig!, extendData)
+      await new Promise<void>(resolve => setTimeout(() => {
+        trackEventDataProcess.targetEndExposure(defaultExampleEventConfig)
+        resolve()
+      }, 500))
 
-            expect(spySubmitEventsQueue).toHaveBeenCalled()
+      const eventKey = trackEventDataProcess.generateEventKey(eventExposureConfig, extendData)
 
-            expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeUndefined()
-        })
+      expect(spySubmitEventsQueue).toHaveBeenCalled()
 
+      expect((trackEventDataProcess as any)._exposureEventDataMap.get(eventKey)).toBeUndefined()
     })
+  })
 
-    describe('targetClick', () => {
+  describe('targetClick', () => {
+    it('target click track', () => {
+      trackEventDataProcess.targetClick(defaultExampleEventConfig)
 
-        it('target click track', () => {
+      const eventKey = trackEventDataProcess.generateEventKey(eventClickConfig, extendData)
 
-            trackEventDataProcess.targetClick(defaultExampleEventConfig)
+      expect(spySubmitEventsQueue).toHaveBeenCalled()
 
-            const eventKey = trackEventDataProcess.generateEventKey(eventClickConfig!, extendData)
-
-            expect(spySubmitEventsQueue).toHaveBeenCalled()
-
-            expect((trackEventDataProcess as any)._clickEventDataMap.get(eventKey)).toBeTruthy()
-
-        })
-
+      expect((trackEventDataProcess as any)._clickEventDataMap.get(eventKey)).toBeTruthy()
     })
-
-});
+  })
+})

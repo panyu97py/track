@@ -1,4 +1,4 @@
-import {EventDataRequest} from "./store";
+import { EventDataRequest } from './store'
 
 export interface InitBaseTrackOption {
 

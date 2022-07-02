@@ -1,4 +1,4 @@
-import type {EventType} from '../interface'
+import type { EventType } from '../interface'
 
 export const CLICK: EventType = 'CLICK'
 

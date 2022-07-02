@@ -1,6 +1,6 @@
-import type {SimpleEventData, EventData} from './eventData'
-import type {EventConfig, EventType, TargetTrackConfig} from "./eventConfig";
-import {FilledEventIdSimpleEventData} from "./eventData";
+import type { SimpleEventData, EventData } from './eventData'
+import type { EventConfig, EventType, TargetTrackConfig } from './eventConfig'
+import { FilledEventIdSimpleEventData } from './eventData'
 
 export type EventDataProcessType = 'CLICK' | 'BEGIN_EXPOSURE' | 'END_EXPOSURE';
 

@@ -1,4 +1,4 @@
-import {EventData} from "./eventData";
+import { EventData } from './eventData'
 
 export interface requestParams {
     baseInfo: Record<string, any>,

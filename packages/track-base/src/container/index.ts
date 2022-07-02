@@ -1,14 +1,14 @@
-import {Container} from 'inversify'
-import {SERVICE_IDENTIFIER} from '../constants'
-import {CommonStore, ConfigStore} from "../store";
-import {EventCenter, TrackEventDataProcess, TrackEventQueueManager, PageLifecycleTrack} from '../impl'
+import { Container } from 'inversify'
+import { SERVICE_IDENTIFIER } from '../constants'
+import { CommonStore, ConfigStore } from '../store'
+import { EventCenter, TrackEventDataProcess, TrackEventQueueManager, PageLifecycleTrack } from '../impl'
 import type {
-    TrackEventDataProcessInstance,
-    TrackEventQueueManagerInterface,
-    EventCenterInterface,
-    PageLifecycleTrackInstance,
-    ConfigStoreInterface,
-    CommonStoreInterface
+  TrackEventDataProcessInstance,
+  TrackEventQueueManagerInterface,
+  EventCenterInterface,
+  PageLifecycleTrackInstance,
+  ConfigStoreInterface,
+  CommonStoreInterface
 } from '../interface'
 
 const container = new Container()
@@ -25,4 +25,4 @@ container.bind<TrackEventDataProcessInstance>(SERVICE_IDENTIFIER.TRACK_EVENT_DAT
 
 container.bind<TrackEventQueueManagerInterface>(SERVICE_IDENTIFIER.TRACK_EVENT_QUEUE_MANAGER).to(TrackEventQueueManager).inRequestScope()
 
-export {container}
+export { container }

@@ -1,7 +1,7 @@
 export type Listener = (...args: any[]) => void
 
 export interface EventNode {
-    listener: Function;
+    listener: (...args: any[]) => void;
     context?: any;
 }
 

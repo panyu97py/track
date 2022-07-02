@@ -1,74 +1,69 @@
-'use strict';
-import {container, SERVICE_IDENTIFIER, EventCenter} from '../src'
-import {ERROR_MSG} from "../src/constants";
+'use strict'
+import { container, SERVICE_IDENTIFIER, EventCenter } from '../src'
+import { ERROR_MSG } from '../src/constants'
 
 describe('EventCenter', () => {
+  const eventCenter = container.get<EventCenter>(SERVICE_IDENTIFIER.EVENT_CENTER)
 
-    const eventCenter = container.get<EventCenter>(SERVICE_IDENTIFIER.EVENT_CENTER)
+  const EXAMPLE_EVENT_NAME = 'EXAMPLE_EVENT_NAME'
 
-    const EXAMPLE_EVENT_NAME = 'EXAMPLE_EVENT_NAME'
+  const params = 'params'
 
-    const params = 'params'
+  it('trigger on event', () => {
+    const firstFn = jest.fn()
 
-    it('trigger on event', () => {
-        const firstFn = jest.fn()
+    const secondFn = jest.fn()
 
-        const secondFn = jest.fn()
+    eventCenter.on(EXAMPLE_EVENT_NAME, firstFn)
 
-        eventCenter.on(EXAMPLE_EVENT_NAME, firstFn)
+    eventCenter.on(EXAMPLE_EVENT_NAME, secondFn)
 
-        eventCenter.on(EXAMPLE_EVENT_NAME, secondFn)
+    eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
 
-        eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
+    expect(firstFn).toHaveBeenCalledWith(params)
 
-        expect(firstFn).toHaveBeenCalledWith(params)
+    expect(secondFn).toHaveBeenCalledWith(params)
+  })
 
-        expect(secondFn).toHaveBeenCalledWith(params)
-    })
+  it('trigger once event ', function () {
+    const fn = jest.fn()
 
-    it('trigger once event ', function () {
+    eventCenter.once(EXAMPLE_EVENT_NAME, fn)
 
-        const fn = jest.fn()
+    eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
 
-        eventCenter.once(EXAMPLE_EVENT_NAME, fn)
+    eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
 
-        eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
+    expect(fn).toHaveBeenCalledWith(params)
 
-        eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
 
-        expect(fn).toHaveBeenCalledWith(params)
+  it('off all event register', () => {
+    const fn = jest.fn()
 
-        expect(fn).toHaveBeenCalledTimes(1)
-    });
+    eventCenter.on(EXAMPLE_EVENT_NAME, fn)
 
-    it('off all event register', () => {
+    eventCenter.off(EXAMPLE_EVENT_NAME)
 
-        const fn = jest.fn();
+    expect(() => eventCenter.trigger(EXAMPLE_EVENT_NAME, params)).toThrow(ERROR_MSG.EVENT_NAME_IS_NOR_REGISTER)
+  })
 
-        eventCenter.on(EXAMPLE_EVENT_NAME, fn)
+  it('off designated listener', () => {
+    const designatedFn = jest.fn()
 
-        eventCenter.off(EXAMPLE_EVENT_NAME)
+    const otherFn = jest.fn()
 
-        expect(() => eventCenter.trigger(EXAMPLE_EVENT_NAME, params)).toThrow(ERROR_MSG.EVENT_NAME_IS_NOR_REGISTER)
-    })
+    eventCenter.on(EXAMPLE_EVENT_NAME, designatedFn)
 
-    it('off designated listener', () => {
+    eventCenter.on(EXAMPLE_EVENT_NAME, () => otherFn())
 
-        const designatedFn = jest.fn();
+    eventCenter.off(EXAMPLE_EVENT_NAME, designatedFn)
 
-        const otherFn = jest.fn();
+    eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
 
-        eventCenter.on(EXAMPLE_EVENT_NAME, designatedFn)
+    expect(designatedFn).not.toHaveBeenCalled()
 
-        eventCenter.on(EXAMPLE_EVENT_NAME, ()=>otherFn())
-
-        eventCenter.off(EXAMPLE_EVENT_NAME, designatedFn)
-
-        eventCenter.trigger(EXAMPLE_EVENT_NAME, params)
-
-        expect(designatedFn).not.toHaveBeenCalled()
-
-        expect(otherFn).toHaveBeenCalled()
-    })
-
+    expect(otherFn).toHaveBeenCalled()
+  })
 })
