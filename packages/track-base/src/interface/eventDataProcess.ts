@@ -6,19 +6,19 @@ export type EventDataProcessType = 'CLICK' | 'BEGIN_EXPOSURE' | 'END_EXPOSURE';
 
 export interface TrackEventDataProcessInstance {
 
-    getEventConfig: (trackConfig: TargetTrackConfig, type: EventType) => EventConfig
+  getEventConfig: (trackConfig: TargetTrackConfig, type: EventType) => EventConfig
 
-    generateEventKey: (config: EventConfig, extendData?: Record<string, any>) => string;
+  generateEventKey: (config: EventConfig, extendData?: Record<string, any>) => string;
 
-    generateEventData: (config: EventConfig, extendData?: Record<string, any>) => FilledEventIdSimpleEventData;
+  generateEventData: (config: EventConfig, extendData?: Record<string, any>) => FilledEventIdSimpleEventData;
 
-    fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => FilledEventIdSimpleEventData;
+  fillReferrerId: (trackData: SimpleEventData, config: EventConfig) => FilledEventIdSimpleEventData;
 
-    fillEndTime: (trackData: FilledEventIdSimpleEventData, type: EventType) => EventData;
+  fillEndTime: (trackData: FilledEventIdSimpleEventData, type: EventType) => EventData;
 
-    targetBeginExposure: (trackConfig: TargetTrackConfig) => void;
+  targetBeginExposure: (trackConfig: TargetTrackConfig) => void;
 
-    targetEndExposure: (trackConfig: TargetTrackConfig, isImport?:boolean) => void;
+  targetEndExposure: (trackConfig: TargetTrackConfig, isImport?: boolean) => void;
 
-    targetClick: (trackConfig: TargetTrackConfig, isImport?:boolean) => void;
+  targetClick: (trackConfig: TargetTrackConfig, isImport?: boolean) => void;
 }
