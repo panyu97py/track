@@ -1,5 +1,5 @@
 # 自动发布
-name: Auto Publish
+name: Auto Test
 
 on:
   push:
