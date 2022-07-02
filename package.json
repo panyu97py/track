@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "release": "lerna publish --yes --no-verify-access"
+    "release": "lerna publish --canary --yes --no-verify-access"
   },
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",
