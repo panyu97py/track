@@ -72,7 +72,25 @@ describe('trackEventDataProcess', () => {
   })
 
   describe('fillReferrerId', () => {
-    // TODO 页面曝光 referrerId (来自上个页面的事件)
+    it('page event referrer', () => {
+      trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
+
+      const pageEventKey = trackEventDataProcess.generateEventKey(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG.eventExposureConfig)
+
+      const referrerPageEventData = (trackEventDataProcess as any)._exposureEventDataMap.get(pageEventKey)
+
+      trackEventDataProcess.targetEndExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
+
+      const newTrackEventDataProcess = container.get<TrackEventDataProcess>(SERVICE_IDENTIFIER.TRACK_EVENT_DATA_PROCESS)
+
+      newTrackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
+
+      const newPageEventData = (newTrackEventDataProcess as any)._exposureEventDataMap.get(pageEventKey)
+
+      expect(newPageEventData.referrerId).toBeTruthy()
+
+      expect(newPageEventData.referrerId).toBe(referrerPageEventData.eventId)
+    })
 
     it('referrer is page exposure', () => {
       trackEventDataProcess.targetBeginExposure(DEFAULT_EVENT_CONFIG.PAGE_EXPOSURE_CONFIG)
