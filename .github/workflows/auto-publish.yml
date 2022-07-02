@@ -11,7 +11,7 @@ on:
       - 'packages/**/*.js'
       - 'packages/**/*.scss'
       - '**/package*.json'
-      - '**/lerna*.json'
+      - 'lerna.json'
   # 让你能够手动触发，方便测试，参考https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#workflow_dispatch
   workflow_dispatch:
 
