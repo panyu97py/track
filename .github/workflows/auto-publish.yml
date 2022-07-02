@@ -9,6 +9,7 @@ on:
     # 针对指定文件修改，这里可参考https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths
     paths:
       - 'packages/**/*.ts'
+      - 'packages/**/*.tsx'
       - 'packages/**/*.js'
       - 'packages/**/*.json'
       - '**/package*.json'
