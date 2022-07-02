@@ -8,15 +8,12 @@
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
   },
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://registry.yarnpkg.com/"
-  },
   "scripts": {
     "test": "jest",
     "test:dev": "jest --watch",
