@@ -1,5 +1,5 @@
-# 自动发布
-name: Auto Publish
+# 发布
+name: Publish
 
 on:
   # 让你能够手动触发，方便测试，参考 https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#workflow_dispatch
