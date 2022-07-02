@@ -1,5 +1,5 @@
-import {v4 as generateUUID} from 'uuid'
 import {inject, injectable} from 'inversify'
+import {generateUUID} from '../utils'
 import {TrackEventQueueManager} from "./TrackEventQueueManager";
 import {EVENT_TYPE, DEFAULT_TRACK_EVENT_NAME, ERROR_MSG, SERVICE_IDENTIFIER} from "../constants";
 import type {
