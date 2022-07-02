@@ -10,6 +10,7 @@
   },
   "scripts": {
     "release": "lerna publish --canary --yes",
+    "build": "lerna run build",
     "test": "lerna run test"
   },
   "devDependencies": {
