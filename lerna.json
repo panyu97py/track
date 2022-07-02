@@ -11,6 +11,9 @@
     },
     "publish": {
       "message": "chore(release): publish %s"
+    },
+    "publishConfig": {
+      "registry": "https://registry.npmjs.org"
     }
   },
   "useWorkspaces": true
