@@ -4,6 +4,10 @@ import {SERVICE_IDENTIFIER} from "./constants";
 import {initGlobalEventQueueManager, noop} from "./utils";
 import type {InitBaseTrackOption} from "./interface/initBaseTrack";
 
+/**
+ * 初始化基础埋点配置
+ * @param option
+ */
 export const initBaseTrack = (option: InitBaseTrackOption) => {
 
     const {enableLog = true, request = noop, baseInfo = {}, commonInfo = {}} = option
