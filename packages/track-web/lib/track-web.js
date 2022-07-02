@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = trackWeb;
+module.exports = trackWeb
 
-function trackWeb() {
-    // TODO
+function trackWeb () {
+  // TODO
 }

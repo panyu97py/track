@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = babelPluginTrackWeb;
+module.exports = babelPluginTrackWeb
 
-function babelPluginTrackWeb() {
-    // TODO
+function babelPluginTrackWeb () {
+  // TODO
 }

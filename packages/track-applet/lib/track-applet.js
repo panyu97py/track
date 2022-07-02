@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = trackApplet;
+module.exports = trackApplet
 
-function trackApplet() {
-    // TODO
+function trackApplet () {
+  // TODO
 }

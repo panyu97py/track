@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = babelPresetTrack;
+module.exports = babelPresetTrack
 
-function babelPresetTrack() {
-    // TODO
+function babelPresetTrack () {
+  // TODO
 }

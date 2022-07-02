@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = trackHelp;
+module.exports = trackHelp
 
-function trackHelp() {
-    // TODO
+function trackHelp () {
+  // TODO
 }

@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-module.exports = taroPresetTrack;
+module.exports = taroPresetTrack
 
-function taroPresetTrack() {
-    // TODO
+function taroPresetTrack () {
+  // TODO
 }
