@@ -55,3 +55,4 @@ jobs:
         # 利用 automation token publish 至 npm，这里NPM_TOKEN 就是我们上文中设定的
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
