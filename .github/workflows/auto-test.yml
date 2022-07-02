@@ -2,6 +2,18 @@
 name: Auto Publish
 
 on:
+  push:
+    # 针对指定分支
+    branches:
+      - '**'
+    # 针对指定文件修改，这里可参考https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#onpushpull_requestpaths
+    paths:
+      - 'packages/**/*.ts'
+      - 'packages/**/*.tsx'
+      - 'packages/**/*.js'
+      - 'packages/**/*.json'
+      - '**/package*.json'
+      - 'lerna.json'
   # 让你能够手动触发，方便测试，参考 https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#workflow_dispatch
   workflow_dispatch:
 
@@ -15,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@main
         with:
           # 0 indicates all history for all branches and tags，保留所有历史，为了让lerna publish 时可以生成有效的change log
           fetch-depth: '0'
@@ -40,16 +52,5 @@ jobs:
       - name: Install dependencies 📦️
         run: yarn install
 
-      - name: Setup credentials
-        # lerna publish 后会提交代码到master分支，这里是为了配置 git 用户，区分用户
-        run: |
-          git config --global user.email action@github.com
-          git config --global user.name Github Action
-        # run: |
-        #   git config --global user.email MrDaemon@outlook.com
-        #   git config --global user.name Sea
-      - name: Publish 🚀
-        run: npm run release
-        # 利用 automation token publish 至 npm，这里NPM_TOKEN 就是我们上文中设定的
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Test 🚀
+        run: npm run test

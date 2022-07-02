@@ -37,7 +37,11 @@ describe('PageLifecycleTrack', () => {
 
     const configStore = container.get<ConfigStore>(SERVICE_IDENTIFIER.CONFIG_STORE)
 
+    const requestMockFn = jest.fn()
+
     configStore.setEnableLog(true)
+
+    configStore.setRequest(requestMockFn)
 
     const trackEventQueueManager: TrackEventQueueManager = (pageLifecycleTrack as any)._trackEventQueueManager
 
@@ -96,5 +100,7 @@ describe('PageLifecycleTrack', () => {
         expect(spySubmitEvent).toHaveBeenCalled()
 
         expect(spySubmitEventsQueue).toHaveBeenCalled()
+
+        expect(requestMockFn).toHaveBeenCalled()
     })
 })

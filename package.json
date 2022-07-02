@@ -9,7 +9,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "release": "lerna publish --canary --yes"
+    "release": "lerna publish --canary --yes",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@rollup/plugin-buble": "^0.21.3",

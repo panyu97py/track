@@ -3,5 +3,7 @@
 const babelPresetTrack = require('..');
 
 describe('babel-preset-track', () => {
-    it('needs tests');
+    it('needs tests',()=>{
+        expect(0).toBe(0)
+    });
 });
