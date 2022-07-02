@@ -1,5 +1,5 @@
 {
-  "name": "@track/web",
+  "name": "@trackerjs/web",
   "version": "0.0.0",
   "description": "web埋点sdk",
   "author": "yu.pan <panyupy@vip.qq.com>",
