@@ -1,5 +1,5 @@
 {
-  "name": "babel-preset-track",
+  "name": "@track/babel-preset-track",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "yu.pan <panyu@pinpianyi.com>",

@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-track-web",
+  "name": "@track/babel-plugin-track-web",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "yu.pan <panyu@pinpianyi.com>",
