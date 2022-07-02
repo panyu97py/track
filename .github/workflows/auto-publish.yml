@@ -36,7 +36,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
+          registry-url: https://registry.npmjs.org
       #  设定安装工具--> yarn
       - name: Global install Yarn 🔨
         run: npm install -g yarn
