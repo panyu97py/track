@@ -10,6 +10,10 @@ import type { EventData, EventDataProcessType, TargetTrackConfig } from '../inte
 export const noop = () => {
 }
 
+/**
+ * 生成 uuid
+ * @desc 由于埋点数据，数据量较为庞大可能会出现uuid重复的情况，故而增加时间戳用于降低重复的几率
+ */
 export const generateUUID = () => {
   const s:any[] = []
   const hexDigits = '0123456789abcdef'
