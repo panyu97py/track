@@ -29,9 +29,11 @@ class TrackerHooks {
   call (name: string, ...args: any[]) {
     if (!name) throw new Error('name 不能为空')
     const waitApplyHooks = this.hooks.filter(item => item.name === name)
+    let res
     for (const item of waitApplyHooks) {
-      item.callback(...args)
+      res = item.callback(...args)
     }
+    return res
   }
 }
 

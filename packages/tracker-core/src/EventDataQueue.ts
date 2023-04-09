@@ -42,7 +42,7 @@ export class EventDataQueue {
    * 提交事件队列
    * @private
    */
-  private submitEventsQueue () {
+  submitEventsQueue () {
     const len = this.eventsQueue.length
     if (!len) return
     const eventDataList = this.eventsQueue.splice(0, len)

@@ -1,3 +1,20 @@
+// 修改事件数据
 export const MODIFY_EVENT_DATA = 'MODIFY_EVENT_DATA'
 
+// 提交事件队列
 export const SUBMIT_EVENTS_QUEUE = 'SUBMIT_EVENTS_QUEUE'
+
+// 添加事件数据进队列
+export const APPEND_EVENT_DATA_TO_QUEUE = 'APPEND_EVENT_DATA_TO_QUEUE'
+
+// 获取当前页面默认事件来源
+export const GET_CUR_PAGE_DEFAULT_REFERRER_EVENT_DATA = 'GET_CUR_PAGE_DEFAULT_REFERRER_EVENT_DATA'
+
+// 设置下一个页面默认事件来源
+export const SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA = 'SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA'
+
+// 获取当前页面路径
+export const GET_CUR_PAGE_PATH = 'GET_CUR_PAGE_PATH'
+
+// 获取上一个页面的路径
+export const GET_PRE_PAGE_PATH = 'GET_PRE_PAGE_PATH'
