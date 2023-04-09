@@ -31,6 +31,7 @@ class TrackerHooks extends EventCenter {
   call (name: string, ...args: any[]) {
     if (!name) throw ErrorMsg.HOOK_NAME_IS_EMPTY
     const waitApplyHooks = this.hooks.filter(item => item.name === name)
+    if (!waitApplyHooks.length) throw ErrorMsg.HOOK_NAME_IS_NOR_REGISTER
     let res
     for (const item of waitApplyHooks) {
       res = item.callback(...args)
