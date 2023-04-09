@@ -1,5 +1,5 @@
 import { generateUUID, hooks } from './helper'
-import { EventType, BaseEventName, ErrorMsg, HookNames } from './constant'
+import { EventType, BaseEventName, ErrorMsg, HookNames } from './constants'
 import type {
   EventConfig,
   EventData,

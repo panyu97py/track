@@ -1,4 +1,5 @@
 export * from './core'
 export * from './eventData'
+export * from './eventCenter'
 export * from './eventConfig'
 export * from './hooks'

@@ -1,3 +1,3 @@
-export * from './constant'
+export * from './constants'
 export * from './helper'
 export * from './types'

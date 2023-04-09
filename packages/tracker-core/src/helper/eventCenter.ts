@@ -1,70 +1,71 @@
-interface IEventNode {
-  listener: Function;
-  context?: any;
-}
+import { ErrorMsg } from '../constants'
+import { EventNode, Listener } from '../types'
 
-class EventCenter {
-
-  private eventMap: { [key: string]: IEventNode[] }
-
-  constructor () {
-    this.eventMap = {}
-  }
+export class EventCenter {
+  private eventMap: Map<string, EventNode[]> = new Map()
 
   /**
-   * 监听同个事件，同时绑定多个 handler
+   * 监听事件
    * @param eventName
    * @param listener
    * @param context
    */
-  on = (eventName: string, listener: (...args: any[]) => void, context?: any) => {
-    if (!this.eventMap[eventName]) this.eventMap[eventName] = []
-    this.eventMap[eventName].push({
-      context,
-      listener
+  on (eventName: string, listener: Listener, context?: any): void {
+    if (!this.eventMap.has(eventName)) this.eventMap.set(eventName, [])
+
+    this.eventMap.get(eventName)?.push({
+      listener,
+      context
     })
   }
 
   /**
-   * 监听同个事件一次，同时绑定多个 handler
+   * 监听同个事件一次
    * @param eventName
    * @param listener
    * @param context
    */
-  once = (eventName: string, listener: (...args: any[]) => void, context?: any) => {
+  once (eventName: string, listener: Listener, context?: any): void {
     const wrapper = (...args: any[]) => {
       listener.apply(context, args)
+
       this.off(eventName, wrapper, context)
     }
+
     this.on(eventName, wrapper, context)
   }
 
   /**
-   * 取消监听事件 | 取消监听一个事件某个 handler | 取消监听所有事件
+   * 取消监听事件
    * @param eventName
    * @param listener
    * @param context
    */
-  off = (eventName: string, listener?: (...args: any[]) => void, context?: any) => {
-    const tempEventMap = this.eventMap
-    this.eventMap = {}
-    if (!eventName) return
-    for (let key in tempEventMap) {
-      if (key !== eventName && !listener) {
-        this.eventMap[key] = tempEventMap[key]
-      } else if (listener) {
-        this.eventMap[key] = tempEventMap[key].filter(item => item.listener === listener && item.context === context)
-      }
+  off (eventName: string, listener?: Listener, context?: any): void {
+    if (!eventName) throw ErrorMsg.EVENT_NAME_IS_EMPTY
+
+    if (!this.eventMap.has(eventName)) throw ErrorMsg.EVENT_NAME_IS_NOR_REGISTER
+
+    if (!listener) {
+      this.eventMap.delete(eventName)
+      return
     }
+
+    const tempEventNodeList = this.eventMap.get(eventName)?.filter(item => !(item.listener === listener && item.context === context)) || []
+
+    this.eventMap.set(eventName, tempEventNodeList)
   }
+
   /**
-   * 触发个事件
+   * 触发事件
    * @param eventName
    * @param args
    */
-  trigger = (eventName: string, ...args: any[]) => {
-    if (!eventName) throw `The eventName can't be empty!`
-    if (!this.eventMap[eventName]) throw `The event ${eventName} is not register!`
-    this.eventMap[eventName].forEach(item => item.listener.apply(item.context, args))
+  trigger (eventName: string, ...args: any[]): void {
+    const tempEventNodeList = this.eventMap.get(eventName)
+
+    if (!tempEventNodeList) throw ErrorMsg.EVENT_NAME_IS_NOR_REGISTER
+
+    tempEventNodeList.forEach(item => item.listener.apply(item.context, args))
   }
 }

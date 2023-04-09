@@ -18,3 +18,9 @@ export const GET_CUR_PAGE_PATH = 'GET_CUR_PAGE_PATH'
 
 // 获取上一个页面的路径
 export const GET_PRE_PAGE_PATH = 'GET_PRE_PAGE_PATH'
+
+export const EVENT_ON_TRIGGER = 'EVENT_ON_TRIGGER'
+
+export const PAGE_ON_SHOW = 'PAGE_ON_SHOW'
+
+export const PAGE_ON_HIDE = 'PAGE_ON_HIDE'

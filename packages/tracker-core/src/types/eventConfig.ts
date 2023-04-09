@@ -1,4 +1,4 @@
-import { EventType } from '../constant'
+import { EventType } from '../constants'
 
 export interface EventConfig {
   eventType: EventType;

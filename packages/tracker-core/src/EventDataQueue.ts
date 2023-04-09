@@ -1,6 +1,6 @@
 import { EventData } from './types'
 import { hooks } from './helper'
-import { HookNames } from './constant'
+import { HookNames } from './constants'
 
 export class EventDataQueue {
   /**

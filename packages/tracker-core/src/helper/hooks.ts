@@ -1,6 +1,7 @@
 import { HookCallback, TrackerHookItem } from '../types'
+import { EventCenter } from './eventCenter'
 
-class TrackerHooks {
+class TrackerHooks extends EventCenter {
   /**
    * hook 回调列表
    * @private
