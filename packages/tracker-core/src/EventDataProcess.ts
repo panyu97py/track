@@ -1,5 +1,5 @@
 import { generateUUID, hooks } from './helper'
-import { EventType, BaseEventName, ErrorMsg, HookNames } from './constants'
+import { EventType, BaseEventName, ErrorMsg, BaseHookName } from './constants'
 import type {
   EventConfig,
   EventData,
@@ -39,7 +39,7 @@ export class EventDataProcess {
   constructor (curPagePath: string, prePagePath: string) {
     this.curPagePath = curPagePath
     this.prePagePath = prePagePath
-    this.defaultReferrerEventData = hooks.call(HookNames.GET_CUR_PAGE_DEFAULT_REFERRER_EVENT_DATA)
+    this.defaultReferrerEventData = hooks.call(BaseHookName.GET_CUR_PAGE_DEFAULT_REFERRER_EVENT_DATA)
   }
 
   /**
@@ -192,9 +192,9 @@ export class EventDataProcess {
 
     this._clickEventDataMap.set(eventKey, eventData)
 
-    hooks.call(HookNames.APPEND_EVENT_DATA_TO_QUEUE, eventData, isImport)
+    hooks.call(BaseHookName.APPEND_EVENT_DATA_TO_QUEUE, eventData, isImport)
 
-    if (eventConfig.canBePageReferrerEvent) hooks.call(HookNames.SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA, eventData)
+    if (eventConfig.canBePageReferrerEvent) hooks.call(BaseHookName.SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA, eventData)
   }
 
   /**
@@ -225,10 +225,10 @@ export class EventDataProcess {
 
     const eventData = this.fillEndTime(simpleEvent, EventType.EXPOSURE)
 
-    hooks.call(HookNames.APPEND_EVENT_DATA_TO_QUEUE, eventData, isImport)
+    hooks.call(BaseHookName.APPEND_EVENT_DATA_TO_QUEUE, eventData, isImport)
 
     this._exposureEventDataMap.delete(eventKey)
 
-    if (eventConfig.canBePageReferrerEvent) hooks.call(HookNames.SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA, eventData)
+    if (eventConfig.canBePageReferrerEvent) hooks.call(BaseHookName.SET_NEXT_PAGE_DEFAULT_REFERRER_EVENT_DATA, eventData)
   }
 }

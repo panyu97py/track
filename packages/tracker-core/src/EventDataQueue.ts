@@ -1,6 +1,6 @@
 import { EventData } from './types'
 import { hooks } from './helper'
-import { HookNames } from './constants'
+import { BaseHookName } from './constants'
 
 export class EventDataQueue {
   /**
@@ -33,7 +33,16 @@ export class EventDataQueue {
    * @param isImport
    */
   batchAppend (eventDataList: EventData[], isImport?: boolean) {
-    eventDataList.map(eventData => hooks.call(HookNames.MODIFY_EVENT_DATA, eventData))
+    eventDataList.forEach(eventData => {
+      Object.defineProperty(eventData, '_rawData',
+        {
+          value: eventData,
+          writable: false,
+          enumerable: false,
+          configurable: false
+        })
+      hooks.call(BaseHookName.MODIFY_EVENT_DATA, eventData)
+    })
     this.eventsQueue.push(...eventDataList)
     if (isImport || this.eventsQueue.length >= this.queueLineLimit) this.submitEventsQueue()
   }
@@ -46,6 +55,6 @@ export class EventDataQueue {
     const len = this.eventsQueue.length
     if (!len) return
     const eventDataList = this.eventsQueue.splice(0, len)
-    hooks.call(HookNames.SUBMIT_EVENTS_QUEUE, eventDataList)
+    hooks.call(BaseHookName.SUBMIT_EVENTS_QUEUE, eventDataList)
   }
 }

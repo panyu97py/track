@@ -1,4 +1,4 @@
-import { EventDataProcessType, HookNames, BaseEventConfig } from './constants'
+import { EventDataProcessType, BaseHookName, BaseEventConfig } from './constants'
 import { EventDataProcess } from './EventDataProcess'
 import { hooks } from './helper'
 import { EventDataQueue } from './EventDataQueue'
@@ -27,15 +27,40 @@ export class EventTracker {
    * 事件队列
    * @private
    */
-  private eventDateQueue: EventDataQueue
+  private eventDataQueue: EventDataQueue
 
   constructor () {
-    hooks.tap(HookNames.GET_CUR_PAGE_PATH, () => this.curPagePath)
-    hooks.tap(HookNames.EVENT_ON_TRIGGER, this.eventTrigger)
-    hooks.tap(HookNames.PAGE_ON_SHOW, this.pageOnShow)
-    hooks.tap(HookNames.PAGE_ON_HIDE, this.pageOnHide)
+    this.initEventDataQueue()
+    this.initHooks()
   }
 
+  initEventDataQueue () {
+    const trackerConfig = hooks.call(BaseHookName.GET_TRACKER_CONFIG)
+    const { queueLimit } = trackerConfig
+    this.eventDataQueue = new EventDataQueue(queueLimit)
+  }
+
+  /**
+   * 初始化 hook
+   */
+  initHooks () {
+    hooks.tap(BaseHookName.GET_CUR_PAGE_PATH, () => this.curPagePath)
+
+    hooks.tap(BaseHookName.APPEND_EVENT_DATA_TO_QUEUE, this.eventDataQueue.append)
+
+    hooks.tap(BaseHookName.EVENT_ON_TRIGGER, this.eventTrigger)
+
+    hooks.tap(BaseHookName.PAGE_ON_SHOW, this.pageOnShow)
+
+    hooks.tap(BaseHookName.PAGE_ON_HIDE, this.pageOnHide)
+  }
+
+  /**
+   * 事件触发
+   * @param trackConfig
+   * @param type
+   * @param isImport
+   */
   eventTrigger (trackConfig: TargetTrackConfig, type: EventDataProcessType, isImport?: boolean) {
     switch (type) {
       case EventDataProcessType.BEGIN_EXPOSURE:
@@ -49,6 +74,10 @@ export class EventTracker {
     }
   }
 
+  /**
+   * 页面曝光
+   * @param pagePath
+   */
   pageOnShow (pagePath: string) {
     this.prePagePath = this.curPagePath
 
@@ -59,9 +88,12 @@ export class EventTracker {
     this.eventDataProcess.targetBeginExposure(BaseEventConfig.PAGE_EXPOSURE_CONFIG)
   }
 
+  /**
+   * 页面隐藏
+   */
   pageOnHide () {
     this.eventDataProcess.targetEndExposure(BaseEventConfig.PAGE_EXPOSURE_CONFIG)
 
-    this.eventDateQueue.submitEventsQueue()
+    this.eventDataQueue.submitEventsQueue()
   }
 }
