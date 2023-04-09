@@ -2,7 +2,7 @@ import { EventDataProcessType, BaseHookName, BaseEventConfig } from './constants
 import { EventDataProcess } from './EventDataProcess'
 import { hooks } from './helper'
 import { EventDataQueue } from './EventDataQueue'
-import { TargetTrackConfig } from './types'
+import { EventData, TargetTrackConfig, TrackerBaseConfig } from './types'
 
 export class EventTracker {
   /**
@@ -29,24 +29,36 @@ export class EventTracker {
    */
   private eventDataQueue: EventDataQueue
 
+  /**
+   * 埋点配置
+   * @private
+   */
+  private get trackerConfig (): TrackerBaseConfig {
+    return hooks.call(BaseHookName.GET_TRACKER_CONFIG)
+  }
+
   constructor () {
     this.initEventDataQueue()
     this.initHooks()
   }
 
-  initEventDataQueue () {
-    const trackerConfig = hooks.call(BaseHookName.GET_TRACKER_CONFIG)
-    const { queueLimit } = trackerConfig
+  /**
+   * 初始化事件队列
+   */
+  private initEventDataQueue () {
+    const { queueLimit } = this.trackerConfig
     this.eventDataQueue = new EventDataQueue(queueLimit)
   }
 
   /**
    * 初始化 hook
    */
-  initHooks () {
+  private initHooks () {
     hooks.tap(BaseHookName.GET_CUR_PAGE_PATH, () => this.curPagePath)
 
     hooks.tap(BaseHookName.APPEND_EVENT_DATA_TO_QUEUE, this.eventDataQueue.append)
+
+    hooks.tap(BaseHookName.SUBMIT_EVENTS_DATA_QUEUE, this.submitTrackData)
 
     hooks.tap(BaseHookName.EVENT_ON_TRIGGER, this.eventTrigger)
 
@@ -56,12 +68,26 @@ export class EventTracker {
   }
 
   /**
+   * 提交埋点数据
+   * @param eventDataList
+   * @private
+   */
+  private submitTrackData (eventDataList: EventData[]) {
+    const { commonInfo: tempCommonInfo } = this.trackerConfig
+    const commonInfo = typeof tempCommonInfo === 'function' ? tempCommonInfo() : tempCommonInfo
+    hooks.call(BaseHookName.SUBMIT_TRACK_DATA, {
+      commonInfo,
+      eventDataList
+    })
+  }
+
+  /**
    * 事件触发
    * @param trackConfig
    * @param type
    * @param isImport
    */
-  eventTrigger (trackConfig: TargetTrackConfig, type: EventDataProcessType, isImport?: boolean) {
+  private eventTrigger (trackConfig: TargetTrackConfig, type: EventDataProcessType, isImport?: boolean) {
     switch (type) {
       case EventDataProcessType.BEGIN_EXPOSURE:
         return this.eventDataProcess.targetBeginExposure(trackConfig)
@@ -78,7 +104,7 @@ export class EventTracker {
    * 页面曝光
    * @param pagePath
    */
-  pageOnShow (pagePath: string) {
+  private pageOnShow (pagePath: string) {
     this.prePagePath = this.curPagePath
 
     this.curPagePath = pagePath
@@ -91,9 +117,9 @@ export class EventTracker {
   /**
    * 页面隐藏
    */
-  pageOnHide () {
+  private pageOnHide () {
     this.eventDataProcess.targetEndExposure(BaseEventConfig.PAGE_EXPOSURE_CONFIG)
 
-    this.eventDataQueue.submitEventsQueue()
+    this.eventDataQueue.submitQueue()
   }
 }

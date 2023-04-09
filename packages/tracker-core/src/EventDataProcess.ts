@@ -47,7 +47,7 @@ export class EventDataProcess {
    * @param trackData
    * @param config
    */
-  fillReferrerId (trackData: SimpleEventData, config: EventConfig): FilledEventIdSimpleEventData {
+  private fillReferrerId (trackData: SimpleEventData, config: EventConfig): FilledEventIdSimpleEventData {
     const {
       originEventType = EventType.EXPOSURE,
       originEventName = BaseEventName.PAGE_EXPOSURE,
@@ -82,7 +82,7 @@ export class EventDataProcess {
    * @param trackData
    * @param type
    */
-  fillEndTime (trackData: FilledEventIdSimpleEventData, type: EventType): EventData {
+  private fillEndTime (trackData: FilledEventIdSimpleEventData, type: EventType): EventData {
     if (type === EventType.CLICK) {
       return {
         ...trackData,
@@ -107,7 +107,7 @@ export class EventDataProcess {
    * @param trackConfig
    * @param type
    */
-  getEventConfig (trackConfig: TargetTrackConfig, type: EventType): EventConfig {
+  private getEventConfig (trackConfig: TargetTrackConfig, type: EventType): EventConfig {
     const eventConfig = (() => {
       switch (type) {
         case EventType.CLICK:
@@ -129,7 +129,7 @@ export class EventDataProcess {
    * @param config
    * @param extendData
    */
-  generateEventKey (config: EventConfig, extendData?: Record<string, any>): string {
+  private generateEventKey (config: EventConfig, extendData?: Record<string, any>): string {
     const {
       eventType,
       eventName,
@@ -148,7 +148,7 @@ export class EventDataProcess {
    * @param config
    * @param extendData
    */
-  generateEventData (config: EventConfig, extendData?: Record<string, any>): FilledEventIdSimpleEventData {
+  private generateEventData (config: EventConfig, extendData?: Record<string, any>): FilledEventIdSimpleEventData {
     const {
       eventType,
       eventName

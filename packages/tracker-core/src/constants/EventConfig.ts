@@ -1,4 +1,4 @@
-import { TargetTrackConfig } from '../types/eventConfig'
+import { TargetTrackConfig } from '../types'
 import { BaseEventName, EventType } from './EventData'
 
 export const PAGE_EXPOSURE_CONFIG: Omit<Required<TargetTrackConfig>, 'eventClickConfig' | 'extendData'> = {

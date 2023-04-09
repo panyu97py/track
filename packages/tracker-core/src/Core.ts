@@ -1,4 +1,4 @@
-import { TrackerBaseConfig } from './types'
+import { HookCallback, TrackerBaseConfig } from './types'
 import { EventTracker } from './EventTracker'
 import { hooks } from './helper'
 import { BaseHookName } from './constants'
@@ -30,7 +30,7 @@ class TrackerCore {
    * @param name
    * @param callback
    */
-  tap (name: string, callback: () => any) {
+  tap (name: string, callback: HookCallback) {
     hooks.tap(name, callback)
     return this
   }

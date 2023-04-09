@@ -44,17 +44,17 @@ export class EventDataQueue {
       hooks.call(BaseHookName.MODIFY_EVENT_DATA, eventData)
     })
     this.eventsQueue.push(...eventDataList)
-    if (isImport || this.eventsQueue.length >= this.queueLineLimit) this.submitEventsQueue()
+    if (isImport || this.eventsQueue.length >= this.queueLineLimit) this.submitQueue()
   }
 
   /**
    * 提交事件队列
    * @private
    */
-  submitEventsQueue () {
+  submitQueue () {
     const len = this.eventsQueue.length
     if (!len) return
     const eventDataList = this.eventsQueue.splice(0, len)
-    hooks.call(BaseHookName.SUBMIT_EVENTS_QUEUE, eventDataList)
+    hooks.call(BaseHookName.SUBMIT_EVENTS_DATA_QUEUE, eventDataList)
   }
 }

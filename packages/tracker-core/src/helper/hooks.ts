@@ -1,7 +1,6 @@
 import { HookCallback, TrackerHookItem } from '../types'
 import { EventCenter } from './eventCenter'
 import { ErrorMsg } from '../constants'
-import { HOOK_CALLBACK_IS_EMPTY } from '../constants/ErrorMsg'
 
 class TrackerHooks extends EventCenter {
   /**
