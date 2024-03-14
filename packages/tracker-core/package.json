@@ -1,16 +1,30 @@
 {
   "name": "@trackerjs/core",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "yu.pan <panyupy@vip.qq.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "directories": {
-    "lib": "lib",
+    "lib": "dist",
     "test": "__tests__"
   },
-  "scripts": {
-    "test": "jest"
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "test": "jest",
+    "test:dev": "jest --watch",
+    "build": "rollup -c",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "debug": "^4.3.4"
+  }
 }

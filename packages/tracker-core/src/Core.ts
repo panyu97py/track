@@ -1,4 +1,4 @@
-import { HookCallback, Preset, PresetContext, TrackerBaseConfig } from './types'
+import { HookCallback, Preset, PresetContext, Config } from './types'
 import { EventTracker } from './EventTracker'
 import { hooks } from './helper'
 import { BaseHookName } from './constants'
@@ -7,7 +7,7 @@ class TrackerCore {
   /**
    * 基础配置
    */
-  private baseConfig: TrackerBaseConfig
+  private config: Config
 
   /**
    * 事件跟踪器
@@ -19,10 +19,10 @@ class TrackerCore {
    * 初始化
    * @param config
    */
-  init (config: TrackerBaseConfig) {
-    this.baseConfig = config
+  init (config: Config) {
+    this.config = config
     this.eventTracker = new EventTracker()
-    hooks.tap(BaseHookName.GET_TRACKER_CONFIG, () => this.baseConfig)
+    hooks.tap(BaseHookName.GET_TRACKER_CONFIG, () => this.config)
     this.applyPresets(config.presets)
   }
 
