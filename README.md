@@ -21,3 +21,4 @@
 - [ ] 一个页面下，在 scrollView 下的元素，采用计算埋点实现，不在 scrollView 下的元素采用 observe 实现
 - [ ] taro 编译过深元素成为组件导致无法查找的问题，可以通过 taro 元素实例逐层 parent 查找实现
 - [ ] [前端日志监控系统-上报SDK](https://juejin.cn/post/7218513153402224695)
+- [] [错误监控](https://juejin.cn/post/7416282129451810867?searchId=20240925145126935E3024210D4184F76C)
