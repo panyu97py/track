@@ -11,6 +11,9 @@ const generateUUIDv4 = () => {
 type OutputEventData = (eventData: EventData) => void
 
 export class Tracker {
+  /**
+   * 实例
+   */
   private static tracker: Tracker
 
   /**
