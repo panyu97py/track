@@ -23,13 +23,13 @@ export class PluginCtx {
     })
   }
 
-  registerMethod (name:string, fn: AnyFn) {
+  public registerMethod (name:string, fn: AnyFn) {
     const methods = this.ctx.methods.get(name) || []
     methods.push(fn)
     this.ctx.methods.set(name, methods)
   }
 
-  applyMethod (name: string, opts?: any) {
+  public applyMethod (name: string, opts?: any) {
     const methods = this.ctx.methods.get(name) || []
     methods.forEach(method => method.apply(this, opts))
   }

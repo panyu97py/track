@@ -1,4 +1,4 @@
-import { BaseEventName, EventConfig, EventData, EventType } from './types'
+import { BaseEventName, EventConfig, EventData, EventType } from '../../types'
 import { generateUUIDv4 } from '../../helper'
 
 type OutputEventData = (eventData: EventData) => void

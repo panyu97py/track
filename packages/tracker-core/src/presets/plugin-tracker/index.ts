@@ -1,11 +1,11 @@
 import { definePlugin } from '../../helper'
 import { Tracker } from './tracker'
-import { EventData } from './types'
+import { EventData } from '../../types'
 
-export const pluginTrack = definePlugin(() => {
+export const pluginTracker = definePlugin(() => {
   return (ctx) => {
     const tracker = Tracker.getInstance()
-    tracker.registerCallback((eventData: EventData) => ctx.applyMethod('', eventData))
+    tracker.registerCallback((eventData: EventData) => ctx.submitEventData(eventData))
     ctx.registerMethod('trackTargetBeginExposure', tracker.targetBeginExposure)
     ctx.registerMethod('trackTargetEndExposure', tracker.targetEndExposure)
     ctx.registerMethod('trackPageBeginExposure', tracker.pageBeginExposure)

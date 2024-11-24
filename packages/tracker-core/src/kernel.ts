@@ -1,4 +1,4 @@
-import { AnyFn, Config, Plugin, Preset } from './types'
+import { AnyFn, Config, Plugin, PluginContext, Preset } from './types'
 import { PluginCtx } from './plugin'
 
 export class Kernel {
@@ -41,7 +41,7 @@ export class Kernel {
    * @private
    */
   private initPlugins (plugins: ReturnType<Plugin>[]) {
-    const pluginCtx = new PluginCtx(this)
+    const pluginCtx = new PluginCtx(this) as PluginContext
     plugins.forEach(plugin => plugin(pluginCtx))
   }
 
@@ -51,7 +51,7 @@ export class Kernel {
    * @private
    */
   private initPresets (presets: ReturnType<Preset>[]) {
-    const pluginCtx = new PluginCtx(this)
+    const pluginCtx = new PluginCtx(this) as PluginContext
     presets.forEach(preset => {
       const { plugins } = preset(pluginCtx)
       this.initPlugins(plugins)

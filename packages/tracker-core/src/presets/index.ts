@@ -1,10 +1,10 @@
 import { definePreset } from '../helper'
-import { pluginTrack } from './plugin-tracker'
+import { pluginTracker } from './plugin-tracker'
 
 export const internalPreset = definePreset(() => {
   return () => {
     return {
-      plugins: [pluginTrack()]
+      plugins: [pluginTracker()]
     }
   }
 })
