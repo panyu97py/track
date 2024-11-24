@@ -23,7 +23,7 @@ export interface EventConfig {
   extendData?: Record<string, any>;
 }
 
-export interface SimpleEventData {
+export interface EventData {
   eventId: string;
   referrerEventId?: string;
   eventType: string;
@@ -35,5 +35,3 @@ export interface SimpleEventData {
   duration?: number;
   extendData: Record<string, any>;
 }
-
-export type EventData = Required<SimpleEventData>

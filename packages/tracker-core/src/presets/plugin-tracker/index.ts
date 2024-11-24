@@ -8,6 +8,8 @@ export const pluginTrack = definePlugin(() => {
     tracker.registerCallback((eventData: EventData) => ctx.applyMethod('', eventData))
     ctx.registerMethod('trackTargetBeginExposure', tracker.targetBeginExposure)
     ctx.registerMethod('trackTargetEndExposure', tracker.targetEndExposure)
+    ctx.registerMethod('trackPageBeginExposure', tracker.pageBeginExposure)
+    ctx.registerMethod('trackPageEndExposure', tracker.pageEndExposure)
     ctx.registerMethod('trackTargetClick', tracker.targetClick)
   }
 })
