@@ -1,12 +1,5 @@
 import { BaseEventName, EventConfig, EventData, EventType } from './types'
-
-const generateUUIDv4 = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c: any) => {
-    const r = Math.random() * 16 | 0 // 生成一个 0-15 之间的随机整数
-    const v = c === 'x' ? r : (r & 0x3 | 0x8) // 'x' 位置随机，'y' 位置符合版本4规范
-    return v.toString(16) // 将结果转换成 16 进制字符串
-  })
-}
+import { generateUUIDv4, pipe } from '../../helper'
 
 type OutputEventData = (eventData: EventData) => void
 
@@ -82,21 +75,21 @@ export class Tracker {
     const eventName = (() => {
       if (eventType === EventType.CLICK && eventClickName) return eventClickName
       if (eventType === EventType.EXPOSURE && eventExposureName) return eventExposureName
-      throw new Error('unknown event type')
+      throw new Error('unknown event type or event name is empty')
     })()
     const startTime = Date.now()
+    const { prePagePath, curPagePath } = this
     const tempEventData = { eventId, eventName, eventType, startTime, extendData }
-    if (eventType === EventType.CLICK) return this.fillEndTime(tempEventData, eventType)
-    return tempEventData
+    if (eventName === BaseEventName.PAGE_EXPOSURE) return tempEventData
+    return { ...tempEventData, prePagePath, curPagePath }
   }
 
   /**
    * 填充事件结束时间
    * @param eventData
-   * @param type
    */
-  private fillEndTime (eventData: EventData, type: EventType): EventData {
-    if (type === EventType.CLICK) return { ...eventData, endTime: eventData.startTime, duration: 0 }
+  private fillEndTime (eventData: EventData): EventData {
+    if (eventData.eventType === EventType.CLICK) return { ...eventData, endTime: eventData.startTime, duration: 0 }
 
     const endTime = new Date().getTime()
 
@@ -109,34 +102,31 @@ export class Tracker {
     // return trackData
   }
 
-  private fillPageUrl (trackData: EventData) {
-    // const { prePagePath, curPagePath } = this
-    // return { prePagePath, curPagePath, ...trackData }
-  }
-
   public targetClick (eventConfig: EventConfig) {
-    // const { canBePageReferrerEvent } = eventConfig
-    // const eventData = this.generateEventData(eventConfig, EventType.CLICK)
-    // if (canBePageReferrerEvent) {
-    //   this.defaultReferrerEventId = eventData.eventId
-    // }
-    // this.outputEventData(eventData)
+    const { canBePageReferrerEvent } = eventConfig
+    const eventKey = this.generateEventKey(eventConfig, EventType.CLICK)
+    const tempEventData = this.generateEventData(eventConfig, EventType.CLICK)
+    const finalEventData = pipe(this.fillEndTime, this.fillReferrerId)(tempEventData)
+    if (canBePageReferrerEvent) { this.defaultReferrerEventId = finalEventData.eventId }
+    this.exposureEventDataMap.set(eventKey, finalEventData)
+    this.outputEventData(finalEventData)
   }
 
   public targetBeginExposure (eventConfig: EventConfig) {
-    // const eventData = this.generateEventData(eventConfig, EventType.EXPOSURE)
-    // const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
-    // this.exposureEventDataMap.set(eventKey, eventData)
+    const eventData = this.generateEventData(eventConfig, EventType.EXPOSURE)
+    const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
+    this.exposureEventDataMap.set(eventKey, eventData)
   }
 
   public targetEndExposure (eventConfig: EventConfig) {
+    const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
+    const tempEventData = this.exposureEventDataMap.get(eventKey)
+    const finalEventData = pipe(this.fillEndTime, this.fillReferrerId)(tempEventData)
+    this.exposureEventDataMap.delete(eventKey)
+    this.outputEventData(finalEventData)
   }
 
   public pageBeginExposure (pagePath: string) {
-    // 清空上个页面的缓存数据
-    this.clickEventDataMap.clear()
-    this.exposureEventDataMap.clear()
-
     const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE }
     const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
     const tempEventData = this.generateEventData(eventConfig, EventType.CLICK)
@@ -155,9 +145,11 @@ export class Tracker {
   public pageEndExposure () {
     const eventDataList = Array.from(this.exposureEventDataMap.values())
     eventDataList.forEach((item) => {
-      const eventData = this.fillEndTime(item, EventType.EXPOSURE)
+      const eventData = this.fillEndTime(item)
       this.outputEventData(eventData)
     })
+    this.exposureEventDataMap.clear()
+    this.clickEventDataMap.clear()
   }
 
   public registerCallback (callback: OutputEventData) {

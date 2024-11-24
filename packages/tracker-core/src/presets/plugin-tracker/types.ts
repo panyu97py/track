@@ -26,10 +26,10 @@ export interface EventConfig {
 export interface EventData {
   eventId: string;
   referrerEventId?: string;
-  eventType: string;
+  eventType: EventType;
   eventName: string;
-  curPagePath: string;
-  prePagePath: string;
+  curPagePath?: string;
+  prePagePath?: string;
   startTime: number;
   endTime?: number;
   duration?: number;

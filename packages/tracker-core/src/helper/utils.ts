@@ -4,17 +4,17 @@
 export const noop = () => {}
 
 /**
- * 生成 uuid
- * @desc 由于埋点数据，数据量较为庞大可能会出现uuid重复的情况，故而增加时间戳用于降低重复的几率
+ * 顺序执行方法
+ * @param functions
  */
-export const generateUUID = () => {
-  const s: any[] = []
-  const hexDigits = '0123456789abcdef'
-  for (let i = 0; i < 36; i++) {
-    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
-  }
-  s[14] = '4' // bits 12-15 of the time_hi_and_version field to 0010
-  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1) // bits 6-7 of the clock_seq_hi_and_reserved to 01
-  s[8] = s[13] = s[18] = s[23] = '-'
-  return s.join('') + Date.now().toString(16)
+export const pipe = (...functions: Array<(val: any) => any>) => {
+  return (inputVal: any) => functions.reduce((resultVal, func) => func(resultVal), inputVal)
+}
+
+export const generateUUIDv4 = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c: any) => {
+    const r = Math.random() * 16 | 0 // 生成一个 0-15 之间的随机整数
+    const v = c === 'x' ? r : (r & 0x3 | 0x8) // 'x' 位置随机，'y' 位置符合版本4规范
+    return v.toString(16) // 将结果转换成 16 进制字符串
+  })
 }
