@@ -1,5 +1,5 @@
 {
-  "name": "@trackerjs/core",
+  "name": "@trackerjs/applet",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
@@ -25,6 +25,6 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "debug": "^4.3.4"
+    "@trackerjs/core": "0.0.0"
   }
 }
