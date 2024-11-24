@@ -1,18 +1,18 @@
 import { BaseEventName, EventConfig, EventData, EventType } from '../../types'
 import { generateUUIDv4 } from '../../helper'
 
-type OutputEventData = (eventData: EventData) => void
+type Callback = (eventData: EventData) => void
 
 export class Tracker {
   /**
    * 实例
    */
-  private static tracker: Tracker
+  private static trackerInstance: Tracker
 
   /**
    * 输出埋点数据的回调函数
    */
-  private outputEventData: OutputEventData
+  private callback: Callback
 
   /**
    * 默认来源事件Id
@@ -36,10 +36,10 @@ export class Tracker {
   private exposureEventDataMap: Map<string, EventData> = new Map()
 
   public static getInstance () {
-    if (!this.tracker) {
-      this.tracker = new Tracker()
+    if (!this.trackerInstance) {
+      this.trackerInstance = new Tracker()
     }
-    return this.tracker
+    return this.trackerInstance
   }
 
   /**
@@ -109,7 +109,7 @@ export class Tracker {
     const { canBePageReferrerEvent } = eventConfig
     const tempEventData = this.generateTargetClickEventData(eventConfig)
     if (canBePageReferrerEvent) { this.defaultReferrerEventId = tempEventData.eventId }
-    this.outputEventData(tempEventData)
+    this.callback(tempEventData)
   }
 
   /**
@@ -134,7 +134,7 @@ export class Tracker {
     const duration = endTime - tempEventData.startTime
     const finalEventData = { ...tempEventData, endTime, duration }
     this.exposureEventDataMap.delete(eventKey)
-    this.outputEventData(finalEventData)
+    this.callback(finalEventData)
   }
 
   /**
@@ -160,7 +160,7 @@ export class Tracker {
     const endTime = Date.now()
     eventDataList.forEach((eventData) => {
       const finalEventData = { ...eventData, endTime }
-      this.outputEventData(finalEventData)
+      this.callback(finalEventData)
     })
     this.exposureEventDataMap.clear()
   }
@@ -169,7 +169,7 @@ export class Tracker {
    * 注册输出埋点数据的回调函数
    * @param callback
    */
-  public registerCallback (callback: OutputEventData) {
-    this.outputEventData = callback
+  public registerCallback (callback: Callback) {
+    this.callback = callback
   }
 }
