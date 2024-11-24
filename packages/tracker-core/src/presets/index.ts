@@ -1,10 +1,10 @@
 import { definePreset } from '../helper'
-import { initInternalMethods } from './init-internal-methods'
+import { pluginTrack } from './plugin-track'
 
 export const internalPreset = definePreset(() => {
   return () => {
     return {
-      plugins: [initInternalMethods()]
+      plugins: [pluginTrack()]
     }
   }
 })

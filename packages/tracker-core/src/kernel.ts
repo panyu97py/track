@@ -11,30 +11,26 @@ export class Kernel {
   /**
    * 基础配置
    */
-  private readonly config: Config
+  private config: Config
 
   /**
    * 注册方法
    */
   public methods: Map<string, AnyFn[]>
 
-  /**
-   * 创建实例
-   * @param config
-   */
-  public static create (config: Config) {
-    this.kernelInstance = new Kernel(config)
-    this.kernelInstance.init()
-  }
-
-  constructor (config: Config) {
-    this.config = config
+  public static init (config: Config): Kernel {
+    if (!this.kernelInstance) {
+      this.kernelInstance = new Kernel()
+      this.kernelInstance.init(config)
+    }
+    return this.kernelInstance
   }
 
   /**
    * 初始化
    */
-  private init () {
+  private init (config: Config) {
+    this.config = config
     this.initPlugins(this.config.plugins || [])
     this.initPresets(this.config.presets || [])
   }
