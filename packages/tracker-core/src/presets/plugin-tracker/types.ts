@@ -16,8 +16,6 @@ export enum BaseEventName {
 export interface EventConfig {
   eventClickName?: string;
   eventExposureName?: string;
-  originEventType?: EventType;
-  originEventName?: string;
   canBePageReferrerEvent?: boolean
   relevanceKey?: string;
   extendData?: Record<string, any>;
@@ -33,5 +31,5 @@ export interface EventData {
   startTime: number;
   endTime?: number;
   duration?: number;
-  extendData: Record<string, any>;
+  extendData?: Record<string, any>;
 }
