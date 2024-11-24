@@ -3,9 +3,15 @@ import { PluginCtx } from './plugin'
 
 export class Kernel {
   /**
+   * 实例
+   * @private
+   */
+  private static kernelInstance: Kernel
+
+  /**
    * 基础配置
    */
-  private config: Config
+  private readonly config: Config
 
   /**
    * 注册方法
@@ -13,26 +19,22 @@ export class Kernel {
   public methods: Map<string, AnyFn[]>
 
   /**
-   * 实例
-   * @private
-   */
-  private static kernelInstance: Kernel
-
-  /**
    * 创建实例
    * @param config
    */
-  static create (config: Config) {
-    this.kernelInstance = new Kernel()
-    this.kernelInstance.init(config)
+  public static create (config: Config) {
+    this.kernelInstance = new Kernel(config)
+    this.kernelInstance.init()
+  }
+
+  constructor (config: Config) {
+    this.config = config
   }
 
   /**
    * 初始化
-   * @param config
    */
-  private init (config: Config) {
-    this.config = config
+  private init () {
     this.initPlugins(this.config.plugins || [])
     this.initPresets(this.config.presets || [])
   }
