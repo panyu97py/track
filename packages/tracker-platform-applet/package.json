@@ -23,8 +23,13 @@
     "build": "tsc",
     "prepublish": "npm run build"
   },
-  "devDependencies": {},
+  "peerDependencies": {
+    "@tarojs/taro": "^3.6.29"
+  },
   "dependencies": {
     "@trackerjs/core": "0.0.0"
+  },
+  "devDependencies": {
+    "@tarojs/taro": "3.6.29"
   }
 }

@@ -1,7 +1,10 @@
-import { definePlugin } from '@trackerjs/core'
+import { definePlugin, EventData } from '@trackerjs/core'
+import Taro from '@tarojs/taro'
 
-export const pluginAppletRequest = definePlugin(() => {
+export const pluginAppletRequest = definePlugin((opt:Taro.request.Option) => {
   return (ctx) => {
-    console.log('pluginAppletRequest', { ctx })
+    ctx.registerMethod('reportEventData', (eventDataList:EventData[]) => {
+      Taro.request({ ...opt, data: eventDataList })
+    })
   }
 })
