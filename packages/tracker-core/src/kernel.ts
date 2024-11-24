@@ -53,8 +53,9 @@ export class Kernel {
   private initPresets (presets: ReturnType<Preset>[]) {
     const pluginCtx = new PluginCtx(this) as PluginContext
     presets.forEach(preset => {
-      const { plugins } = preset(pluginCtx)
+      const { plugins = [], presets = [] } = preset(pluginCtx)
       this.initPlugins(plugins)
+      this.initPresets(presets)
     })
   }
 }
