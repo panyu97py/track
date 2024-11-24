@@ -30,12 +30,6 @@ export class Tracker {
   private curPagePath: string
 
   /**
-   * 点击事件数据列表
-   * @desc 保存当前页面所有点击事件
-   */
-  private clickEventIdMap: Map<string, string> = new Map()
-
-  /**
    * 曝光事件数据列表
    * @desc 仅保存当前页面可视元素
    */
@@ -51,16 +45,11 @@ export class Tracker {
   /**
    * 生成事件唯一标识
    * @param config
-   * @param eventType
    */
-  private generateEventKey (config: EventConfig, eventType: EventType): string {
-    const { eventClickName, eventExposureName, relevanceKey, extendData } = config
+  private generateExposureEventKey (config: EventConfig): string {
+    const { eventExposureName: eventName, relevanceKey, extendData } = config
 
-    const eventName = (() => {
-      if (eventType === EventType.CLICK && eventClickName) return eventClickName
-      if (eventType === EventType.EXPOSURE && eventExposureName) return eventExposureName
-      throw new Error('unknown event type')
-    })()
+    const eventType = EventType.EXPOSURE
 
     const baseEventKey = `${eventType}-${eventName}`
 
@@ -69,18 +58,26 @@ export class Tracker {
     return `${baseEventKey}-${extendData[relevanceKey]}`
   }
 
+  /**
+   * 生成元素点击事件数据
+   * @param eventConfig
+   */
   private generateTargetClickEventData (eventConfig: EventConfig): EventData {
     const { eventClickName: eventName, extendData } = eventConfig
     const { prePagePath, curPagePath } = this
     const eventId = generateUUIDv4()
     const eventType = EventType.CLICK
-    const originEventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
+    const originEventKey = this.generateExposureEventKey(eventConfig)
     const referrerEventId = this.exposureEventDataMap.get(originEventKey)?.eventId || this.defaultReferrerEventId
     if (!eventName) throw new Error('eventClickName is empty')
     const timeInfo = { startTime: Date.now(), endTime: Date.now() }
     return { eventId, referrerEventId, extendData, prePagePath, curPagePath, eventType, eventName, ...timeInfo }
   }
 
+  /**
+   * 生成元素曝光事件数据
+   * @param eventConfig
+   */
   private generateTargetExposureEventData (eventConfig: EventConfig): EventData {
     const { eventExposureName: eventName, extendData } = eventConfig
     const { prePagePath, curPagePath, defaultReferrerEventId: referrerEventId } = this
@@ -91,6 +88,10 @@ export class Tracker {
     return { eventId, referrerEventId, extendData, prePagePath, curPagePath, eventType, eventName, ...timeInfo }
   }
 
+  /**
+   * 生成页面曝光事件数据
+   * @param curPagePath
+   */
   private generatePageExposureEventData (curPagePath:string): EventData {
     const eventId = generateUUIDv4()
     const eventType = EventType.EXPOSURE
@@ -100,28 +101,35 @@ export class Tracker {
     return { eventId, referrerEventId, prePagePath, curPagePath, eventType, eventName, ...timeInfo }
   }
 
+  /**
+   * 元素点击事件埋点逻辑
+   * @param eventConfig
+   */
   public targetClick (eventConfig: EventConfig) {
     const { canBePageReferrerEvent } = eventConfig
-    const eventKey = this.generateEventKey(eventConfig, EventType.CLICK)
     const tempEventData = this.generateTargetClickEventData(eventConfig)
     if (canBePageReferrerEvent) { this.defaultReferrerEventId = tempEventData.eventId }
-    this.clickEventIdMap.set(eventKey, tempEventData.eventId)
     this.outputEventData(tempEventData)
   }
 
+  /**
+   * 元素开始曝光事件埋点逻辑
+   * @param eventConfig
+   */
   public targetBeginExposure (eventConfig: EventConfig) {
     const eventData = this.generateTargetExposureEventData(eventConfig)
-    const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
+    const eventKey = this.generateExposureEventKey(eventConfig)
     this.exposureEventDataMap.set(eventKey, eventData)
   }
 
+  /**
+   * 元素结束曝光事件埋点逻辑
+   * @param eventConfig
+   */
   public targetEndExposure (eventConfig: EventConfig) {
-    const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
-    const tempEventData = (() => {
-      const result = this.exposureEventDataMap.get(eventKey)
-      if (!result) return this.generateTargetExposureEventData(eventConfig)
-      return result
-    })()
+    const eventKey = this.generateExposureEventKey(eventConfig)
+    const tempEventData = this.exposureEventDataMap.get(eventKey)
+    if (!tempEventData) return // 页面结束曝光时会上报一遍未结束曝光的数据，为避免重复上报这里直接 return
     const endTime = new Date().getTime()
     const duration = endTime - tempEventData.startTime
     const finalEventData = { ...tempEventData, endTime, duration }
@@ -129,9 +137,13 @@ export class Tracker {
     this.outputEventData(finalEventData)
   }
 
+  /**
+   * 页面开始曝光事件埋点逻辑
+   * @param pagePath
+   */
   public pageBeginExposure (pagePath: string) {
     const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE }
-    const eventKey = this.generateEventKey(eventConfig, EventType.EXPOSURE)
+    const eventKey = this.generateExposureEventKey(eventConfig)
     const tempEventData = this.generatePageExposureEventData(pagePath)
     this.exposureEventDataMap.set(eventKey, tempEventData)
     this.defaultReferrerEventId = tempEventData.eventId
@@ -139,6 +151,10 @@ export class Tracker {
     this.curPagePath = pagePath
   }
 
+  /**
+   * 页面结束曝光埋点事件逻辑
+   * @desc 页面结束曝光统一将所有曝光事件数据输出
+   */
   public pageEndExposure () {
     const eventDataList = Array.from(this.exposureEventDataMap.values())
     const endTime = Date.now()
@@ -147,9 +163,12 @@ export class Tracker {
       this.outputEventData(finalEventData)
     })
     this.exposureEventDataMap.clear()
-    this.clickEventIdMap.clear()
   }
 
+  /**
+   * 注册输出埋点数据的回调函数
+   * @param callback
+   */
   public registerCallback (callback: OutputEventData) {
     this.outputEventData = callback
   }
