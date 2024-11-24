@@ -5,11 +5,11 @@ interface Opt {
   limitCount?: number
 }
 
-export const pluginDataQueue = definePlugin((opt: Opt) => {
+export const pluginDataQueue = definePlugin((opt?: Opt) => {
   return (ctx) => {
     const dataQueue = DataQueue.getInstance()
 
-    dataQueue.setLimitCount(opt.limitCount || 10)
+    dataQueue.setLimitCount(opt?.limitCount || 10)
 
     dataQueue.registerCallback(ctx.reportEventData)
 
