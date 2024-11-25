@@ -1,8 +1,13 @@
 import { declare } from '@babel/helper-plugin-utils'
+import { Options } from './types'
+import { importInjectVisitor, jsxAttributeInjectVisitor } from './visitor'
 
-export default declare(() => {
+export default declare<Options>(() => {
   return {
     name: 'babel-plugin-inject',
-    visitor: {}
+    visitor: {
+      ...importInjectVisitor,
+      ...jsxAttributeInjectVisitor
+    }
   }
 })
