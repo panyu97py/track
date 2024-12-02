@@ -46,7 +46,7 @@ export const injectJsxElementParentVisitor: Visitor = {
         return elementMatch(jsxElementNodePath)
       })()
 
-      if (isProcessed || !isElementMatch) jsxElementNodePath.skip()
+      if (isProcessed || !isElementMatch) return jsxElementNodePath.skip()
 
       // 将目标节点作为插入节点的字节点
       parentElementAst.children = [jsxElementNodePath.node]
