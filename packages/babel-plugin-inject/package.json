@@ -1,6 +1,6 @@
 {
   "name": "@trackerjs/babel-plugin-inject",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
   "homepage": "",
@@ -26,7 +26,6 @@
     "@babel/template": "*",
     "@babel/types": "*"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/generator": "^7.0.0",
