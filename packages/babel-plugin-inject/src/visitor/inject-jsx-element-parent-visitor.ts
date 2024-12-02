@@ -46,6 +46,9 @@ export const injectJsxElementParentVisitor: Visitor = {
       // 替换节点
       jsxElementNodePath.replaceWith(parentElementAst)
 
+      // 若依赖源不存在则初始化
+      if (!state.dependRequire) state.dependRequire = new Set()
+
       // 设置依赖源
       dependRequire.forEach((item) => state.dependRequire.add(item))
     })

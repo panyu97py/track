@@ -10,6 +10,8 @@ export const injectImportVisitor: Visitor = {
       // 获取所有当前的 import 元素
       const importElements = getImportElements(programPath)
 
+      if (!state.dependRequire) return programPath.skip()
+
       Array.from(state.dependRequire).forEach((dependRequireStr) => {
         // 生成 import ast
         const dependRequireAst = template.statement(dependRequireStr)() as ImportDeclaration
