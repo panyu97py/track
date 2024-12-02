@@ -16,7 +16,7 @@ export class Kernel {
   /**
    * 注册方法
    */
-  public methods: Map<string, AnyFn[]>
+  public methods: Map<string, AnyFn[]> = new Map()
 
   public static init (config: Config): Kernel {
     if (!this.kernelInstance) {
