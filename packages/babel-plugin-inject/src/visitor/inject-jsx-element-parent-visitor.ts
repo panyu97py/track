@@ -35,7 +35,7 @@ export const injectJsxElementParentVisitor: Visitor = {
       const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxElementNodePath)
 
       // 若模版代码字符串为空或元素不匹配则返回
-      if (!isElementMatch || templateCodeStr) return
+      if (!isElementMatch || !templateCodeStr) return
 
       // 插入节点的 ast
       const parentElementAst = template.expression(templateCodeStr)() as JSXElement

@@ -34,7 +34,7 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxOpeningElementNodePath)
 
       // 若模版代码字符串为空或元素不匹配则返回
-      if (!isElementMatch || templateCodeStr) return
+      if (!isElementMatch || !templateCodeStr) return
 
       // 删除原有属性
       const attributes = curAttributes.filter(item => {
