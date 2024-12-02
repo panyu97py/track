@@ -1,2 +1,2 @@
-export * from './jsx-attribute-inject-visitor'
-export * from './import-inject-visitor'
+export * from './inject-jsx-attribute-visitor'
+export * from './inject-import-visitor'

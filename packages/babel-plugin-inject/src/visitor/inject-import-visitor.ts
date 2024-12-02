@@ -4,7 +4,7 @@ import template from '@babel/template'
 import { PluginState } from '../types'
 import { getImportElements } from '../utils'
 
-export const importInjectVisitor: Visitor = {
+export const injectImportVisitor: Visitor = {
   Program: {
     exit (programPath: NodePath<Program>, state:PluginState) {
       // 获取所有当前的 import 元素

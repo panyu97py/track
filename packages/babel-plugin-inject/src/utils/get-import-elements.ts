@@ -10,8 +10,12 @@ export const getImportElements = (programPath:NodePath<Program>) => {
   programPath.traverse({
     ImportDeclaration (importDeclarationPath) {
       const { source, specifiers } = importDeclarationPath.node
+
+      // 按 source 归类 type
       if (!importElement.has(source.value)) importElement.set(source.value, new Map())
       const tempObj = importElement.get(source.value)
+
+      // 按 type 归类 specifier
       specifiers.forEach((specifier) => {
         const { type } = specifier
         if (!tempObj.has(type)) tempObj.set(type, new Set())
