@@ -1,21 +1,21 @@
-import { definePlugin, EventData, PluginContext } from '@trackerjs/core'
+import { definePlugin, EventConfig, EventData, PluginContext } from '@trackerjs/core'
 import { eventHooks } from '../../event-hooks'
 
 export const pluginTriggerEvent = definePlugin(() => {
   return (ctx: PluginContext) => {
-    eventHooks.trackTargetClick.tap((eventName:string, extendData:Record<string, any>) => {
-      ctx.trackTargetClick({ eventClickName: eventName, extendData })
+    eventHooks.trackTargetClick.tap((eventConfig: EventConfig) => {
+      ctx.trackTargetClick(eventConfig)
     })
 
-    eventHooks.trackTargetBeginExposure.tap((eventName:string, extendData:Record<string, any>) => {
-      ctx.trackTargetBeginExposure({ eventExposureName: eventName, extendData })
+    eventHooks.trackTargetBeginExposure.tap((eventConfig: EventConfig) => {
+      ctx.trackTargetBeginExposure(eventConfig)
     })
 
-    eventHooks.trackTargetBeginExposure.tap((eventName:string, extendData:Record<string, any>) => {
-      ctx.trackTargetBeginExposure({ eventExposureName: eventName, extendData })
+    eventHooks.trackTargetBeginExposure.tap((eventConfig: EventConfig) => {
+      ctx.trackTargetBeginExposure(eventConfig)
     })
 
-    eventHooks.appendEventData.tap((eventData:EventData) => {
+    eventHooks.appendEventData.tap((eventData: EventData) => {
       ctx.appendEventData(eventData)
     })
   }
