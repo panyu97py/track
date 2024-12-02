@@ -2,7 +2,7 @@ import { Visitor } from '@babel/core'
 import { JsxElementAttributeInjectOption, Options, PluginState, NodePath } from '../types'
 import { JSXOpeningElement } from '@babel/types'
 import * as types from '@babel/types'
-import { getJsxElementNodeName } from '../utils'
+import { getJsxOpeningElementNodeName } from '../utils'
 
 import template from '@babel/template'
 
@@ -21,7 +21,7 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       const { name, attributes: curAttributes = [] } = jsxOpeningElementNodePath.node
 
       // 获取元素名称
-      const elementName = getJsxElementNodeName(name)
+      const elementName = getJsxOpeningElementNodeName(name)
 
       // 判断元素是否匹配
       const isElementMatch = (() => {
