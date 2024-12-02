@@ -11,7 +11,7 @@ export const injectJsxElementParentVisitor: Visitor = {
 
     const { jsxElementParentInject = [] } = opts as Options
 
-    if (jsxElementNodePath._processed) return jsxElementNodePath.skip()
+    if (jsxElementNodePath._processed) return
 
     jsxElementNodePath._processed = true
 
@@ -25,7 +25,7 @@ export const injectJsxElementParentVisitor: Visitor = {
       const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxElementNodePath)
 
       // 若模版代码字符串为空则跳过
-      if (!templateCodeStr) return jsxElementNodePath.skip()
+      if (!templateCodeStr) return
 
       // 插入节点的 ast
       const parentElementAst = template.expression(templateCodeStr, { plugins: ['jsx'] })() as JSXElement
@@ -46,7 +46,7 @@ export const injectJsxElementParentVisitor: Visitor = {
         return elementMatch(jsxElementNodePath)
       })()
 
-      if (isProcessed || !isElementMatch) return jsxElementNodePath.skip()
+      if (isProcessed || !isElementMatch) return
 
       // 将目标节点作为插入节点的字节点
       parentElementAst.children = [jsxElementNodePath.node]

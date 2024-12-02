@@ -13,5 +13,5 @@ export const trackTargetWrapInject: JsxElementParentInjectOption = {
     })
   },
   templateCode: '<TrackTargetWrap />',
-  dependRequire: ['import {TrackTargetWrap} from \'@trackerjs/tracker-platform-applet\'']
+  dependRequire: ['import {TrackTargetWrap} from \'@trackerjs/applet\'']
 }

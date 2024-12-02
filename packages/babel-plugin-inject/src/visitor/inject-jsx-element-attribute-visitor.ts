@@ -11,7 +11,7 @@ export const injectJsxElementAttributeVisitor: Visitor = {
     const { opts } = state
     const { jsxElementAttributeInject = [] } = opts as Options
 
-    if (jsxOpeningElementNodePath._processed) return jsxOpeningElementNodePath.skip()
+    if (jsxOpeningElementNodePath._processed) return
 
     jsxOpeningElementNodePath._processed = true
 
