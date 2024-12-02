@@ -42,7 +42,7 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       })
 
       // 将模版代码转为 ast
-      const templateCodeAst = template.expression(templateCodeStr)() as any
+      const templateCodeAst = template.expression(templateCodeStr, { plugins: ['jsx'] })() as any
 
       // 插入模版代码为属性值
       attributes.push(types.jsxAttribute(types.jsxIdentifier(attribute), templateCodeAst))

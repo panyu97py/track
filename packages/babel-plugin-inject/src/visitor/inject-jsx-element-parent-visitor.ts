@@ -38,7 +38,7 @@ export const injectJsxElementParentVisitor: Visitor = {
       if (!isElementMatch || !templateCodeStr) return
 
       // 插入节点的 ast
-      const parentElementAst = template.expression(templateCodeStr)() as JSXElement
+      const parentElementAst = template.expression(templateCodeStr, { plugins: ['jsx'] })() as JSXElement
 
       // 将目标节点作为插入节点的字节点
       parentElementAst.children = [jsxElementNodePath.node]
