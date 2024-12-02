@@ -12,7 +12,7 @@ export class EventCenter {
 
   // 提供获取全局唯一实例的方法
   static getInstance () {
-    if (this.instance === null) {
+    if (!this.instance) {
       this.instance = new EventCenter()
     }
     return this.instance
