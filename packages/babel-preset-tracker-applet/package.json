@@ -1,0 +1,42 @@
+{
+  "name": "@trackerjs/babel-preset-tracker-applet",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "yu.pan <panyupy@vip.qq.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build"
+  },
+  "peerDependencies": {
+    "@babel/generator": "*",
+    "@babel/template": "*",
+    "@babel/types": "*"
+  },
+  "dependencies": {
+    "@trackerjs/babel-plugin-inject": "0.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/generator": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/template": "^7.0.0",
+    "@babel/types": "^7.0.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__helper-plugin-utils": "^7.0.0",
+    "babel-plugin-tester": "^11.0.4"
+  }
+}
