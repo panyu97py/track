@@ -1,22 +1,22 @@
 import { Visitor } from '@babel/core'
-import { JsxAttributeInjectOption, Options, PluginState, NodePath } from '../types'
+import { JsxElementAttributeInjectOption, Options, PluginState, NodePath } from '../types'
 import { JSXOpeningElement } from '@babel/types'
 import * as types from '@babel/types'
 import { getJsxElementNodeName } from '../utils'
 
 import template from '@babel/template'
 
-export const injectJsxAttributeVisitor: Visitor = {
+export const injectJsxElementAttributeVisitor: Visitor = {
   JSXOpeningElement: (jsxOpeningElementNodePath: NodePath<JSXOpeningElement>, state: PluginState) => {
     const { opts } = state
-    const { jsxAttributeInject = [] } = opts as Options
+    const { jsxElementAttributeInject = [] } = opts as Options
 
     if (jsxOpeningElementNodePath._processed) return jsxOpeningElementNodePath.skip()
 
     jsxOpeningElementNodePath._processed = true
 
-    jsxAttributeInject.forEach((jsxAttributeInjectOption: JsxAttributeInjectOption) => {
-      const { elementMatch, attribute, templateCode, dependRequire = [] } = jsxAttributeInjectOption
+    jsxElementAttributeInject.forEach((jsxElementAttributeInjectOption: JsxElementAttributeInjectOption) => {
+      const { elementMatch, attribute, templateCode, dependRequire = [] } = jsxElementAttributeInjectOption
 
       const { name, attributes: curAttributes = [] } = jsxOpeningElementNodePath.node
 

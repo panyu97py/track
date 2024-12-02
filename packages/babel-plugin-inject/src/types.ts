@@ -1,5 +1,5 @@
 import { NodePath as OriginNodePath, PluginPass } from '@babel/core'
-import { JSXOpeningElement } from '@babel/types'
+import { JSXElement, JSXOpeningElement } from '@babel/types'
 
 export interface NodePath<T> extends OriginNodePath<T> {
   _processed?: boolean
@@ -12,13 +12,20 @@ export interface PluginState extends PluginPass {
   dependRequire: Set<string>
 }
 
-export interface JsxAttributeInjectOption {
+export interface JsxElementAttributeInjectOption {
   attribute: string,
   elementMatch: ElementMatch<JSXOpeningElement>,
   templateCode: TemplateCode<JSXOpeningElement>,
   dependRequire: string[]
 }
 
+export interface JsxElementParentInjectOption {
+  elementMatch: ElementMatch<JSXElement>,
+  templateCode: TemplateCode<JSXElement>,
+  dependRequire: string[]
+}
+
 export interface Options {
-  jsxAttributeInject?: JsxAttributeInjectOption[]
+  jsxElementAttributeInject?: JsxElementAttributeInjectOption[]
+  jsxElementParentInject?: JsxElementParentInjectOption[]
 }
