@@ -24,7 +24,7 @@ export class DataQueue {
   /**
    * 获取实例
    */
-  public static getInstance () {
+  public static getInstance = () => {
     if (!this.dataQueueInstance) {
       this.dataQueueInstance = new DataQueue()
     }
@@ -43,7 +43,7 @@ export class DataQueue {
    * 插入数据
    * @param data
    */
-  public appendData (data: EventData) {
+  public appendData = (data: EventData) => {
     this.eventsQueue.push(data)
     if (this.eventsQueue.length > this.limitCount) this.reportData()
   }
@@ -52,14 +52,14 @@ export class DataQueue {
    * 提交事件队列
    * @private
    */
-  public reportData () {
+  public reportData = () => {
     const len = this.eventsQueue.length
     if (!len) return
     const eventDataList = this.eventsQueue.splice(0, len)
     this.callback(eventDataList)
   }
 
-  public registerCallback (callback: Callback) {
+  public registerCallback = (callback: Callback) => {
     this.callback = callback
   }
 }

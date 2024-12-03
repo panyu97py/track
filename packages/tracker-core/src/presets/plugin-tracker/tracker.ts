@@ -35,7 +35,7 @@ export class Tracker {
    */
   private exposureEventDataMap: Map<string, EventData> = new Map()
 
-  public static getInstance () {
+  public static getInstance = () => {
     if (!this.trackerInstance) {
       this.trackerInstance = new Tracker()
     }
@@ -46,7 +46,7 @@ export class Tracker {
    * 生成事件唯一标识
    * @param config
    */
-  private generateExposureEventKey (config: EventConfig): string {
+  private generateExposureEventKey = (config: EventConfig): string => {
     const { eventExposureName: eventName, relevanceKey, extendData } = config
 
     const eventType = EventType.EXPOSURE
@@ -62,7 +62,7 @@ export class Tracker {
    * 生成元素点击事件数据
    * @param eventConfig
    */
-  private generateTargetClickEventData (eventConfig: EventConfig): EventData {
+  private generateTargetClickEventData = (eventConfig: EventConfig): EventData => {
     const { eventClickName: eventName, extendData } = eventConfig
     const { prePagePath, curPagePath } = this
     const eventId = generateUUIDv4()
@@ -78,7 +78,7 @@ export class Tracker {
    * 生成元素曝光事件数据
    * @param eventConfig
    */
-  private generateTargetExposureEventData (eventConfig: EventConfig): EventData {
+  private generateTargetExposureEventData = (eventConfig: EventConfig): EventData => {
     const { eventExposureName: eventName, extendData } = eventConfig
     const { prePagePath, curPagePath, defaultReferrerEventId: referrerEventId } = this
     const eventId = generateUUIDv4()
@@ -92,7 +92,7 @@ export class Tracker {
    * 生成页面曝光事件数据
    * @param curPagePath
    */
-  private generatePageExposureEventData (curPagePath:string): EventData {
+  private generatePageExposureEventData = (curPagePath:string): EventData => {
     const eventId = generateUUIDv4()
     const eventType = EventType.EXPOSURE
     const eventName = BaseEventName.PAGE_EXPOSURE
@@ -105,7 +105,7 @@ export class Tracker {
    * 元素点击事件埋点逻辑
    * @param eventConfig
    */
-  public targetClick (eventConfig: EventConfig) {
+  public targetClick = (eventConfig: EventConfig) => {
     const { canBePageReferrerEvent } = eventConfig
     const tempEventData = this.generateTargetClickEventData(eventConfig)
     if (canBePageReferrerEvent) { this.defaultReferrerEventId = tempEventData.eventId }
@@ -116,7 +116,7 @@ export class Tracker {
    * 元素开始曝光事件埋点逻辑
    * @param eventConfig
    */
-  public targetBeginExposure (eventConfig: EventConfig) {
+  public targetBeginExposure = (eventConfig: EventConfig) => {
     const eventData = this.generateTargetExposureEventData(eventConfig)
     const eventKey = this.generateExposureEventKey(eventConfig)
     this.exposureEventDataMap.set(eventKey, eventData)
@@ -126,7 +126,7 @@ export class Tracker {
    * 元素结束曝光事件埋点逻辑
    * @param eventConfig
    */
-  public targetEndExposure (eventConfig: EventConfig) {
+  public targetEndExposure = (eventConfig: EventConfig) => {
     const eventKey = this.generateExposureEventKey(eventConfig)
     const tempEventData = this.exposureEventDataMap.get(eventKey)
     if (!tempEventData) return // 页面结束曝光时会上报一遍未结束曝光的数据，为避免重复上报这里直接 return
@@ -141,7 +141,7 @@ export class Tracker {
    * 页面开始曝光事件埋点逻辑
    * @param pagePath
    */
-  public pageBeginExposure (pagePath: string) {
+  public pageBeginExposure = (pagePath: string) => {
     const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE }
     const eventKey = this.generateExposureEventKey(eventConfig)
     const tempEventData = this.generatePageExposureEventData(pagePath)
@@ -155,7 +155,7 @@ export class Tracker {
    * 页面结束曝光埋点事件逻辑
    * @desc 页面结束曝光统一将所有曝光事件数据输出
    */
-  public pageEndExposure () {
+  public pageEndExposure = () => {
     const eventDataList = Array.from(this.exposureEventDataMap.values())
     const endTime = Date.now()
     eventDataList.forEach((eventData) => {
@@ -169,7 +169,7 @@ export class Tracker {
    * 注册输出埋点数据的回调函数
    * @param callback
    */
-  public registerCallback (callback: Callback) {
+  public registerCallback = (callback: Callback) => {
     this.callback = callback
   }
 }
