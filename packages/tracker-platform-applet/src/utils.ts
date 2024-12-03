@@ -2,7 +2,7 @@ import { eventHooks } from './event-hooks'
 import { EventConfig, EventData } from '@trackerjs/core'
 
 export const trackTargetClick = (eventConfig: EventConfig) => {
-  eventHooks.trackTargetEndExposure.call(eventConfig)
+  eventHooks.trackTargetClick.call(eventConfig)
 }
 
 export const trackTargetEndExposure = (eventConfig: EventConfig) => {
