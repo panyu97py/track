@@ -1,5 +1,5 @@
 import { Plugin, Preset } from '../types'
 
-export const definePlugin = (plugin:Plugin) => plugin
+export const definePlugin = <T>(plugin:Plugin<T>) => plugin
 
-export const definePreset = (preset:Preset) => preset
+export const definePreset = <T>(preset:Preset<T>) => preset

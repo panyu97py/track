@@ -6,7 +6,7 @@ export interface PresetInternalOpt {
   limitCount?: number
 }
 
-export const presetInternal = definePreset((opt?: PresetInternalOpt) => {
+export const presetInternal = definePreset<PresetInternalOpt>((opt) => {
   return () => {
     return {
       plugins: [

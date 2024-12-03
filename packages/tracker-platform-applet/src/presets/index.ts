@@ -5,7 +5,7 @@ import { pluginTriggerEvent } from './plugin-trigger-event'
 
 type AppletPresetOpt = Taro.request.Option & PresetInternalOpt
 
-export const presetApplet = definePreset((opt: AppletPresetOpt) => {
+export const presetApplet = definePreset<AppletPresetOpt>((opt) => {
   return () => {
     return {
       presets: [presetInternal()],
