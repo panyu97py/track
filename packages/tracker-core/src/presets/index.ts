@@ -2,11 +2,11 @@ import { definePreset } from '../helper'
 import { pluginTracker } from './plugin-tracker'
 import { pluginDataQueue } from './plugin-data-queue'
 
-interface Opt {
+export interface PresetInternalOpt {
   limitCount?: number
 }
 
-export const internalPreset = definePreset((opt?: Opt) => {
+export const presetInternal = definePreset((opt?: PresetInternalOpt) => {
   return () => {
     return {
       plugins: [

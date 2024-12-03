@@ -4,5 +4,7 @@ export const eventHooks = {
   appendEventData: new EventHook('appendEventData'),
   trackTargetClick: new EventHook('trackTargetClick'),
   trackTargetBeginExposure: new EventHook('trackTargetBeginExposure'),
-  trackTargetEndExposure: new EventHook('trackTargetBeginExposure')
+  trackTargetEndExposure: new EventHook('trackTargetBeginExposure'),
+  trackPageBeginExposure: new EventHook('trackPageBeginExposure'),
+  trackPageEndExposure: new EventHook('trackPageEndExposure')
 }
