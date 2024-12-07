@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@trackerjs/core": "0.0.1-alpha.20",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^9.0.0"
   },
   "devDependencies": {
     "@tarojs/taro": "3.6.29",
