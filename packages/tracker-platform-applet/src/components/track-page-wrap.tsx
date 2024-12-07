@@ -1,4 +1,5 @@
-import { useDidHide, useDidShow, useRouter, usePageScroll } from '@tarojs/taro'
+import { useDidHide, useDidShow, useRouter, usePageScroll, useUnload, useLoad } from '@tarojs/taro'
+import { useDebouncedCallback } from 'use-debounce'
 import { eventHooks } from '../event-hooks'
 import React, { ReactNode } from 'react'
 
@@ -11,9 +12,21 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
 
   const { path } = useRouter()
 
-  useDidShow(() => eventHooks.trackPageBeginExposure.call(path))
+  const triggerTrackPageBeginExposure = useDebouncedCallback(() => {
+    return eventHooks.trackPageBeginExposure.call(path)
+  }, 500, { leading: true, trailing: false })
 
-  useDidHide(() => eventHooks.trackPageEndExposure.call(path))
+  const triggerTrackPageEndExposure = useDebouncedCallback(() => {
+    return eventHooks.trackPageEndExposure.call(path)
+  }, 500, { leading: true, trailing: false })
+
+  useLoad(() => triggerTrackPageBeginExposure())
+
+  useDidShow(() => triggerTrackPageBeginExposure())
+
+  useDidHide(() => triggerTrackPageEndExposure())
+
+  useUnload(() => triggerTrackPageEndExposure())
 
   usePageScroll(() => eventHooks.pageScroll.call(path))
 
