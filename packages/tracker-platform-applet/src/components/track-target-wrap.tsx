@@ -1,5 +1,5 @@
 import React from 'react'
-import { appendEventData } from '@/utils'
+import { eventHooks } from '@/event-hooks'
 import { EventType, generateUUIDv4, noop } from '@trackerjs/core'
 import { useTargetReferrerInfo } from '@/hooks'
 import { useRouter } from '@tarojs/taro'
@@ -43,7 +43,7 @@ export const TrackTargetWrap: React.FC<TrackTargetWrapProps> = (props) => {
     onClick(...args)
     if (!eventClickName) return
     const eventData = generateClickEventData()
-    appendEventData(eventData)
+    eventHooks.appendEventData.call(eventData)
   }
 
   return React.cloneElement(children, { ...childProps, onClick: handleClick })
