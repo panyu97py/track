@@ -70,7 +70,7 @@ export class Tracker {
     const originEventKey = this.generateExposureEventKey(eventConfig)
     const referrerEventId = this.exposureEventDataMap.get(originEventKey)?.eventId || this.defaultReferrerEventId
     if (!eventName) throw new Error('eventClickName is empty')
-    const timeInfo = { startTime: Date.now(), endTime: Date.now() }
+    const timeInfo = { startTime: Date.now(), endTime: Date.now(), duration: 0 }
     return { eventId, referrerEventId, extendData, prePagePath, curPagePath, eventType, eventName, ...timeInfo }
   }
 
