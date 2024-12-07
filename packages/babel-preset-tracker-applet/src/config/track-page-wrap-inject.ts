@@ -14,7 +14,7 @@ export const trackPageWrapInjectOption = (opt: Opt): ExportDefaultWrapInjectOpti
       if (!state.filename) return false
       const relativeFileName = state.filename.replace(`${process.cwd()}/src`, '')
       const relativeFileNameWithoutExtension = removeFileExtension(relativeFileName)
-      return allPages.some(page => page === relativeFileNameWithoutExtension)
+      return allPages.some(page => new RegExp(page).test(relativeFileNameWithoutExtension))
     },
     templateCode: (nodePath) => {
       const tempAst = template.expression(' wrapPageEvent(%%component%%)')({ component: nodePath.node.declaration })
