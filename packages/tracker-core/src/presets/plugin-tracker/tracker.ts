@@ -159,7 +159,8 @@ export class Tracker {
     const eventDataList = Array.from(this.exposureEventDataMap.values())
     const endTime = Date.now()
     eventDataList.forEach((eventData) => {
-      const finalEventData = { ...eventData, endTime }
+      const duration = endTime - eventData.startTime
+      const finalEventData = { ...eventData, endTime, duration }
       this.callback(finalEventData)
     })
     this.exposureEventDataMap.clear()
