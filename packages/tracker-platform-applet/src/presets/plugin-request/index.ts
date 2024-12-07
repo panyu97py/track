@@ -1,6 +1,6 @@
 import { definePlugin, EventData } from '@trackerjs/core'
 import Taro from '@tarojs/taro'
-import { deviceId, sessionId } from '@/constants'
+import { deviceId, sessionId } from '../../constants'
 
 export const pluginAppletRequest = definePlugin((opt:Taro.request.Option) => {
   return (ctx) => {

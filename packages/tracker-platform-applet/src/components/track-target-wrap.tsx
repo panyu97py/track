@@ -1,8 +1,8 @@
 import React from 'react'
-import { eventHooks } from '@/event-hooks'
-import { EventType, generateUUIDv4, noop } from '@trackerjs/core'
-import { useTargetReferrerInfo } from '@/hooks'
 import { useRouter } from '@tarojs/taro'
+import { EventType, generateUUIDv4, noop } from '@trackerjs/core'
+import { eventHooks } from '../event-hooks'
+import { useTargetReferrerInfo } from '../hooks'
 
 interface ChildProps extends Record<string, any> {
   onClick?: (...args: any[]) => void,

@@ -1,11 +1,11 @@
 import { useDidHide, useDidShow, useRouter, usePageScroll, useUnload, useLoad } from '@tarojs/taro'
-import { useDebouncedCallback } from 'use-debounce'
-import { eventHooks } from '@/event-hooks'
-import React, { ReactNode, useMemo, useRef, useState } from 'react'
-import { usePageReferrerInfo } from '@/hooks'
-import { TrackPageContext } from '@/context'
 import { BaseEventName, EventType, generateUUIDv4 } from '@trackerjs/core'
-import { Current } from '@/constants'
+import React, { ReactNode, useMemo, useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
+import { eventHooks } from '../event-hooks'
+import { usePageReferrerInfo } from '../hooks'
+import { TrackPageContext } from '../context'
+import { Current } from '../constants'
 
 interface TrackPageWrapProps {
   children: ReactNode

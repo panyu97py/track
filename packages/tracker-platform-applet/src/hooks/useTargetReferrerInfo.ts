@@ -1,4 +1,4 @@
-import { TrackPageContext } from '@/context'
+import { TrackPageContext } from '../context'
 import { useContext } from 'react'
 
 export const useTargetReferrerInfo = () => {

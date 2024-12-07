@@ -1,4 +1,4 @@
-import { CurrentInfo } from '@/types'
+import { CurrentInfo } from './types'
 import { generateUUIDv4 } from '@trackerjs/core'
 import Taro from '@tarojs/taro'
 

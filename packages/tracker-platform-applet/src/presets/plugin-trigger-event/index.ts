@@ -1,5 +1,5 @@
 import { definePlugin, EventConfig, EventData, PluginContext } from '@trackerjs/core'
-import { eventHooks } from '@/event-hooks'
+import { eventHooks } from '../../event-hooks'
 
 export const pluginTriggerEvent = definePlugin(() => {
   return (ctx: PluginContext) => {

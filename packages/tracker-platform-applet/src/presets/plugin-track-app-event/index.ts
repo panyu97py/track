@@ -1,6 +1,6 @@
 import { definePlugin, EventData, generateUUIDv4 } from '@trackerjs/core'
 import Taro from '@tarojs/taro'
-import { systemInfo } from '@/constants'
+import { systemInfo } from '../../constants'
 
 const generateTimeInfo = () => {
   const startTime = Date.now()

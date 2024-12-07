@@ -8,10 +8,6 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "jsx": "react",  // or "react-jsx" for React 17+
-    "paths": {
-      "@/*": ["src/*"]
-    }
   },
   "include": ["src"],
-
 }
