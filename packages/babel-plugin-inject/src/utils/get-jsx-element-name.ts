@@ -18,7 +18,7 @@ export const getJsxOpeningElementNodeName = (node: JSXNode) => {
   return null
 }
 
-export const getJsxElementNodeName = (node: JSXElement) => {
+export const getJsxElementName = (node: JSXElement) => {
   const { openingElement } = node
   return getJsxOpeningElementNodeName(openingElement.name)
 }

@@ -27,11 +27,14 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       const isTargetMatch = (() => {
         if (targetMatch instanceof RegExp) return targetMatch.test(elementName)
         if (typeof targetMatch === 'string') return targetMatch === elementName
-        return targetMatch(jsxOpeningElementNodePath)
+        return targetMatch(jsxOpeningElementNodePath, state)
       })()
 
       // 生成模版代码字符串
-      const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxOpeningElementNodePath)
+      const templateCodeStr = (() => {
+        if (typeof templateCode === 'string') return templateCode
+        return templateCode(jsxOpeningElementNodePath, state)
+      })()
 
       // 若模版代码字符串为空或元素不匹配则返回
       if (!isTargetMatch || !templateCodeStr) return

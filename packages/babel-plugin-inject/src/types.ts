@@ -5,15 +5,17 @@ export interface NodePath<T> extends OriginNodePath<T> {
   _processed?: boolean
 }
 
-export type TargetMatchFn<T> = (nodePath: NodePath<T>) => boolean
-
-export type TargetMatch<T> = string | RegExp | TargetMatchFn<T>;
-
-export type TemplateCode<T> = string | ((path: NodePath<T>) => string)
-
 export interface PluginState extends PluginPass {
   dependRequire: Set<string>
 }
+
+export type TargetMatchFn<T> = (nodePath: NodePath<T>, state:PluginState) => boolean
+
+export type TemplateCodeFn<T> = (nodePath: NodePath<T>, state:PluginState) => string
+
+export type TargetMatch<T> = string | RegExp | TargetMatchFn<T>;
+
+export type TemplateCode<T> = string | TemplateCodeFn<T>
 
 export interface JsxElementAttributeInjectOption {
   attribute: string,

@@ -2,7 +2,7 @@ import { Visitor } from '@babel/core'
 import * as types from '@babel/types'
 import type { JSXElement } from '@babel/types'
 import { JsxElementParentInjectOption, NodePath, Options, PluginState } from '../types'
-import { getJsxElementNodeName } from '../utils'
+import { getJsxElementName } from '../utils'
 import template from '@babel/template'
 
 export const injectJsxElementParentVisitor: Visitor = {
@@ -19,10 +19,14 @@ export const injectJsxElementParentVisitor: Visitor = {
       const { targetMatch, templateCode, dependRequire = [] } = jsxElementParentInjectOption
 
       // 获取元素名称
-      const elementName = getJsxElementNodeName(jsxElementNodePath.node)
+      const elementName = getJsxElementName(jsxElementNodePath.node)
 
       // 生成模版代码字符串
-      const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxElementNodePath)
+      // 生成模版代码字符串
+      const templateCodeStr = (() => {
+        if (typeof templateCode === 'string') return templateCode
+        return templateCode(jsxElementNodePath, state)
+      })()
 
       // 若模版代码字符串为空则跳过
       if (!templateCodeStr) return
@@ -34,8 +38,8 @@ export const injectJsxElementParentVisitor: Visitor = {
       const isProcessed = (() => {
         const { node: parentNode } = jsxElementNodePath.parentPath
         if (!types.isJSXElement(parentNode)) return false
-        const curParentElementName = getJsxElementNodeName(parentNode)
-        const nextParentElementName = getJsxElementNodeName(parentElementAst)
+        const curParentElementName = getJsxElementName(parentNode)
+        const nextParentElementName = getJsxElementName(parentElementAst)
         return curParentElementName === nextParentElementName
       })()
 
@@ -43,7 +47,7 @@ export const injectJsxElementParentVisitor: Visitor = {
       const isTargetMatch = (() => {
         if (targetMatch instanceof RegExp) return targetMatch.test(elementName)
         if (typeof targetMatch === 'string') return targetMatch === elementName
-        return targetMatch(jsxElementNodePath)
+        return targetMatch(jsxElementNodePath, state)
       })()
 
       if (isProcessed || !isTargetMatch) return
