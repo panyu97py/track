@@ -1,6 +1,6 @@
 {
   "name": "@trackerjs/babel-preset-tracker-applet",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
   "homepage": "",
@@ -29,7 +29,7 @@
     "vm": "*"
   },
   "dependencies": {
-    "@trackerjs/babel-plugin-inject": "0.0.1-alpha.21"
+    "@trackerjs/babel-plugin-inject": "0.0.1-alpha.22"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
