@@ -7,10 +7,8 @@ export default (opt: Opt) => {
   return {
     plugins: [
       [babelPluginInject, {
-        jsxElementParentInject: [
-          trackTargetWrapInject(),
-          trackPageWrapInjectOption(opt)
-        ]
+        jsxElementParentInject: [trackTargetWrapInject()],
+        exportDefaultWrapInject: [trackPageWrapInjectOption(opt)]
       }]
     ]
   }
