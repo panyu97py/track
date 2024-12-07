@@ -47,6 +47,8 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       // 插入模版代码为属性值
       attributes.push(types.jsxAttribute(types.jsxIdentifier(attribute), templateCodeAst))
 
+      jsxOpeningElementNodePath.node.attributes = attributes
+
       // 若依赖源不存在则初始化
       if (!state.dependRequire) state.dependRequire = new Set()
 

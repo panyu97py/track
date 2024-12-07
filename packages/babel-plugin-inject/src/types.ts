@@ -1,11 +1,14 @@
 import { NodePath as OriginNodePath, PluginPass } from '@babel/core'
-import { JSXElement, JSXOpeningElement } from '@babel/types'
+import { ExportDefaultDeclaration, JSXElement, JSXOpeningElement } from '@babel/types'
 
 export interface NodePath<T> extends OriginNodePath<T> {
   _processed?: boolean
 }
 
-export type ElementMatch<T> = string | RegExp | ((nodePath: NodePath<T>) => boolean);
+export type TargetMatchFn<T> = (nodePath: NodePath<T>) => boolean
+
+export type TargetMatch<T> = string | RegExp | TargetMatchFn<T>;
+
 export type TemplateCode<T> = string | ((path: NodePath<T>) => string)
 
 export interface PluginState extends PluginPass {
@@ -14,18 +17,25 @@ export interface PluginState extends PluginPass {
 
 export interface JsxElementAttributeInjectOption {
   attribute: string,
-  targetMatch: ElementMatch<JSXOpeningElement>,
+  targetMatch: TargetMatch<JSXOpeningElement>,
   templateCode: TemplateCode<JSXOpeningElement>,
   dependRequire: string[]
 }
 
 export interface JsxElementParentInjectOption {
-  targetMatch: ElementMatch<JSXElement>,
+  targetMatch: TargetMatch<JSXElement>,
   templateCode: TemplateCode<JSXElement>,
+  dependRequire: string[]
+}
+
+export interface ExportDefaultWrapInjectOption {
+  targetMatch: TargetMatchFn<ExportDefaultDeclaration>,
+  templateCode: TemplateCode<ExportDefaultDeclaration>,
   dependRequire: string[]
 }
 
 export interface Options {
   jsxElementAttributeInject?: JsxElementAttributeInjectOption[]
   jsxElementParentInject?: JsxElementParentInjectOption[]
+  exportDefaultWrapInject?: ExportDefaultWrapInjectOption[]
 }
