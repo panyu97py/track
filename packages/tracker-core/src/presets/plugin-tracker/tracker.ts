@@ -91,14 +91,15 @@ export class Tracker {
   /**
    * 生成页面曝光事件数据
    * @param curPagePath
+   * @param extendData
    */
-  private generatePageExposureEventData = (curPagePath:string): EventData => {
+  private generatePageExposureEventData = (curPagePath:string, extendData:Record<string, any>): EventData => {
     const eventId = generateUUIDv4()
     const eventType = EventType.EXPOSURE
     const eventName = BaseEventName.PAGE_EXPOSURE
     const { curPagePath: prePagePath, defaultReferrerEventId: referrerEventId } = this
     const timeInfo = { startTime: Date.now() }
-    return { eventId, referrerEventId, prePagePath, curPagePath, eventType, eventName, ...timeInfo }
+    return { eventId, referrerEventId, prePagePath, curPagePath, eventType, eventName, extendData, ...timeInfo }
   }
 
   /**
@@ -145,7 +146,7 @@ export class Tracker {
   public pageBeginExposure = (pagePath: string, params:Record<string, any>) => {
     const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE, extendData: params }
     const eventKey = this.generateExposureEventKey(eventConfig)
-    const tempEventData = this.generatePageExposureEventData(pagePath)
+    const tempEventData = this.generatePageExposureEventData(pagePath, params)
     this.exposureEventDataMap.set(eventKey, tempEventData)
     this.defaultReferrerEventId = tempEventData.eventId
     this.prePagePath = this.curPagePath
