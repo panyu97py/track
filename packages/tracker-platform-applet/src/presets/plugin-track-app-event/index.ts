@@ -11,17 +11,6 @@ const generateTimeInfo = () => {
 
 export const pluginTrackAppEvent = definePlugin(() => {
   return (ctx) => {
-    const appleSystemInfoEventData:EventData = (() => {
-      const eventId = generateUUIDv4()
-      const eventName = 'APPLET_SYSTEM_INFO'
-      const eventType = 'SYSTEM_EVENT'
-      const baseEventData = { eventType, eventId, eventName, extendData: systemInfo }
-      const timeInfo = generateTimeInfo()
-      return { ...baseEventData, ...timeInfo }
-    })()
-
-    ctx.appendEventData(appleSystemInfoEventData)
-
     Taro.onAppShow((result) => {
       const eventId = generateUUIDv4()
       const eventName = 'APPLET_SHOW'
@@ -41,5 +30,28 @@ export const pluginTrackAppEvent = definePlugin(() => {
       const eventData:EventData = { ...baseEventData, ...timeInfo }
       ctx.appendEventData(eventData)
     })
+
+    const appleSystemInfoEventData:EventData = (() => {
+      const eventId = generateUUIDv4()
+      const eventName = 'APPLET_SYSTEM_INFO'
+      const eventType = 'SYSTEM_EVENT'
+      const baseEventData = { eventType, eventId, eventName, extendData: systemInfo }
+      const timeInfo = generateTimeInfo()
+      return { ...baseEventData, ...timeInfo }
+    })()
+
+    ctx.appendEventData(appleSystemInfoEventData)
+
+    const appOnLaunchEventData:EventData = (() => {
+      const eventId = generateUUIDv4()
+      const eventName = 'APPLET_LAUNCH'
+      const eventType = 'SYSTEM_EVENT'
+      const extendData = Taro.getLaunchOptionsSync()
+      const baseEventData = { eventType, eventId, eventName, extendData }
+      const timeInfo = generateTimeInfo()
+      return { ...baseEventData, ...timeInfo }
+    })()
+
+    ctx.appendEventData(appOnLaunchEventData)
   }
 })
