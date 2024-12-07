@@ -17,7 +17,7 @@ export const trackPageWrapInjectOption = (opt: Opt): ExportDefaultWrapInjectOpti
       return allPages.some(page => page === relativeFileNameWithoutExtension)
     },
     templateCode: (nodePath) => {
-      const tempAst = template.expression(' wrapPageEvent(%%component%%)')({ component: nodePath.node })
+      const tempAst = template.expression(' wrapPageEvent(%%component%%)')({ component: nodePath.node.declaration })
       return generate(tempAst).code
     },
     dependRequire: ['import {wrapPageEvent} from \'@trackerjs/applet\'']
