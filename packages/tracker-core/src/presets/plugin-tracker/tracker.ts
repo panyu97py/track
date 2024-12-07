@@ -140,9 +140,10 @@ export class Tracker {
   /**
    * 页面开始曝光事件埋点逻辑
    * @param pagePath
+   * @param params
    */
-  public pageBeginExposure = (pagePath: string) => {
-    const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE }
+  public pageBeginExposure = (pagePath: string, params:Record<string, any>) => {
+    const eventConfig = { eventExposureName: BaseEventName.PAGE_EXPOSURE, extendData: params }
     const eventKey = this.generateExposureEventKey(eventConfig)
     const tempEventData = this.generatePageExposureEventData(pagePath)
     this.exposureEventDataMap.set(eventKey, tempEventData)

@@ -10,14 +10,14 @@ interface TrackPageWrapProps {
 export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
   const { children } = props
 
-  const { path } = useRouter()
+  const { path, params } = useRouter()
 
   const triggerTrackPageBeginExposure = useDebouncedCallback(() => {
-    return eventHooks.trackPageBeginExposure.call(path)
+    return eventHooks.trackPageBeginExposure.call(path, params)
   }, 500, { leading: true, trailing: false })
 
   const triggerTrackPageEndExposure = useDebouncedCallback(() => {
-    return eventHooks.trackPageEndExposure.call(path)
+    return eventHooks.trackPageEndExposure.call(path, params)
   }, 500, { leading: true, trailing: false })
 
   useLoad(() => triggerTrackPageBeginExposure())
