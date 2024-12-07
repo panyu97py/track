@@ -17,11 +17,11 @@ export interface EventConfig {
 
 export interface EventData {
   eventId: string;
-  referrerEventId?: string;
-  eventType: EventType;
-  eventName: string;
   curPagePath?: string;
-  prePagePath?: string;
+  referrerEventId?: string;
+  referrerPagePath?: string;
+  eventType: EventType | string;
+  eventName: string;
   startTime: number;
   endTime?: number;
   duration?: number;

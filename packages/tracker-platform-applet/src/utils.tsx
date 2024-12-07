@@ -3,10 +3,6 @@ import { EventConfig, EventData } from '@trackerjs/core'
 import { eventHooks } from './event-hooks'
 import { TrackPageWrap } from './components'
 
-export const trackTargetClick = (eventConfig: EventConfig) => {
-  eventHooks.trackTargetClick.call(eventConfig)
-}
-
 export const trackTargetEndExposure = (eventConfig: EventConfig) => {
   eventHooks.trackTargetEndExposure.call(eventConfig)
 }
