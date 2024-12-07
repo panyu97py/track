@@ -3,7 +3,7 @@ import * as types from '@babel/types'
 import { JSXAttribute, JSXIdentifier } from '@babel/types'
 
 export const trackTargetWrapInject: JsxElementParentInjectOption = {
-  elementMatch: (nodePath) => {
+  targetMatch: (nodePath) => {
     const { attributes } = nodePath.node.openingElement
     return attributes.some((attribute) => {
       const trackEventNameKeys = ['eventClickName', 'eventEndExposureName']

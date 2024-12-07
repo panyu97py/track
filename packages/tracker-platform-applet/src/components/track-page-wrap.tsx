@@ -1,4 +1,4 @@
-import { useDidHide, useDidShow, useRouter } from '@tarojs/taro'
+import { useDidHide, useDidShow, useRouter, usePageScroll } from '@tarojs/taro'
 import { eventHooks } from '../event-hooks'
 import React, { ReactNode } from 'react'
 
@@ -14,6 +14,8 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
   useDidShow(() => eventHooks.trackPageBeginExposure.call(path))
 
   useDidHide(() => eventHooks.trackPageEndExposure.call(path))
+
+  usePageScroll(() => eventHooks.pageScroll.call(path))
 
   return <>{children}</>
 }

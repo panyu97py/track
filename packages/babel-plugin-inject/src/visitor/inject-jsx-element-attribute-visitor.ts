@@ -16,7 +16,7 @@ export const injectJsxElementAttributeVisitor: Visitor = {
     jsxOpeningElementNodePath._processed = true
 
     jsxElementAttributeInject.forEach((jsxElementAttributeInjectOption: JsxElementAttributeInjectOption) => {
-      const { elementMatch, attribute, templateCode, dependRequire = [] } = jsxElementAttributeInjectOption
+      const { targetMatch, attribute, templateCode, dependRequire = [] } = jsxElementAttributeInjectOption
 
       const { name, attributes: curAttributes = [] } = jsxOpeningElementNodePath.node
 
@@ -24,17 +24,17 @@ export const injectJsxElementAttributeVisitor: Visitor = {
       const elementName = getJsxOpeningElementNodeName(name)
 
       // 判断元素是否匹配
-      const isElementMatch = (() => {
-        if (elementMatch instanceof RegExp) return elementMatch.test(elementName)
-        if (typeof elementMatch === 'string') return elementMatch === elementName
-        return elementMatch(jsxOpeningElementNodePath)
+      const isTargetMatch = (() => {
+        if (targetMatch instanceof RegExp) return targetMatch.test(elementName)
+        if (typeof targetMatch === 'string') return targetMatch === elementName
+        return targetMatch(jsxOpeningElementNodePath)
       })()
 
       // 生成模版代码字符串
       const templateCodeStr = typeof templateCode === 'string' ? templateCode : templateCode(jsxOpeningElementNodePath)
 
       // 若模版代码字符串为空或元素不匹配则返回
-      if (!isElementMatch || !templateCodeStr) return
+      if (!isTargetMatch || !templateCodeStr) return
 
       // 删除原有属性
       const attributes = curAttributes.filter(item => {

@@ -14,13 +14,13 @@ export interface PluginState extends PluginPass {
 
 export interface JsxElementAttributeInjectOption {
   attribute: string,
-  elementMatch: ElementMatch<JSXOpeningElement>,
+  targetMatch: ElementMatch<JSXOpeningElement>,
   templateCode: TemplateCode<JSXOpeningElement>,
   dependRequire: string[]
 }
 
 export interface JsxElementParentInjectOption {
-  elementMatch: ElementMatch<JSXElement>,
+  targetMatch: ElementMatch<JSXElement>,
   templateCode: TemplateCode<JSXElement>,
   dependRequire: string[]
 }

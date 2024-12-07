@@ -16,7 +16,7 @@ export const injectJsxElementParentVisitor: Visitor = {
     jsxElementNodePath._processed = true
 
     jsxElementParentInject.forEach((jsxElementParentInjectOption:JsxElementParentInjectOption) => {
-      const { elementMatch, templateCode, dependRequire = [] } = jsxElementParentInjectOption
+      const { targetMatch, templateCode, dependRequire = [] } = jsxElementParentInjectOption
 
       // 获取元素名称
       const elementName = getJsxElementNodeName(jsxElementNodePath.node)
@@ -40,13 +40,13 @@ export const injectJsxElementParentVisitor: Visitor = {
       })()
 
       // 判断元素是否匹配
-      const isElementMatch = (() => {
-        if (elementMatch instanceof RegExp) return elementMatch.test(elementName)
-        if (typeof elementMatch === 'string') return elementMatch === elementName
-        return elementMatch(jsxElementNodePath)
+      const isTargetMatch = (() => {
+        if (targetMatch instanceof RegExp) return targetMatch.test(elementName)
+        if (typeof targetMatch === 'string') return targetMatch === elementName
+        return targetMatch(jsxElementNodePath)
       })()
 
-      if (isProcessed || !isElementMatch) return
+      if (isProcessed || !isTargetMatch) return
 
       // 将目标节点作为插入节点的字节点
       parentElementAst.children = [jsxElementNodePath.node]
