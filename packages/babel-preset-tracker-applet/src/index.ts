@@ -3,7 +3,9 @@ import { trackTargetWrapInject } from './config/track-target-wrap-inject'
 import { trackPageWrapInjectOption } from './config/track-page-wrap-inject'
 import { Opt } from './types'
 
-export default (opt: Opt) => {
+export * from './utils'
+
+export default (_: any, opt: Opt) => {
   return {
     plugins: [
       [babelPluginInject, {

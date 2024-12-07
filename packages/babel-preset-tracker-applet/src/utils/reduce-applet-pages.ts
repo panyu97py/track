@@ -1,11 +1,7 @@
 import Taro from '@tarojs/taro'
 
 export const reduceAppletPages = (appConfig: Taro.AppConfig) => {
-  const { pages = [], subPackages = [] } = appConfig
-
-  const mainPages = pages.reduce((result: string[], page: string) => {
-    return [...result, page]
-  }, [])
+  const { pages: mainPages = [], subPackages = [] } = appConfig
 
   const subPackagePages = subPackages.reduce((result: string[], subPackage) => {
     const { pages: subPackagePages = [] } = subPackage
