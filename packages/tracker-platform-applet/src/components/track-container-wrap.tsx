@@ -1,8 +1,12 @@
 import React from 'react'
 import { TrackWrapContext, useTrackWrapContext } from '../context'
 import { useCalcTargetExposure } from '../hooks'
+import { createSelectorQuery } from '../utils'
+import { DomInfo } from '../types'
 
-type ChildProps = Record<string, any>
+interface ChildProps extends Record<string, any>{
+  selfSelector:string
+}
 
 interface TrackTargetContainerWrapProps {
   calcTrigger?: string | string[]
@@ -18,7 +22,13 @@ export const TrackContainerWrap: React.FC<TrackTargetContainerWrapProps> = (prop
   const { referrerInfo = {} } = useTrackWrapContext()
 
   // 计算元素曝光
-  const { registerTrackTarget, calcTriggerProxy, unregisterTrackTarget } = useCalcTargetExposure()
+  const { registerTrackTarget, calcTriggerProxy, unregisterTrackTarget } = useCalcTargetExposure(async () => {
+    const selectorQuery = createSelectorQuery()
+    return new Promise<DomInfo>(resolve => {
+      const opt = { dataset: true, rect: true, size: true }
+      selectorQuery?.select(childProps.selfSelector).fields(opt, resolve).exec()
+    })
+  }, referrerInfo)
 
   // 元素曝光计算触发器
   const finalCalcTrigger = Array.isArray(calcTrigger) ? calcTrigger : [calcTrigger]

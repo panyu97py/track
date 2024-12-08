@@ -12,3 +12,16 @@ export interface CurrentInfo {
 export interface AppleTrackTargetConfig extends EventConfig {
   selfSelector?: string
 }
+
+export interface DomInfo {
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+}
+
+export interface TrackTargetDomInfo extends DomInfo {
+  dataset: { trackKey: string }
+}

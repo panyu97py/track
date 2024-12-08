@@ -1,30 +1,19 @@
-import Taro from '@tarojs/taro'
-import { useRef } from 'react'
-import { AppleTrackTargetConfig } from '../types'
-import { AnyFn } from '@trackerjs/core'
+import { useEffect, useRef } from 'react'
+import { AppleTrackTargetConfig, DomInfo, ReferrerInfo, TrackTargetDomInfo } from '../types'
+import { AnyFn, EventType, generateUUIDv4 } from '@trackerjs/core'
+import { createSelectorQuery, filterVisibleTarget } from '../utils'
+import { eventHooks } from '../event-hooks'
+import { useDebouncedCallback } from 'use-debounce'
+import { useDidHide, useRouter } from '@tarojs/taro'
 
-interface DomInfo {
-  dataset: { trackKey: string },
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-}
-
-const createSelectorQuery = () => {
-  if (Taro.getEnv() !== Taro.ENV_TYPE.ALIPAY) return Taro.createSelectorQuery()
-
-  // 支付宝小程序兼容
-  const { page } = Taro.getCurrentInstance()
-
-  return page?.createSelectorQuery?.()
-}
-
-export const useCalcTargetExposure = () => {
+export const useCalcTargetExposure = (queryRelativeDomInfo: () => Promise<DomInfo>, referrerInfo:ReferrerInfo) => {
   // 事件配置 map
   const eventConfigMapRef = useRef<Map<string, AppleTrackTargetConfig>>(new Map())
+
+  // 元素开始曝光时间map
+  const exposureStartTimeMapRef = useRef<Map<string, number>>(new Map())
+
+  const { path } = useRouter()
 
   /**
    * 查询目标元素 dom 信息
@@ -35,17 +24,63 @@ export const useCalcTargetExposure = () => {
     if (!allSelector.length) return
     const selectorStr = [...new Set(allSelector)].join(',')
     const opt = { dataset: true, rect: true, size: true }
-    return new Promise<DomInfo[]>(resolve => {
+    return new Promise<TrackTargetDomInfo[]>(resolve => {
       createSelectorQuery()?.selectAll(selectorStr).fields(opt, resolve).exec()
     })
   }
 
   /**
+   * 元素开始曝光
+   * @param trackKey
+   */
+  const targetBeginExposure = (trackKey: string) => {
+    exposureStartTimeMapRef.current.set(trackKey, Date.now())
+  }
+
+  /**
+   * 元素结束曝光
+   * @param trackKey
+   */
+  const targetEndExposure = useDebouncedCallback((trackKey: string) => {
+    const eventConfig = eventConfigMapRef.current.get(trackKey)
+    const { eventExposureName: eventName, extendData } = eventConfig || {}
+    const startTime = exposureStartTimeMapRef.current.get(trackKey)
+    if (!eventConfig || !eventName || !startTime) return
+    const eventId = generateUUIDv4()
+    const eventType = EventType.EXPOSURE
+    const baseEventData = { eventId, eventName, eventType, extendData }
+    const timeInfo = { startTime, endTime: Date.now(), duration: Date.now() - startTime }
+    const finalEventData = { ...baseEventData, ...timeInfo, ...referrerInfo, currentPagePath: path }
+    exposureStartTimeMapRef.current.delete(trackKey)
+    eventHooks.appendEventData.call(finalEventData)
+  }, 500, { leading: true, trailing: false })
+
+  /**
    * 触发埋点计算
    */
   const triggerTrackCalc = async () => {
-    const targetDomInfo = await queryTargetDomInfo()
-    console.log({ targetDomInfo })
+    const [targetDomInfo, relativeDomInfo] = await Promise.all([queryTargetDomInfo(), queryRelativeDomInfo()])
+
+    // 本次计算可见的元素
+    const curVisibleTarget = filterVisibleTarget(targetDomInfo || [], relativeDomInfo)
+
+    // 本次计算可见的元素 key
+    const curVisibleTargetTrackKeys = curVisibleTarget.map(item => item.dataset?.trackKey)
+
+    // 上次计算可见的元素 key
+    const preVisibleTargetTrackKeys = Array.from(exposureStartTimeMapRef.current.keys())
+
+    // 本次计算开始曝光的元素 key
+    const beginExposureTargetTrackKeys = curVisibleTargetTrackKeys?.filter(item => !preVisibleTargetTrackKeys.includes(item))
+
+    // 本次计算结束曝光的元素 key
+    const endExposureTargetTrackKeys = preVisibleTargetTrackKeys.filter(item => !curVisibleTargetTrackKeys.includes(item))
+
+    // 生成元素开始曝光数据
+    beginExposureTargetTrackKeys.forEach((trackKey) => targetBeginExposure(trackKey))
+
+    // 生成元素结束曝光数据
+    endExposureTargetTrackKeys.forEach((trackKey) => targetEndExposure(trackKey))
   }
 
   /**
@@ -71,8 +106,23 @@ export const useCalcTargetExposure = () => {
    * @param dataTrackKey
    */
   const unregisterTrackTarget = (dataTrackKey: string) => {
+    targetEndExposure(dataTrackKey)
     eventConfigMapRef.current.delete(dataTrackKey)
   }
+
+  const allTargetEndExposure = () => {
+    // 上次计算可见的元素 key
+    const preVisibleTargetTrackKeys = Array.from(exposureStartTimeMapRef.current.keys())
+
+    // 生成元素结束曝光数据
+    preVisibleTargetTrackKeys.forEach((trackKey) => targetEndExposure(trackKey))
+  }
+
+  useDidHide(() => allTargetEndExposure())
+
+  useEffect(() => {
+    return () => allTargetEndExposure()
+  }, [])
 
   return {
     registerTrackTarget,

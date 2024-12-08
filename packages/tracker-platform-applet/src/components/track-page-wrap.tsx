@@ -5,7 +5,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { eventHooks } from '../event-hooks'
 import { useCalcTargetExposure, usePageReferrerInfo } from '../hooks'
 import { TrackWrapContext } from '../context'
-import { Current } from '../constants'
+import { Current, systemInfo } from '../constants'
 
 interface TrackPageWrapProps {
   children: ReactNode
@@ -24,13 +24,16 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
   // 页面曝光事件id（由于子组件依赖该字段故采用 state 实现）
   const [pageExposureEventId, setPageExposureEventId] = useState<string>('')
 
-  // 计算目标曝光事件
-  const { registerTrackTarget, unregisterTrackTarget, triggerTrackCalc } = useCalcTargetExposure()
-
   // 页面元素埋点事件的 referrerInfo
   const targetReferrerInfo = useMemo(() => {
     return { referrerEventId: pageExposureEventId, referrerPagePath: referrerInfo.referrerPagePath }
   }, [pageExposureEventId, referrerInfo])
+
+  // 计算目标曝光事件
+  const { registerTrackTarget, unregisterTrackTarget, triggerTrackCalc } = useCalcTargetExposure(async () => {
+    const { screenWidth: width, screenHeight: height } = systemInfo
+    return { width, height, top: 0, left: 0, right: width, bottom: height }
+  }, targetReferrerInfo)
 
   /**
    * 生成页面曝光事件数据
