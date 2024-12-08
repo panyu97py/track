@@ -3,6 +3,16 @@ import { useRef } from 'react'
 import { AppleTrackTargetConfig } from '../types'
 import { AnyFn } from '@trackerjs/core'
 
+interface DomInfo {
+  dataset: { trackKey: string },
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+}
+
 const createSelectorQuery = () => {
   if (Taro.getEnv() !== Taro.ENV_TYPE.ALIPAY) return Taro.createSelectorQuery()
 
@@ -25,7 +35,7 @@ export const useCalcTargetExposure = () => {
     if (!allSelector.length) return
     const selectorStr = [...new Set(allSelector)].join(',')
     const opt = { dataset: true, rect: true, size: true }
-    return new Promise(resolve => {
+    return new Promise<DomInfo[]>(resolve => {
       createSelectorQuery()?.selectAll(selectorStr).fields(opt, resolve).exec()
     })
   }
@@ -64,5 +74,10 @@ export const useCalcTargetExposure = () => {
     eventConfigMapRef.current.delete(dataTrackKey)
   }
 
-  return { registerTrackTarget, unregisterTrackTarget, triggerTrackCalc, calcTriggerProxy }
+  return {
+    registerTrackTarget,
+    unregisterTrackTarget,
+    triggerTrackCalc,
+    calcTriggerProxy
+  }
 }
