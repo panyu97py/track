@@ -53,12 +53,12 @@ export const useCalcTargetExposure = (queryRelativeDomInfo: () => Promise<DomInf
     const finalEventData = { ...baseEventData, ...timeInfo, ...referrerInfo, currentPagePath: path }
     exposureStartTimeMapRef.current.delete(trackKey)
     eventHooks.appendEventData.call(finalEventData)
-  }, 500, { leading: true, trailing: false })
+  }, 100, { leading: true, trailing: false })
 
   /**
    * 触发埋点计算
    */
-  const triggerTrackCalc = async () => {
+  const triggerTrackCalc = useDebouncedCallback(async () => {
     const [targetDomInfo, relativeDomInfo] = await Promise.all([queryTargetDomInfo(), queryRelativeDomInfo()])
 
     // 本次计算可见的元素
@@ -81,7 +81,7 @@ export const useCalcTargetExposure = (queryRelativeDomInfo: () => Promise<DomInf
 
     // 生成元素结束曝光数据
     endExposureTargetTrackKeys.forEach((trackKey) => targetEndExposure(trackKey))
-  }
+  }, 100, { leading: true, trailing: true })
 
   /**
    * 代理埋点计算触发器
