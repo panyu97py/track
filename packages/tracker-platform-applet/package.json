@@ -1,6 +1,6 @@
 {
   "name": "@trackerjs/applet",
-  "version": "0.0.1-alpha.28",
+  "version": "0.0.1-alpha.29",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
   "homepage": "",
@@ -28,7 +28,7 @@
     "react": "*"
   },
   "dependencies": {
-    "@trackerjs/core": "0.0.1-alpha.28",
+    "@trackerjs/core": "0.0.1-alpha.29",
     "use-debounce": "^9.0.0"
   },
   "devDependencies": {
