@@ -10,5 +10,5 @@ export interface CurrentInfo {
 }
 
 export interface AppleTrackTargetConfig extends EventConfig {
-  selfSelector: string
+  selfSelector?: string
 }

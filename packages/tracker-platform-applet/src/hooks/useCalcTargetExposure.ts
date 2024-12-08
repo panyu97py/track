@@ -21,10 +21,12 @@ export const useCalcTargetExposure = () => {
    */
   const queryTargetDomInfo = async () => {
     const allEventConfig = Array.from(eventConfigMapRef.current.values())
-    const selector = [...new Set(allEventConfig.map(item => item.selfSelector))].join(',')
+    const allSelector = allEventConfig.filter(item => item).map(item => item.selfSelector)
+    if (!allSelector.length) return
+    const selectorStr = [...new Set(allSelector)].join(',')
     const opt = { dataset: true, rect: true, size: true }
     return new Promise(resolve => {
-      createSelectorQuery()?.selectAll(selector).fields(opt, resolve).exec()
+      createSelectorQuery()?.selectAll(selectorStr).fields(opt, resolve).exec()
     })
   }
 
