@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { AnyFn, EventType, generateUUIDv4, noop } from '@trackerjs/core'
 import { eventHooks } from '../event-hooks'
@@ -23,7 +23,7 @@ export const TrackTargetWrap: React.FC<TrackTargetWrapProps> = (props) => {
   const { path } = useRouter()
 
   // 获取目标元素的 referrerInfo
-  const { referrerInfo = {} } = useTrackWrapContext()
+  const { referrerInfo = {}, registerTrackTarget = noop } = useTrackWrapContext()
 
   // 生成数据追踪 key
   const dataTrackKey = `${childProps.eventExposureName}-${childProps.eventTargetKey}`
@@ -50,6 +50,10 @@ export const TrackTargetWrap: React.FC<TrackTargetWrapProps> = (props) => {
     const eventData = generateClickEventData()
     eventHooks.appendEventData.call(eventData)
   }
+
+  useEffect(() => {
+    registerTrackTarget(dataTrackKey, childProps)
+  }, [])
 
   return React.cloneElement(children, { ...childProps, dataTrackKey, onClick: handleClick })
 }

@@ -54,5 +54,9 @@ export const useCalcTargetExposure = () => {
     eventConfigMapRef.current.set(dataTrackKey, eventConfig)
   })
 
-  return { registerTrackTarget, triggerTrackCalc, calcTriggerProxy }
+  const unregisterTrackTarget = (dataTrackKey: string) => {
+    eventConfigMapRef.current.delete(dataTrackKey)
+  }
+
+  return { registerTrackTarget, unregisterTrackTarget, triggerTrackCalc, calcTriggerProxy }
 }
