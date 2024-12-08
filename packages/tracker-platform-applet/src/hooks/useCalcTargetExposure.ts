@@ -56,6 +56,10 @@ export const useCalcTargetExposure = () => {
     eventConfigMapRef.current.set(dataTrackKey, eventConfig)
   })
 
+  /**
+   * 注销埋点元素配置
+   * @param dataTrackKey
+   */
   const unregisterTrackTarget = (dataTrackKey: string) => {
     eventConfigMapRef.current.delete(dataTrackKey)
   }
