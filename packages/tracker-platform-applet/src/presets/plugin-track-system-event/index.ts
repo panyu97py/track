@@ -9,7 +9,7 @@ const generateTimeInfo = () => {
   return { startTime, endTime, duration }
 }
 
-export const pluginTrackAppEvent = definePlugin(() => {
+export const pluginTrackSystemEvent = definePlugin(() => {
   return (ctx) => {
     Taro.onAppShow((result) => {
       const eventId = generateUUIDv4()

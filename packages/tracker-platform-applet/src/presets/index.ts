@@ -1,8 +1,8 @@
 import { definePreset, presetInternal, PresetInternalOpt } from '@trackerjs/core'
 import { pluginAppletRequest } from './plugin-request'
 import Taro from '@tarojs/taro'
+import { pluginTrackSystemEvent } from './plugin-track-system-event'
 import { pluginTriggerEvent } from './plugin-trigger-event'
-import { pluginTrackAppEvent } from './plugin-track-app-event'
 
 type AppletPresetOpt = Taro.request.Option & PresetInternalOpt
 
@@ -12,7 +12,7 @@ export const presetApplet = definePreset<AppletPresetOpt>((opt) => {
       presets: [presetInternal()],
       plugins: [
         pluginAppletRequest(opt),
-        pluginTrackAppEvent(),
+        pluginTrackSystemEvent(),
         pluginTriggerEvent()
       ]
     }
