@@ -18,7 +18,7 @@ export const TrackContainerWrap: React.FC<TrackTargetContainerWrapProps> = (prop
   const { referrerInfo = {} } = useTrackWrapContext()
 
   // 计算元素曝光
-  const { registerTrackTarget, calcTriggerProxy } = useCalcTargetExposure()
+  const { registerTrackTarget, calcTriggerProxy, unregisterTrackTarget } = useCalcTargetExposure()
 
   // 元素曝光计算触发器
   const finalCalcTrigger = Array.isArray(calcTrigger) ? calcTrigger : [calcTrigger]
@@ -28,8 +28,10 @@ export const TrackContainerWrap: React.FC<TrackTargetContainerWrapProps> = (prop
     return { ...result, [item]: calcTriggerProxy(childProps[item]) }
   }, {})
 
+  const contextValue = { referrerInfo, registerTrackTarget, unregisterTrackTarget }
+
   return (
-    <TrackWrapContext.Provider value={{ referrerInfo, registerTrackTarget }}>
+    <TrackWrapContext.Provider value={contextValue}>
       {React.cloneElement(children, proxyEvents)}
     </TrackWrapContext.Provider>
   )

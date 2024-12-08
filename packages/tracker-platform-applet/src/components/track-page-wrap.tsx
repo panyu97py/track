@@ -25,7 +25,7 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
   const [pageExposureEventId, setPageExposureEventId] = useState<string>('')
 
   // 计算目标曝光事件
-  const { registerTrackTarget, triggerTrackCalc } = useCalcTargetExposure()
+  const { registerTrackTarget, unregisterTrackTarget, triggerTrackCalc } = useCalcTargetExposure()
 
   // 页面元素埋点事件的 referrerInfo
   const targetReferrerInfo = useMemo(() => {
@@ -74,8 +74,14 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
 
   usePageScroll(() => triggerTrackCalc())
 
+  const contextValue = {
+    registerTrackTarget,
+    unregisterTrackTarget,
+    referrerInfo: targetReferrerInfo
+  }
+
   return (
-    <TrackWrapContext.Provider value={{ registerTrackTarget, referrerInfo: targetReferrerInfo }}>
+    <TrackWrapContext.Provider value={contextValue}>
       {children}
     </TrackWrapContext.Provider>
   )
