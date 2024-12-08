@@ -1,10 +1,10 @@
-import { useDidHide, useDidShow, useRouter, usePageScroll, useUnload, useLoad } from '@tarojs/taro'
+import { useDidHide, useDidShow, useRouter, useUnload, useLoad, usePageScroll } from '@tarojs/taro'
 import { BaseEventName, EventType, generateUUIDv4 } from '@trackerjs/core'
 import React, { ReactNode, useMemo, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { eventHooks } from '../event-hooks'
-import { usePageReferrerInfo } from '../hooks'
-import { TrackPageContext } from '../context'
+import { useCalcTargetExposure, usePageReferrerInfo } from '../hooks'
+import { TrackWrapContext } from '../context'
 import { Current } from '../constants'
 
 interface TrackPageWrapProps {
@@ -24,10 +24,17 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
   // 页面曝光事件id（由于子组件依赖该字段故采用 state 实现）
   const [pageExposureEventId, setPageExposureEventId] = useState<string>('')
 
+  // 计算目标曝光事件
+  const { registerTrackTarget, triggerTrackCalc } = useCalcTargetExposure()
+
+  // 页面元素埋点事件的 referrerInfo
   const targetReferrerInfo = useMemo(() => {
     return { referrerEventId: pageExposureEventId, referrerPagePath: referrerInfo.referrerPagePath }
   }, [pageExposureEventId, referrerInfo])
 
+  /**
+   * 生成页面曝光事件数据
+   */
   const generatePageExposureEventData = () => {
     const eventId = pageExposureEventId
     const eventType = EventType.EXPOSURE
@@ -65,11 +72,11 @@ export const TrackPageWrap: React.FC<TrackPageWrapProps> = (props) => {
 
   useUnload(() => triggerTrackPageEndExposure())
 
-  usePageScroll(() => eventHooks.pageScroll.call(path))
+  usePageScroll(() => triggerTrackCalc())
 
   return (
-    <TrackPageContext.Provider value={{ referrerInfo: targetReferrerInfo }}>
+    <TrackWrapContext.Provider value={{ registerTrackTarget, referrerInfo: targetReferrerInfo }}>
       {children}
-    </TrackPageContext.Provider>
+    </TrackWrapContext.Provider>
   )
 }

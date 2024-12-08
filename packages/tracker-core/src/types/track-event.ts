@@ -8,10 +8,10 @@ export enum BaseEventName {
 }
 
 export interface EventConfig {
+  eventTargetKey?: string;
   eventClickName?: string;
   eventExposureName?: string;
-  canBePageReferrerEvent?: boolean
-  relevanceKey?: string;
+  canBePageReferrerEvent?: boolean;
   extendData?: Record<string, any>;
 }
 

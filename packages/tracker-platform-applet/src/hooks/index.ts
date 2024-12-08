@@ -1,2 +1,2 @@
 export * from './usePageReferrerInfo'
-export * from './useTargetReferrerInfo'
+export * from './useCalcTargetExposure'
