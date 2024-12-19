@@ -19,7 +19,7 @@ export const getImportElements = (programPath:NodePath<Program>) => {
       specifiers.forEach((specifier) => {
         const { type } = specifier
         if (!tempObj.has(type)) tempObj.set(type, new Set())
-        tempObj.get(type).add(specifier)
+        tempObj.get(type).add(specifier.local.name)
       })
     }
   })

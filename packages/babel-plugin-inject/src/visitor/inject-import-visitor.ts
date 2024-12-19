@@ -21,7 +21,7 @@ export const injectImportVisitor: Visitor = {
         const needInjectSpecifiers = (() => {
           if (!importElements.has(source.value)) return specifiers
           return specifiers.filter((specifier) => {
-            return !importElements.get(source.value).get(specifier.type)?.has(specifier)
+            return !importElements.get(source.value).get(specifier.type)?.has(specifier.local.name)
           })
         })()
 
