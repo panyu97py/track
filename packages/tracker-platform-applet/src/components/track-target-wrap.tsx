@@ -23,7 +23,7 @@ export const TrackTargetWrap: React.FC<TrackTargetWrapProps> = (props) => {
   const { path } = useRouter()
 
   // 获取目标元素的 referrerInfo
-  const { referrerInfo = {}, registerTrackTarget = noop } = useTrackWrapContext()
+  const { referrerInfo = {}, registerTrackTarget = noop, unregisterTrackTarget = noop } = useTrackWrapContext()
 
   // 生成数据追踪 key
   const dataTrackKey = `${childProps.eventExposureName}-${childProps.eventTargetKey}`
@@ -53,6 +53,7 @@ export const TrackTargetWrap: React.FC<TrackTargetWrapProps> = (props) => {
 
   useEffect(() => {
     registerTrackTarget(dataTrackKey, childProps)
+    return () => unregisterTrackTarget(dataTrackKey)
   }, [])
 
   return React.cloneElement(children, { ...childProps, dataTrackKey, onClick: handleClick })
