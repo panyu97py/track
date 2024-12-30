@@ -1,4 +1,4 @@
-import { ExportDefaultWrapInjectOption } from '@trackerjs/babel-plugin-inject'
+import { ExportDefaultWrapInjectOption } from '@trackerjs/babel-plugin-jsx-inject'
 import { Opt } from '../types'
 import { reduceAppletPages, removeFileExtension } from '../utils'
 import template from '@babel/template'

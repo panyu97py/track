@@ -1,4 +1,4 @@
-import babelPluginInject from '@trackerjs/babel-plugin-inject'
+import babelPluginInject from '@trackerjs/babel-plugin-jsx-inject'
 import { trackTargetWrapInject } from './config/track-target-wrap-inject'
 import { trackPageWrapInjectOption } from './config/track-page-wrap-inject'
 import { Opt } from './types'

@@ -12,7 +12,7 @@ export * from './types'
 
 export default declare<Options>(() => {
   return {
-    name: 'babel-plugin-inject',
+    name: 'babel-plugin-jsx-inject',
     visitor: {
       ...injectImportVisitor,
       ...injectJsxElementParentVisitor,

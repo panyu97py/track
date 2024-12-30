@@ -1,4 +1,4 @@
-import { JsxElementParentInjectOption } from '@trackerjs/babel-plugin-inject'
+import { JsxElementParentInjectOption } from '@trackerjs/babel-plugin-jsx-inject'
 import * as types from '@babel/types'
 import { JSXAttribute, JSXIdentifier } from '@babel/types'
 

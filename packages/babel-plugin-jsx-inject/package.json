@@ -1,5 +1,5 @@
 {
-  "name": "@trackerjs/babel-plugin-inject",
+  "name": "@trackerjs/babel-plugin-jsx-inject",
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
