@@ -1,6 +1,6 @@
 {
   "name": "@trackerjs/babel-preset-tracker-applet",
-  "version": "0.0.2-alpha.1",
+  "version": "0.0.2",
   "description": "> TODO: description",
   "author": "yu.pan <panyupy@vip.qq.com>",
   "homepage": "",
@@ -29,7 +29,7 @@
     "vm": "*"
   },
   "dependencies": {
-    "@trackerjs/babel-plugin-jsx-inject": "0.0.2-alpha.1"
+    "@trackerjs/babel-plugin-jsx-inject": "0.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -43,5 +43,5 @@
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "babel-plugin-tester": "^11.0.4"
   },
-  "gitHead": "d8e524c88ecc26fefc63b5879d2c9dcda47c7d28"
+  "gitHead": "dfc91483829361aef7f1cc282225522e52b24e9f"
 }
